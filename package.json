@@ -11,7 +11,7 @@
     "client": "webpack-dev-server --mode development --hot",
     "build": "webpack --mode production",
     "server": "nodemon app.js"
-  },  
+  },
   "devDependencies": {
     "@babel/core": "^7.11.1",
     "@babel/preset-env": "^7.11.0",
@@ -22,6 +22,7 @@
     "babel-preset-mobx": "^2.0.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
+    "connect-history-api-fallback": "^1.6.0",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "css-loader": "^4.2.1",
@@ -45,7 +46,8 @@
     "webpack-cli": "^3.3.12",
     "webpack-dev-middleware": "^3.7.2",
     "webpack-dev-server": "^3.11.0",
-    "webpack-hot-middleware": "^2.25.0"
+    "webpack-hot-middleware": "^2.25.0",
+    "webpack-node-externals": "^2.5.1"
   },
   "dependencies": {
     "mobx": "^5.15.6",
