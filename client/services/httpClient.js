@@ -40,9 +40,11 @@ class HttpClient {
         return createRequest(req)
     }
     
-    get(url, params) {
+    get(url, params, headersParam) {
+        let headers = new Headers(headersParam);
         let options = {
-            method: "GET"
+            method: "GET",
+            headers: headers
         }
         let paramsPath = "";
         if(params) {

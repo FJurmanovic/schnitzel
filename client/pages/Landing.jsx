@@ -6,6 +6,7 @@ class Landing extends Component {
         return (
             <div>
                 <Link to="login">Login</Link>
+                <Link to="logout">Logout</Link>
             </div>
         );
     }

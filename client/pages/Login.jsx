@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
+import {withRouter} from 'react-router-dom';
 
 @inject("LoginStore")
 @observer
@@ -7,7 +8,7 @@ class Login extends Component {
     render() {
         return (
             <div>
-                <form onSubmit={this.props.LoginStore.submitClick} className="mx-auto col-7 f4">
+                <form onSubmit={(e) => this.props.LoginStore.submitClick(e, this.props.history)} className="mx-auto col-7 f4">
                     <label>Email:<br />
                         <input type="email" value={this.props.LoginStore.emailValue || ''} onChange={(e) => this.props.LoginStore.emailChange(e.target.value)} className="width-full f5 py-2" required autoFocus />
                     </label>
@@ -23,4 +24,4 @@ class Login extends Component {
     }
 }
 
-export default Login;
+export default withRouter(Login);

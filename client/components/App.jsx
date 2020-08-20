@@ -4,7 +4,7 @@ import {BrowserRouter as Router, Switch, Route, Redirect} from 'react-router-dom
 import {Landing, Login} from '../pages';
 import { observer, inject } from 'mobx-react';
 
-const AppRouter = ({auth}) => 
+const AppRouter = ({auth, authLogout}) => 
     <Router>
         <div className="App">
             <div className="container">
@@ -17,11 +17,17 @@ const AppRouter = ({auth}) =>
                         <Login />
                     </Route>
                     <Route path="/logout">
+                        <Logout authLogout={authLogout} />
                     </Route>
                 </Switch>
             </div>
         </div>
     </Router>
+
+const Logout = ({authLogout}) => {
+    authLogout();
+    return <Redirect to="/" />
+}
 
 @inject("AuthStore")
 @observer
@@ -33,7 +39,7 @@ class App extends Component {
     render() {
         return (
             <div>
-                <AppRouter auth={this.props.AuthStore.isAuth} />
+                <AppRouter auth={this.props.AuthStore.isAuth} authLogout={this.props.AuthStore.authLogout} />
             </div>
         );
     }

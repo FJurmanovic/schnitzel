@@ -13,14 +13,14 @@ class LoginStore {
         this.passwordValue = value;
     }
 
-    submitClick = (event) => {
+    submitClick = (event, history) => {
         event.preventDefault();
         let loginObject = {
             "email": this.emailValue,
             "password": this.passwordValue
         };
 
-        AuthStore.authLogin(loginObject);
+        AuthStore.authLogin(loginObject, history);
     }
 
     @computed get token() {
