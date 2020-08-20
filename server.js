@@ -1,16 +1,23 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const path = require("path");
+const cors = require("cors");
 
 const webpack = require('webpack');
 const webpackDevMiddleware = require('webpack-dev-middleware');
 const webpackHotMiddleware = require('webpack-hot-middleware');
 const config = require('./webpack-dev.config.js');
 
+const MongoServer = require("./config/database");
+
 require("dotenv").config();
+
+const api = require('./routes/api');
 
 const argv = process.argv.slice(2), //Takes array of arguments from command line without first two (node server.js)
 devArg = process.env.DEV || hasDev(argv) || false; //True if "--dev" is part of command line args or in .env
+
+MongoServer();
 
 const app = express(), //Creates express application
 DIST_DIR = path.join(__dirname, 'public'), //Path to front-end folder
@@ -24,16 +31,19 @@ if (devArg) { //If devArg is true, front-end will be webpack and not static file
     app.use(webpackHotMiddleware(webpack(config)));
 }
 
+
+app.use(bodyParser.json());
+
+app.use(cors());
+
 app.use('/', express.static(DIST_DIR));
+
+app.use('/api', api);
 
 app.get('*', (_, res) => {
     res.sendFile(HTML_FILE);
 });
 
-app.use(bodyParser.json());
-app.use('/', (_, res) => {
-    res.send("Ok");
-});
 app.listen(PORT, () => {
     console.log(`Server started at PORT ${PORT}`);
 });
