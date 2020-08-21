@@ -9,6 +9,7 @@ class AuthStore {
     @observable userData = {};
     @observable token = null;
     @observable status = null;
+    @observable passedData = false;
 
     @computed get isAuth() {
         if (!!this.token) {
@@ -20,6 +21,7 @@ class AuthStore {
     authorize = () => {
         this.token = localStorage.getItem("token") || null;
         this.token && this.authData();
+        if(!this.token) this.passedData = true;
     }
 
     authLogin = async (loginObject, history) => {
@@ -60,6 +62,25 @@ class AuthStore {
         }
     }
 
+    authEdit = async (editObject, history) => {
+        try { 
+            const data = await this.authService.putData(editObject, this.token);
+            runInAction(() => {
+                if(data.token){
+                    this.token = data.token;
+                    localStorage.setItem("token", data.token);
+                    this.authorize();
+                    history.push("/");
+                }
+            })
+        } catch (error) {
+            console.log(error);
+            runInAction(() => {
+                this.status = "error";
+            });
+        }
+    }
+
     authData = async () => {
         try { 
             const data = await this.authService.getData(this.token);
@@ -67,6 +88,7 @@ class AuthStore {
                 if(data.id){
                     this.userData = data;
                 }
+                this.passedData = true;
             })
         } catch (error) {
             console.log(error);
@@ -83,6 +105,20 @@ class AuthStore {
         localStorage.removeItem("token");
 
         return true;
+    }
+
+    uploadImage = (object, headers) => {
+        try { 
+            //await this.authService.postImage(object, headers);
+            runInAction(() => {
+                console.log("Image uploaded");
+            })
+        } catch (error) {
+            console.log(error);
+            runInAction(() => {
+                this.status = "error";
+            });
+        }
     }
 }
 

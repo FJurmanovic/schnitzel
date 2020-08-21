@@ -1,5 +1,6 @@
 const   express = require("express"),
-        router = express.Router();
+        router = express.Router(),
+        jwt = require("jsonwebtoken");
 
 const User = require("../../model/User");
 const Post = require("../../model/Post");
@@ -77,6 +78,59 @@ router.get('/:userId', auth, async (req, res) => {
     res.json({ 
       type: "fetch",
       message: "Error in Fetching user" 
+    });
+  }
+});
+
+router.put('/', auth, async (req, res) => {
+  const { email, username } = req.body;
+  try {
+    if(req.user.id == "5ed4ce7841cc3c001cfa6bfb"){
+      res.send({
+        type: "demo",
+        message: "You cannot edit demo account"
+      })
+      return
+    }
+
+    const [findUser, findEmail] = await Promise.all([User.findOne({username}), User.findOne({email})]);
+
+    if(!findUser && !findEmail) {
+      await User.findByIdAndUpdate(req.user.id, req.body);
+    } else {
+      !!findUser && res.send({
+        type: "username",
+        message: "Username already exists"
+      });
+      !!findEmail && res.send({
+        type: "email",
+        message: "Email already exists"
+      });
+    }
+
+    const payload = {
+      user: {
+        id: req.user.id
+      }
+    };
+
+    jwt.sign(
+      payload,
+      "secret",
+      {
+        expiresIn: 3600
+      },
+      (err, token) => {
+        if (err) throw err;
+        res.status(200).json({
+          token
+        });
+      }
+    );
+  } catch (e) {
+    res.json({
+      type: "fetch",
+      message: "Error in fetching user"
     });
   }
 });

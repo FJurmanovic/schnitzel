@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import {BrowserRouter as Router, Switch, Route, Redirect} from 'react-router-dom';
 
-import {Landing, Login, Register} from '../pages';
+import {Landing, Login, Register, EditProfile} from '../pages';
 import { observer, inject } from 'mobx-react';
 
-const AppRouter = ({auth, authLogout}) => 
+const AppRouter = ({store, auth}) => 
     <Router>
         <div className="App">
             <div className="container">
@@ -13,15 +13,16 @@ const AppRouter = ({auth, authLogout}) =>
                         <Landing />
                     </Route>
                     <Route path="/login">
-                        {auth ? <Redirect to="/" /> : console.log(auth)}
-                        <Login />
+                        { auth ? () => {console.log(store.isAuth, store); return <Redirect to="/" />} : () => {console.log(store.isAuth, store.userData); return <Login />} }
                     </Route>
                     <Route path="/register">
-                        {auth ? <Redirect to="/" /> : console.log(auth)}
-                        <Register />
+                        { auth ? <Redirect to="/" /> : <Register /> }
                     </Route>
                     <Route path="/logout">
-                        <Logout authLogout={authLogout} />
+                        <Logout authLogout={store.authLogout} />
+                    </Route>
+                    <Route path="/edit">
+                        { auth ? <EditProfile /> : <Redirect to="/" /> }
                     </Route>
                 </Switch>
             </div>
@@ -42,7 +43,9 @@ class App extends Component {
     render() {
         return (
             <div>
-                <AppRouter auth={this.props.AuthStore.isAuth} authLogout={this.props.AuthStore.authLogout} />
+                {this.props.AuthStore.passedData &&
+                    <AppRouter store={this.props.AuthStore} auth={this.props.AuthStore.isAuth} />
+                }
             </div>
         );
     }

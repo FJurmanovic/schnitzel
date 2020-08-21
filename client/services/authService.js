@@ -9,7 +9,10 @@ class AuthService {
         return await HttpClient.post(url + "/register", object);
     }
     getData = async (token) => {
-        return await HttpClient.get(url + "/data", "", {"token": token})
+        return await HttpClient.get(url + "/data", "", {"token": token});
+    }
+    putData = async (object, token) => {
+        return await HttpClient.put(url + "/data", object, {"token": token});
     }
 }
 

@@ -13,8 +13,8 @@ class HttpClient {
         return createRequest(req)
     }
     
-    put(url, data) {
-        let headers = new Headers();
+    put(url, data, headersParam) {
+        let headers = new Headers(headersParam);
         headers.append("Content-Type", "application/json");
         let options = {
             method: "PUT",

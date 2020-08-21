@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import {Provider} from 'mobx-react';
 
 import {App} from './components';
-import {AuthStore, LoginStore, RegisterStore} from './stores';
+import {AuthStore, LoginStore, RegisterStore, EditProfileStore} from './stores';
 
 import './common/styles/Main.scss';
 
@@ -12,6 +12,7 @@ const Application = () =>
         AuthStore={AuthStore}
         LoginStore={LoginStore}
         RegisterStore={RegisterStore}
+        EditProfileStore={EditProfileStore}
     >
         <App />
     </Provider>;
