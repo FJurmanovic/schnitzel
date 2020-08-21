@@ -7,6 +7,7 @@ class Landing extends Component {
             <div>
                 <Link to="login">Login</Link>
                 <Link to="logout">Logout</Link>
+                <Link to="register">Register</Link>
             </div>
         );
     }

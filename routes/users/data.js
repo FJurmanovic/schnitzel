@@ -1,9 +1,8 @@
 const   express = require("express"),
-        router = express.Router(),
-        bcrypt = require("bcryptjs"),
-        jwt = require("jsonwebtoken");
+        router = express.Router();
 
 const User = require("../../model/User");
+const Post = require("../../model/Post");
 
 const auth = require("../../middleware/auth");
 
@@ -52,6 +51,34 @@ router.get('/', auth, async (req, res) => {
           message: "Error in Fetching user" 
         });
       }
+});
+
+router.get('/:userId', auth, async (req, res) => {
+  try {
+    const {userId} = req.params;
+
+    const [user, profile, posts] = await Promise.all([await User.findById(userId), await User.findById(req.user.id), await Post.find({userId: userId })]);
+
+    const postNum = posts.length
+
+    const isFollowing = profile.following.filter(x => x.userId == user._id).map(x => x.userId == user._id)[0] || false
+
+    let userData = {};
+    userData["id"] = user._id;
+    userData["hasPhoto"] = user.hasPhoto;
+    userData["photoExt"] = user.photoExt;
+    userData["username"] = user.username;
+    userData["isFollowing"] = isFollowing;
+    userData["postNum"] = postNum;
+    userData["isPrivate"] = user.isPrivate;
+    userData["createdAt"] = user.createdAt;
+    res.json(userData);
+  } catch (e) {
+    res.json({ 
+      type: "fetch",
+      message: "Error in Fetching user" 
+    });
+  }
 });
 
 module.exports = router;

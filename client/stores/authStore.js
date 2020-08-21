@@ -41,6 +41,25 @@ class AuthStore {
         }
     }
 
+    authRegister = async (registerObject, history) => {
+        try { 
+            const data = await this.authService.postRegister(registerObject);
+            runInAction(() => {
+                if(data.token){
+                    this.token = data.token;
+                    localStorage.setItem("token", data.token);
+                    this.authorize();
+                    history.push("/");
+                }
+            })
+        } catch (error) {
+            console.log(error);
+            runInAction(() => {
+                this.status = "error";
+            });
+        }
+    }
+
     authData = async () => {
         try { 
             const data = await this.authService.getData(this.token);
@@ -62,6 +81,8 @@ class AuthStore {
         this.userData = {};
         this.token = null;
         localStorage.removeItem("token");
+
+        return true;
     }
 }
 
