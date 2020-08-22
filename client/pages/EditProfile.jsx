@@ -9,6 +9,10 @@ class EditProfile extends Component {
     this.props.EditProfileStore.currentData();
   }
 
+  componentWillUnmount() {
+    this.props.EditProfileStore.toDefault();
+  }
+
     render() {
         return (
             <div>

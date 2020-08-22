@@ -1,5 +1,6 @@
 const   express = require("express"),
         router = express.Router(),
+        bcrypt = require("bcryptjs"),
         jwt = require("jsonwebtoken");
 
 const User = require("../../model/User");
@@ -95,8 +96,18 @@ router.put('/', auth, async (req, res) => {
 
     const [findUser, findEmail] = await Promise.all([User.findOne({username}), User.findOne({email})]);
 
+    let user = new editUser(req.body);
+
+    if ('password' in req.body) {
+      const salt = await bcrypt.genSalt(10);
+      const hashpassword = await bcrypt.hash(req.body.password, salt);
+      user.password = hashpassword;
+    }
+
+    console.log(user);
+
     if(!findUser && !findEmail) {
-      await User.findByIdAndUpdate(req.user.id, req.body);
+      await User.findByIdAndUpdate(req.user.id, user);
     } else {
       !!findUser && res.send({
         type: "username",
@@ -136,3 +147,11 @@ router.put('/', auth, async (req, res) => {
 });
 
 module.exports = router;
+
+function editUser (object) {
+  if (object.email) this.email = object.email;
+  if (object.username) this.username = object.username;
+  if (object.privacy) this.isPrivate = object.isPrivate;
+  if (object.hasPhoto) this.hasPhoto = object.hasPhoto;
+  if (object.photoExt) this.photoExt = object.photoExt;
+}

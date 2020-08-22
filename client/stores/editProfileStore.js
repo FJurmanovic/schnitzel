@@ -91,7 +91,13 @@ class EditProfileStore {
                 this.err.push({"password": "Passwords do not match"});
             }
         }
-        if(this.editPrivacy) editObject.privacy = this.privacyValue;
+        if(this.editPrivacy) {
+            if (this.privacyValue === "private") {
+                editObject.isPrivate = true;
+            } else {
+                editObject.isPrivate = false;
+            }
+        }
         if(this.editAvatar) {
             editObject.hasPhoto = true;
             editObject.photoExt = path.extname(this.selectedFile.name);
@@ -102,10 +108,6 @@ class EditProfileStore {
         }
 
         AuthStore.authEdit(editObject, history);
-    }
-
-    @computed get token() {
-        return AuthStore.token;
     }
 }
 
