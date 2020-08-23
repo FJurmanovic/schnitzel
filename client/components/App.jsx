@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {BrowserRouter as Router, Switch, Route, Redirect} from 'react-router-dom';
 
-import {Landing, Login, Register, EditProfile} from '../pages';
+import {Landing, Login, Register, EditProfile, Feed} from '../pages';
 import {Navbar} from './';
 import { observer, inject } from 'mobx-react';
 
@@ -12,7 +12,7 @@ const AppRouter = ({store, auth}) =>
             <div className="container">
                 <Switch>
                     <Route exact path="/">
-                        <Landing />
+                        { auth ? <Feed /> : <Landing /> }
                     </Route>
                     <Route path="/login">
                         { auth ? () => {console.log(store.isAuth, store); return <Redirect to="/" />} : () => {console.log(store.isAuth, store.userData); return <Login />} }
