@@ -4,25 +4,25 @@ import { Link } from 'react-router-dom';
 
 import { Post } from '../components/Post';
 
-@inject("FeedStore")
+@inject("ExploreStore")
 @observer
-class Feed extends Component {
+class Explore extends Component {
     componentWillMount() {
-        this.props.FeedStore.postsGet();
+        this.props.ExploreStore.postsGet();
 
-        window.addEventListener('scroll', this.props.FeedStore.handleScroll);
+        window.addEventListener('scroll', this.props.ExploreStore.handleScroll);
     }
 
     componentWillUnmount() {
-        this.props.FeedStore.destroy();
+        this.props.ExploreStore.destroy();
 
-        window.removeEventListener('scroll', this.props.FeedStore.handleScroll);
+        window.removeEventListener('scroll', this.props.ExploreStore.handleScroll);
     }
 
     render() {
         return (
-            <div className="posts" onScroll={this.props.FeedStore.handleScroll}>
-                { this.props.FeedStore.loadingPost 
+            <div className="posts" onScroll={this.props.ExploreStore.handleScroll}>
+                { this.props.ExploreStore.loadingPost 
                 ? <>
                 <div className="posts-placeholder card col-9 my-6">
                     <div className="text-placeholder my-4 mx-1"></div>
@@ -39,23 +39,23 @@ class Feed extends Component {
                     <div className="description-placeholder my-2 mx-1"></div>
                 </div>
                 </>
-                : <>{ this.props.FeedStore.posts.length > 0 
+                : <>{ this.props.ExploreStore.posts.length > 0 
                 ? <>
-                { this.props.FeedStore.posts.map((post, key) => {
+                { this.props.ExploreStore.posts.map((post, key) => {
                     return <Post 
                                 post={post} 
                                 key={key} 
                                 iter={key} 
-                                userdata={this.props.FeedStore.userData}
-                                addPoint={this.props.FeedStore.addPoint} 
-                                removePoint={this.props.FeedStore.removePoint} 
-                                authUser={this.props.FeedStore.userData.id} 
-                                dataByUsername={this.props.FeedStore.getUserData} 
-                                from="home" 
+                                userdata={this.props.ExploreStore.userData} 
+                                addPoint={this.props.ExploreStore.addPoint} 
+                                removePoint={this.props.ExploreStore.removePoint} 
+                                authUser={this.props.ExploreStore.userData.id} 
+                                dataByUsername={this.props.ExploreStore.getUserData} 
+                                from="explore" 
                             />
                     })
                 }
-                { this.props.FeedStore.last ? <div className="text-center f2 mb-8">There are no more posts to load. <br /> <Link to="/explore" className="btn btn-blue btn-rounder f3">Explore</Link> to find new posts</div> : <div className="text-center f2 mb-8"><button className="btn btn-blue btn-squared p-4" onClick={this.props.FeedStore.handleScroll}>Load more posts</button></div>}
+                { this.props.ExploreStore.last ? <div className="text-center f2 mb-8">There are no more posts to load. <br /> <Link to="/explore" className="btn btn-blue btn-rounder f3">Explore</Link> to find new posts</div> : <div className="text-center f2 mb-8"><button className="btn btn-blue btn-squared p-4" onClick={this.props.ExploreStore.handleScroll}>Load more posts</button></div>}
                 </>
                 : <div className="text-center f2">There are no posts to load. <br /> <Link to="/explore" className="btn btn-blue btn-rounder f3">Explore</Link> to find new posts</div>
                 }</>
@@ -65,4 +65,4 @@ class Feed extends Component {
     }
 }
 
-export default Feed;
+export default Explore;

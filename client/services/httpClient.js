@@ -26,16 +26,15 @@ class HttpClient {
         return createRequest(req)
     }
     
-    delete(url, params) {
+    delete(url, data, headersParam) {
+        let headers = new Headers(headersParam);
+        headers.append("Content-Type", "application/json");
         let options = {
-            method: "DELETE"
+            method: "DELETE",
+            headers: headers,
+            body: JSON.stringify(data)
         }
-        let paramsPath = "";
-        if(params) {
-            let urlParams = new URLSearchParams(Object.entries(params));
-            paramsPath = "?" + urlParams;
-        }
-        const req = new Request(url + paramsPath, options);
+        const req = new Request(url, options);
 
         return createRequest(req)
     }

@@ -6,6 +6,8 @@ const Post = require("../../model/Post");
 
 const auth = require("../../middleware/auth");
 
+const point = require("./point");
+
 router.get('/', auth, async (req, res) => {
     let page = Number(req.query.page) || 1,
         ppp = Number(req.query.ppp) || 10,
@@ -63,6 +65,8 @@ router.get('/', auth, async (req, res) => {
         res.status(500).send("Error in fetching");
     }
 });
+
+router.use("/point", point);
 
 
 module.exports = router;

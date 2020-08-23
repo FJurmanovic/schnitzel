@@ -11,7 +11,7 @@ const OpenButton = (props) => {
     }
 }
 
-export const Post = ({post, iter, userdata, addPoint, authUser, from, dataByUsername}) => {
+export const Post = ({post, iter, userdata, addPoint, removePoint, authUser, from, dataByUsername}) => {
     const [authorData, setAuthorData] = useState(
         {
             id: '',
@@ -21,6 +21,8 @@ export const Post = ({post, iter, userdata, addPoint, authUser, from, dataByUser
     );
 
     const [isFetch, setIsFetch] = useState(false);
+
+    const [isPointed, setIsPointed] = useState(post.isPointed);
     
     const getAuthorData = async(id) => {
         if(!isFetch){
@@ -29,6 +31,22 @@ export const Post = ({post, iter, userdata, addPoint, authUser, from, dataByUser
             if(data) {
                 setAuthorData(data);
                 setIsFetch(true);
+            }
+        }
+    }
+
+    const togglePoint = (id, type) => {
+        if(type === "post") {
+            if(post.isPointed){
+                removePoint(id, type);
+                post.isPointed = false;
+                post.points--;
+                setIsPointed(false);
+            } else {
+                addPoint(id, type);
+                post.isPointed = true;
+                post.points++;
+                setIsPointed(true);
             }
         }
     }
@@ -43,7 +61,7 @@ export const Post = ({post, iter, userdata, addPoint, authUser, from, dataByUser
                     <span className="author mr-2">Author: <span></span>
                         {post.username == "DeletedUser" 
                         ? <span>DeletedUser</span>
-                        : <Link className="f5" onMouseOver={() => getAuthorData(post.username)} to={`/${post.username}`}>{post.username}</Link>
+                        : <Link className="f5" onMouseOver={() => getAuthorData(post.userId)} to={`/${post.username}`}>{post.username}</Link>
                         }
                         <Link className="popover-author" to={`/${post.username}`}>
                             <div className="" id={`popover_${iter}`}>
@@ -91,7 +109,7 @@ export const Post = ({post, iter, userdata, addPoint, authUser, from, dataByUser
                         <div className="f5 directions">{post.directions}</div>
                     </>
                     }
-                    <div className="f5">Points: {post.points.length} <button className="btn-icon ml-n2" onClick={(e) => addPoint(e, iter)}>{!post.isPointed ? <div className="gg-chevron-up"></div> : <div className="gg-chevron-up text-blue"></div>}</button> <OpenButton from={from} id={post.id}><span className="mx-5">Comments: {post.comments}</span></OpenButton></div>
+                    <div className="f5">Points: {post.points} <button className="btn-icon ml-n2" onClick={() => togglePoint(post.id, "post")}>{!isPointed ? <div className="gg-chevron-up"></div> : <div className="gg-chevron-up text-blue"></div>}</button> <OpenButton from={from} id={post.id}><span className="mx-5">Comments: {post.comments}</span></OpenButton></div>
                 </div>
 
                 <OpenButton from={from} id={post.id}><div className="card-footer">View recipe</div></OpenButton>
