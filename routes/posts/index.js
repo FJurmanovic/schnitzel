@@ -13,7 +13,8 @@ router.get('/', auth, async (req, res) => {
         ppp = Number(req.query.ppp) || 10,
         type = req.query.type || "feed",
         category = req.query.category || "all"
-        profileId = req.query.profileId || req.user.id;
+        profileId = req.query.profileId || req.user.id
+        firstDate = req.query.firstDate || Date.now();
 
     try{
         let options = {},
@@ -48,6 +49,7 @@ router.get('/', auth, async (req, res) => {
                 }
             }
         }
+        options.createdAt = {"$lte": firstDate}; 
         const [posts, total] = await Promise.all([Post.find(options).skip((page - 1) * ppp).limit(ppp).sort('-createdAt'), Post.find(options)]);
         let items = [];
         for (post of posts) {

@@ -50,7 +50,7 @@ class Feed extends Component {
                                 addPoint={this.props.FeedStore.addPoint} 
                                 removePoint={this.props.FeedStore.removePoint} 
                                 authUser={this.props.FeedStore.userData.id} 
-                                dataByUsername={this.props.FeedStore.getUserData} 
+                                getUserData={this.props.FeedStore.getUserData} 
                                 from="home" 
                             />
                     })

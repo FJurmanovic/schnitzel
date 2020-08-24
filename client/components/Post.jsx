@@ -1,6 +1,8 @@
 import React, {useState} from 'react';
 import {Link} from 'react-router-dom';
 
+import {Popover} from './';
+
 const OpenButton = (props) => {
     if (props.from == "home") {   
         return <Link to={`/post/${props.id}`}>{props.children}</Link>
@@ -11,29 +13,9 @@ const OpenButton = (props) => {
     }
 }
 
-export const Post = ({post, iter, userdata, addPoint, removePoint, authUser, from, dataByUsername}) => {
-    const [authorData, setAuthorData] = useState(
-        {
-            id: '',
-            postNum: 0,
-            username: post.username
-        }
-    );
-
-    const [isFetch, setIsFetch] = useState(false);
+export const Post = ({post, iter, userdata, addPoint, removePoint, authUser, from, getUserData}) => {
 
     const [isPointed, setIsPointed] = useState(post.isPointed);
-    
-    const getAuthorData = async(id) => {
-        if(!isFetch){
-            
-            let data = await dataByUsername(id);
-            if(data) {
-                setAuthorData(data);
-                setIsFetch(true);
-            }
-        }
-    }
 
     const togglePoint = (id, type) => {
         if(type === "post") {
@@ -58,21 +40,7 @@ export const Post = ({post, iter, userdata, addPoint, removePoint, authUser, fro
                 
                 <div className="f5 pr-5 mb-n3 mt-3 top-card">
                 {(userdata.id == post.userId || authUser == post.userId) &&<span className="float-right"><a href="./" onClick={() => removePost(post.id)}>Delete post</a> | <Link to={`/post/edit/${post.id}`}>Edit post</Link></span>}
-                    <span className="author mr-2">Author: <span></span>
-                        {post.username == "DeletedUser" 
-                        ? <span>DeletedUser</span>
-                        : <Link className="f5" onMouseOver={() => getAuthorData(post.userId)} to={`/${post.username}`}>{post.username}</Link>
-                        }
-                        <Link className="popover-author" to={`/${post.username}`}>
-                            <div className="" id={`popover_${iter}`}>
-                                <div className="md-photo">
-                                    {authorData.hasPhoto ? <img src={`https://storage.googleapis.com/schnitzel/avatar/${authorData.id}/${authorData.id}${authorData.photoExt}`} className="card-img-top" /> : <img src="https://storage.googleapis.com/schnitzel/default.jpg" className="card-img-top" />} 
-                                    <span className="author-user">{post.username}</span>
-                                    <span className="author-post">Posts: {authorData.postNum}</span>
-                                </div>
-                            </div>
-                        </Link>
-                    </span>
+                    <span className="author mr-2">Author: <span><Popover userId={post.userId} username={post.username} getUserData={getUserData} iter={iter} /></span></span>
                 <span className="f5 mx-2 date">Posted {post.timeAgo}</span>
                 </div>
                 <div className="card-body">

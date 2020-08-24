@@ -28,7 +28,6 @@ class ExploreCategory extends Component {
         }
     }
 
-
     render() {
         return (
             <div className="posts" onScroll={this.props.ExploreCategoryStore.handleScroll}>
@@ -60,7 +59,7 @@ class ExploreCategory extends Component {
                                 addPoint={this.props.ExploreCategoryStore.addPoint} 
                                 removePoint={this.props.ExploreCategoryStore.removePoint} 
                                 authUser={this.props.ExploreCategoryStore.userData.id} 
-                                dataByUsername={this.props.ExploreCategoryStore.getUserData} 
+                                getUserData={this.props.ExploreCategoryStore.getUserData} 
                                 from="explore" 
                             />
                     })

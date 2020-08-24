@@ -4,3 +4,4 @@ export {default as RegisterStore} from './registerStore';
 export {default as EditProfileStore} from './editProfileStore';
 
 export {default as PostsStore} from './postsStore';
+export {default as ProfileStore} from './profileStore';

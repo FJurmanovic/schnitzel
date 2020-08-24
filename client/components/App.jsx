@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {BrowserRouter as Router, Switch, Route, Redirect} from 'react-router-dom';
 
-import {Landing, Login, Register, EditProfile, Feed, Explore, ExploreCategory} from '../pages';
+import {Landing, Login, Register, EditProfile, Feed, Explore, ExploreCategory, Profile} from '../pages';
 import {Navbar} from './';
 import { observer, inject } from 'mobx-react';
 
@@ -34,6 +34,12 @@ const AppRouter = ({store, auth}) =>
                     </Route>
                     <Route path="/profile/edit">
                         { auth ? <EditProfile /> : <Redirect to="/" /> }
+                    </Route>
+                    <Route path="/profile">
+                        { auth ? <Profile /> : <Redirect to="/" /> }
+                    </Route>
+                    <Route path="/:profileName">
+                        { auth ? <Profile /> : <Redirect to="/" /> }
                     </Route>
                 </Switch>
             </div>

@@ -50,7 +50,7 @@ class Explore extends Component {
                                 addPoint={this.props.ExploreStore.addPoint} 
                                 removePoint={this.props.ExploreStore.removePoint} 
                                 authUser={this.props.ExploreStore.userData.id} 
-                                dataByUsername={this.props.ExploreStore.getUserData} 
+                                getUserData={this.props.ExploreStore.getUserData} 
                                 from="explore" 
                             />
                     })

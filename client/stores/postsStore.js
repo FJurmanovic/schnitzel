@@ -8,30 +8,36 @@ class PostsStore {
     constructor (type) {
         this.postsService = new PostsService;
         this.authService = new AuthService;
+        this.authStore = AuthStore;
         this.type = type;
     }
     @observable posts = [];
     @observable page = 1;
-    @observable ppp = 1;
+    @observable ppp = 10;
     @observable category = "all";
 
     @observable last = false;
 
     @observable loadingPost = false;
 
+    @observable profileName = null;
+
+    @computed get firstDate () {
+        if(this.posts.length > 0) return this.posts[0].createdAt
+        
+        return null;
+    }
+
     @computed get totalCurrent () {
         return this.posts.length;
     }
 
     @computed get userData () {
-        return AuthStore.userData;
+        return this.authStore.userData;
     }
 
     setCategory = (category) => {
-        this.feedPosts = [];
-        this.page = 1;
-        this.ppp = 10;
-        this.last = false;
+        this.destroy();
         this.category = category || "all";
 
     }
@@ -65,8 +71,10 @@ class PostsStore {
                 "type": this.type,
                 "category": this.category
             }
+            if (this.page !== 1) postsOptions.firstDate = this.firstDate;
+            if (this.profileId) postsOptions.profileId = this.profileId;
             try { 
-                const data = await this.postsService.getPosts(AuthStore.token, postsOptions);
+                const data = await this.postsService.getPosts(this.authStore.token, postsOptions);
                 runInAction(() => {
                     if(data.items){
                         if(this.page == 1) this.posts = data.items;
@@ -87,9 +95,9 @@ class PostsStore {
         }
     }
 
-    getUserData = async (id) => {
+    getUserData = async (username) => {
         try { 
-            const data = await this.authService.getUserData(id, AuthStore.token);
+            const data = await this.authService.getUserData(username, this.authStore.token);
             return data;
         } catch (error) {
             console.log(error);
@@ -101,7 +109,7 @@ class PostsStore {
 
     addPoint = async (id, type) => {
         try { 
-            const data = await this.postsService.putPoint(AuthStore.token, id, type);
+            const data = await this.postsService.putPoint(this.authStore.token, id, type);
             return data;
         } catch (error) {
             console.log(error);
@@ -113,7 +121,7 @@ class PostsStore {
 
     removePoint = async (id, type) => {
         try { 
-            const data = await this.postsService.deletePoint(AuthStore.token, id, type);
+            const data = await this.postsService.deletePoint(this.authStore.token, id, type);
             return data;
         } catch (error) {
             console.log(error);

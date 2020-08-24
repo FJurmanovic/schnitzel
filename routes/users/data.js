@@ -59,11 +59,12 @@ router.get('/:userId', auth, async (req, res) => {
   try {
     const {userId} = req.params;
 
-    const [user, profile, posts] = await Promise.all([await User.findById(userId), await User.findById(req.user.id), await Post.find({userId: userId })]);
+    const [user, profile] = await Promise.all([await User.findOne({ username: userId}), await User.findById(req.user.id)]);
+    const posts = await Post.find({ userId: user._id });
 
-    const postNum = posts.length
+    const postNum = posts.length;
 
-    const isFollowing = profile.following.filter(x => x.userId == user._id).map(x => x.userId == user._id)[0] || false
+    const isFollowing = profile.following.filter(x => x.userId == user._id).map(x => x.userId == user._id)[0] || false;
 
     let userData = {};
     userData["id"] = user._id;
