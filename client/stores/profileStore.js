@@ -11,24 +11,31 @@ class ProfileStore extends PostsStore {
 
     @observable profileData = {};
     @observable validProfile = false;
-    @observable isLoading = false;
+
+    @computed get myProfile () {
+        return this.profileData.id === this.authStore.userData.id;
+    }
     
     componentMounted = async (profileName, callback) => {
         this.isLoading = true;
+        this.destroy();
         let data = null;
-        if (profileName) data = await this.searchUser(profileName) 
+        if (profileName) {
+            data = await this.searchUser(profileName)
+            if (data) this.profileId = data.id;
+        } 
         else data = await this.searchUser(this.userData.username);
-        
-        await this.postsGet();
 
         runInAction(() => {
-            if (!data.message) {
+            if (data) if (!data.message) {
                 this.profileData = data;
                 this.validProfile = true;
             }
+            this.isLoading = false;
         });
 
-        this.isLoading = false;
+        await this.postsGet();
+
         if(typeof(callback) === "function") callback();
     }
 

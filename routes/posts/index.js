@@ -35,7 +35,7 @@ router.get('/', auth, async (req, res) => {
                     "isPrivate": false
                 };
             } else {
-                res.send("Error getting posts");
+                res.status(403).send({"message": "Error getting posts", "status": 403});
             }
         } else if (type === "explore") {
             if (category === "all") { 

@@ -48,7 +48,7 @@ router.get('/', auth, async (req, res) => {
         res.send(userData)
   
       } catch (e) {
-        res.json({ 
+        res.status(401).json({ 
           type: "fetch",
           message: "Error in Fetching user" 
         });
@@ -77,7 +77,7 @@ router.get('/:userId', auth, async (req, res) => {
     userData["createdAt"] = user.createdAt;
     res.json(userData);
   } catch (e) {
-    res.json({ 
+    res.status(401).json({ 
       type: "fetch",
       message: "Error in Fetching user" 
     });
@@ -104,8 +104,6 @@ router.put('/', auth, async (req, res) => {
       const hashpassword = await bcrypt.hash(req.body.password, salt);
       user.password = hashpassword;
     }
-
-    console.log(user);
 
     if(!findUser && !findEmail) {
       await User.findByIdAndUpdate(req.user.id, user);
@@ -140,7 +138,7 @@ router.put('/', auth, async (req, res) => {
       }
     );
   } catch (e) {
-    res.json({
+    res.status(401).json({
       type: "fetch",
       message: "Error in fetching user"
     });

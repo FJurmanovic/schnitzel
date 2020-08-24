@@ -19,8 +19,11 @@ class PostsStore {
     @observable last = false;
 
     @observable loadingPost = false;
+    @observable isLoading = false;
 
-    @observable profileName = null;
+    @observable profileId = null;
+    @observable isPrivate = false;
+
 
     @computed get firstDate () {
         if(this.posts.length > 0) return this.posts[0].createdAt
@@ -60,6 +63,9 @@ class PostsStore {
         this.ppp = 10;
         this.category = "all";
         this.last = false;
+        this.loadingPost = false,
+        this.profileId = null;
+        this.isPrivate = false;
     }
 
     postsGet = async (callback) => {
@@ -84,6 +90,8 @@ class PostsStore {
                         } else this.page++;
                         this.loadingPost = false;
                     }
+                    if(data.status == 403) this.isPrivate = true;
+                    else this.isPrivate = false;
                     if(typeof(callback) === "function") callback();
                 })
             } catch (error) {
