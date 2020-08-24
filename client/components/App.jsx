@@ -24,7 +24,7 @@ const AppRouter = ({store, auth}) =>
                         { auth ? <Explore /> : <Redirect to="/login" /> }
                     </Route>
                     <Route path="/login">
-                        { auth ? () => {console.log(store.isAuth, store); return <Redirect to="/" />} : () => {console.log(store.isAuth, store.userData); return <Login />} }
+                        { auth ? <Redirect to="/" /> : <Login /> }
                     </Route>
                     <Route path="/register">
                         { auth ? <Redirect to="/" /> : <Register /> }

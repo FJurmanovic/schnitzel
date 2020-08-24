@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter, Link } from 'react-router-dom';
-import { Post } from '../components';
+import { Post, Followers } from '../components';
 
 @inject("ProfileStore")
 @observer
@@ -38,24 +38,42 @@ class Profile extends Component {
                     <div className="profile-image mx-auto text-center">{this.props.ProfileStore.profileData.hasPhoto ? <img src={`https://storage.googleapis.com/schnitzel/avatar/${this.props.ProfileStore.profileData.id}/${this.props.ProfileStore.profileData.id}${this.props.ProfileStore.profileData.photoExt}`} className="card-img-top" /> : <img src="https://storage.googleapis.com/schnitzel/default.jpg" className="card-img-top" />}</div>
                     <div className="mx-auto text-center">
                     <ul className="d-inline-block m-3 text-left">
-                        <button className="btn btn-blue-transparent btn-rounder border-blue d-inline-block" onClick={() => this.setState({showFollowers: true})}>Followers</button>
+                        <button className="btn btn-blue-transparent btn-rounder border-blue d-inline-block" onClick={this.props.ProfileStore.toggleFollowers}>Followers</button>
+                        { this.props.ProfileStore.showFollowers &&
+                            <Followers 
+                                type="followers" 
+                                ownerId={this.props.ProfileStore.profileData.id} 
+                                exitScreen={this.props.ProfileStore.toggleFollowers} 
+                                removeAction={this.props.ProfileStore.profileData.removeFollower} 
+                                getFollowerFunction={this.props.ProfileStore.getFollowers}
+                            />
+                        }
                     </ul>
                     <ul className="d-inline-block m-3 text-left">
-                        <button className="btn btn-blue-transparent btn-rounder border-blue" onClick={() => this.setState({showFollowing: true})}>Following</button>
+                        <button className="btn btn-blue-transparent btn-rounder border-blue" onClick={this.props.ProfileStore.toggleFollowing}>Following</button>
+                        { this.props.ProfileStore.showFollowing &&
+                            <Followers 
+                                type="following" 
+                                ownerId={this.props.ProfileStore.profileData.id} 
+                                exitScreen={this.props.ProfileStore.toggleFollowing} 
+                                removeAction={this.props.ProfileStore.profileData.removeFollowing} 
+                                getFollowerFunction={this.props.ProfileStore.getFollowing}
+                            />
+                        }
                     </ul>
-                    </div>
-                    <div>
-                        <h1 className="text-center">{this.props.ProfileStore.profileData.username}</h1>
                     </div>
                     { !this.props.ProfileStore.myProfile && <>{
                         this.props.ProfileStore.profileData.isFollowing
                         ?   <div className="mx-auto text-center">
-                                <button className="btn btn-orange btn-rounder px-11 folbtn" onClick={this.handleUnfollowButton}>Unfollow</button>
+                                <button className="btn btn-orange btn-rounder px-11 folbtn" onClick={this.props.ProfileStore.unfollowClick}>Unfollow</button>
                             </div>
                         :   <div className="mx-auto text-center">
-                                <button className="btn btn-lightgreen btn-rounder folbtn" onClick={this.handleFollowButton}>Follow</button>
+                                <button className="btn btn-lightgreen btn-rounder folbtn" onClick={this.props.ProfileStore.followClick}>Follow</button>
                             </div>
                     }</>}
+                    <div>
+                        <h1 className="text-center">{this.props.ProfileStore.profileData.username}</h1>
+                    </div>
                     { (this.props.ProfileStore.myProfile || !this.props.ProfileStore.isPrivate) 
                         ?  <>{this.props.ProfileStore.loadingPost 
                             ? <>

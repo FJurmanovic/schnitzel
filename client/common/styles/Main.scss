@@ -473,7 +473,7 @@ body{
         background: #ffffff;
         border: 1px #b8b8b8 solid;
         border-radius: 0.5em;
-    
+
         .title{
             font-weight: 600;
             text-align: center;
@@ -506,6 +506,17 @@ body{
                             margin-right: 2px;
                         }
                     }
+                }
+            }
+            .list-placeholder {
+                overflow: auto;
+                height: calc(100% - 22px);
+                .item-placeholder {
+                    background-color: #dbdbdb;
+                    border-radius: .25em; 
+                    height: 24px;
+                    width: calc(100% -8px);
+                    margin: 4px;
                 }
             }
         }

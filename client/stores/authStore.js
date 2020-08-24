@@ -107,6 +107,54 @@ class AuthStore {
         return true;
     }
 
+    getFollowers = async(id) => {
+        try { 
+            const data = await this.authService.getFollowers(id, this.token);
+            return data;
+        } catch (error) {
+            console.log(error);
+            runInAction(() => {
+                this.status = "error";
+            });
+        }
+    }
+
+    getFollowing = async(id) => {
+        try { 
+            const data = await this.authService.getFollowing(id, this.token);
+            return data;
+        } catch (error) {
+            console.log(error);
+            runInAction(() => {
+                this.status = "error";
+            });
+        }
+    }
+
+    putFollow = async(id) => {
+        try {
+            const data = await this.authService.putFollow(id, this.token);
+            return data;
+        } catch (error) {
+            console.log(error);
+            runInAction(() => {
+                this.status = "error";
+            });
+        }
+    }
+
+    deleteFollow = async(id) => {
+        try {
+            const data = await this.authService.deleteFollow(id, this.token);
+            return data;
+        } catch (error) {
+            console.log(error);
+            runInAction(() => {
+                this.status = "error";
+            });
+        }
+    }
+
     uploadImage = (object, headers) => {
         try { 
             //await this.authService.postImage(object, headers);

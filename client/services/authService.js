@@ -17,6 +17,18 @@ class AuthService {
     getUserData = async (id, token) => {
         return await HttpClient.get(url + "/data/" + id, "", {"token": token});
     }
+    getFollowers = async (id, token) => {
+        return await HttpClient.get(url + "/data/followers/" + id, "", {"token": token});
+    }
+    getFollowing = async (id, token) => {
+        return await HttpClient.get(url + "/data/following/" + id, "", {"token": token});
+    }
+    putFollow = async (id, token) => {
+        return await HttpClient.put(url + "/follow/" + id, {}, {"token": token});
+    }
+    deleteFollow = async (id, token) => {
+        return await HttpClient.delete(url + "/follow/" + id, {}, {"token": token});
+    }
 }
 
 export default AuthService;

@@ -1,16 +1,25 @@
 import {observable, computed, runInAction} from 'mobx';
 
-import {PostsService, AuthService} from '../services';
-
 import {PostsStore} from './';
 
 class ProfileStore extends PostsStore {
     constructor(){
         super("profile");
+        this.getFollowers = this.authStore.getFollowers;
+        this.getFollowing = this.authStore.getFollowing;
+        this.putFollow = this.authStore.putFollow;
+        this.deleteFollow = this.authStore.deleteFollow;
     }
 
     @observable profileData = {};
     @observable validProfile = false;
+
+    @observable showFollowers = false;
+    @observable showFollowing = false;
+
+    @observable followers = [];
+    @observable following = [];
+
 
     @computed get myProfile () {
         return this.profileData.id === this.authStore.userData.id;
@@ -39,6 +48,41 @@ class ProfileStore extends PostsStore {
         if(typeof(callback) === "function") callback();
     }
 
+    toggleFollowers = () => {
+        this.showFollowers = !this.showFollowers;
+    }
+
+    toggleFollowing = () => {
+        this.showFollowing = !this.showFollowing;
+    }
+
+    followClick = () => {
+        if (this.myProfile && this.profileData.isFollowing) return;
+        this.profileData.isFollowing = true;
+        this.putFollow(this.profileData.id);
+    }
+
+    unfollowClick = () => {
+        if (this.myProfile && !this.profileData.isFollowing) return;
+        this.profileData.isFollowing = false;
+        this.deleteFollow(this.profileData.id);
+    }
+    
+    destroy = () => {
+        this.posts = [];
+        this.page = 1;
+        this.ppp = 10;
+        this.category = "all";
+        this.last = false;
+        this.loadingPost = false,
+        this.profileId = null;
+        this.isPrivate = false;
+        this.showFollowers = false;
+        this.showFollowing = false;
+        this.following = [];
+        this.followers = [];
+    }
+
     searchUser = async(username) => {
         try { 
             const data = await this.getUserData(username);
@@ -50,6 +94,7 @@ class ProfileStore extends PostsStore {
             });
         }
     }
+
 }
 
 export default new ProfileStore;

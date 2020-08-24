@@ -3,10 +3,15 @@ const   express = require("express"),
         bcrypt = require("bcryptjs"),
         jwt = require("jsonwebtoken");
 
-const User = require("../../model/User");
-const Post = require("../../model/Post");
+const User = require("../../../model/User");
+const Post = require("../../../model/Post");
 
-const auth = require("../../middleware/auth");
+const auth = require("../../../middleware/auth");
+
+const [followers, following] = [require("./followers"), require("./following")];
+
+router.use('/followers', followers);
+router.use('/following', following);
 
 router.get('/', auth, async (req, res) => {
     try {

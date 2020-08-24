@@ -17,8 +17,6 @@ router.post('/', async (req, res) => {
             message: "User does not exist"
         });
 
-        console.log(user)
-
         const isMatch = await bcrypt.compare(password, user.password); //decrypts and compares if passwords match
         if (!isMatch)
         return res.status(400).json({

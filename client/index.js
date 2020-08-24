@@ -6,6 +6,8 @@ import {App} from './components';
 import {AuthStore, LoginStore, RegisterStore, EditProfileStore, PostsStore, ProfileStore} from './stores';
 
 import './common/styles/Main.scss';
+import './common/styles/Chevron.scss';
+import './common/styles/Thorn.scss';
 
 const Application = () => 
     <Provider
