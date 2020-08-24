@@ -11,6 +11,9 @@
     "client": "webpack-dev-server --mode development --hot",
     "build": "webpack --mode production",
     "server": "nodemon app.js"
+  },                              
+  "nodemonConfig": {
+    "ignore": ["client"]
   },
   "devDependencies": {
     "@babel/core": "^7.11.1",

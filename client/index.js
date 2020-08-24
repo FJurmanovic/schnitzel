@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import {Provider} from 'mobx-react';
 
 import {App} from './components';
-import {AuthStore, LoginStore, RegisterStore, EditProfileStore, FeedStore, ExploreStore, ExploreCategoryStore, PostsStore} from './stores';
+import {AuthStore, LoginStore, RegisterStore, EditProfileStore, PostsStore} from './stores';
 
 import './common/styles/Main.scss';
 
