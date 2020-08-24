@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { Link } from 'react-router-dom';
 
-import { Post } from '../components/Post';
+import { Post, NewPost } from '../components';
 
 @inject("FeedStore")
 @observer
@@ -20,7 +20,11 @@ class Feed extends Component {
     }
 
     render() {
-        return (
+        return <>
+            <NewPost 
+                showNew={this.props.FeedStore.showNew}
+                toggleNew={this.props.FeedStore.toggleNew}  
+            />
             <div className="posts" onScroll={this.props.FeedStore.handleScroll}>
                 { this.props.FeedStore.loadingPost 
                 ? <>
@@ -61,7 +65,7 @@ class Feed extends Component {
                 }</>
                 }
             </div>
-        );
+        </>;
     }
 }
 
