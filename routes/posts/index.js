@@ -1,5 +1,6 @@
 const   express = require("express"),
-        router = express.Router();
+        router = express.Router(),
+        { check, validationResult} = require("express-validator");
 
 const User = require("../../model/User");
 const Post = require("../../model/Post");
@@ -7,6 +8,8 @@ const Post = require("../../model/Post");
 const auth = require("../../middleware/auth");
 
 const point = require("./point");
+
+router.use("/point", point);
 
 router.get('/', auth, async (req, res) => {
     let page = Number(req.query.page) || 1,
@@ -68,8 +71,58 @@ router.get('/', auth, async (req, res) => {
     }
 });
 
-router.use("/point", point);
+router.post('/', auth, 
+    [
+        check("title", "Please Enter a Valid Title") //Checks if title is empty
+        .not()
+        .isEmpty(),
+        check("description", "Please enter a valid description").not() //Checks if description is empty
+        .isEmpty()
+    ],
+    async (req, res) => {
+        const { title, type, isPrivate, hasPhoto, photoExt, description, categories, ingredients, directions } = req.body;
+        try { 
+            let points = [];
+            const userId = req.user.id;
+            if(type === "post"){
+                post = new Post({ //Creates new post in database without ingredients and directions
+                    title,
+                    type,
+                    isPrivate,
+                    hasPhoto,
+                    photoExt,
+                    description,
+                    categories,
+                    points,
+                    userId
+                });
+            }else if(type === "recipe"){
+                let newIngredients = [];
+                newIngredients = ingredients.filter(x => !!x.name);
+                post = new Post({ //Creates new post in database with ingredients and directions
+                    title,
+                    type,
+                    isPrivate,
+                    hasPhoto,
+                    photoExt,
+                    description,
+                    categories,
+                    points,
+                    userId,
+                    "ingredients": newIngredients,
+                    directions
+                })
+            }
+            post.createdAt = new Date();
 
+            await post.save();
+
+            res.send({id: post.id})
+        } catch (err) {
+            console.log(err.message);
+            res.status(500).send("Error in fetching");
+        }
+});
 
 module.exports = router;
 

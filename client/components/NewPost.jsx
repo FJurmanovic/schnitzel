@@ -22,9 +22,12 @@ class NewPost extends React.Component {
             { this.props.NewPostStore.showNew
             ?   <div className="new-post">
                     <button className="btn btn-link float-right mr-9 mt-n3" onClick={this.props.NewPostStore.toggleShow}>Cancel</button>
-                    <form onSubmit={this.props.NewPostStore.submitClick} className="col-7 mx-auto">
+                    <form onSubmit={(e) => this.props.NewPostStore.submitClick(e)} className="col-7 mx-auto">
                         <label>Title:<br />
                             <input type="text" value={this.props.NewPostStore.titleValue || ""} onChange={(e) => this.props.NewPostStore.titleChange(e.target.value)} className="width-full py-3 f4" required />
+                            { this.props.NewPostStore.err.title &&
+                                <small className="h5 text-red d-block">{this.props.NewPostStore.err.title}</small>
+                            }
                         </label>
                         <br />
                         <label>Type:<br />
@@ -54,6 +57,9 @@ class NewPost extends React.Component {
                                     </div>
                                 </React.Fragment>   
                             })}
+                            { this.props.NewPostStore.err.categories &&
+                                <small className="h5 text-red d-block">{this.props.NewPostStore.err.categories}</small>
+                            }
                         </div>
                         <br />
                         <label>Description:<br />
@@ -63,13 +69,24 @@ class NewPost extends React.Component {
                                 className="width-full py-3 f4"
                                 required
                             />
+                            { this.props.NewPostStore.err.description &&
+                                <small className="h5 text-red d-block">{this.props.NewPostStore.err.description}</small>
+                            }
                         </label>
                         <br />
                         {this.props.NewPostStore.typeValue == "recipe" &&
                         <>
                             <label>Ingredients:<br /></label>
                             <div className="ingredients">
-                                {this.props.NewPostStore.ingredientsValue.map((ingredient, i) => <Ingredient key={i} ingredient={ingredient} i={i} ingredientNameChange={this.props.NewPostStore.ingredientNameChange} ingredientAmountChange={this.props.NewPostStore.ingredientAmountChange} ingredientUnitChange={this.props.NewPostStore.ingredientUnitChange} />)}
+                                {this.props.NewPostStore.ingredientsValue.map((ingredient, i) => {
+                                    return ( <>
+                                        <Ingredient err={this.props.NewPostStore.err.ingredient} key={i} ingredient={ingredient} i={i} ingredientNameChange={this.props.NewPostStore.ingredientNameChange} ingredientAmountChange={this.props.NewPostStore.ingredientAmountChange} ingredientUnitChange={this.props.NewPostStore.ingredientUnitChange} />
+                                        { this.props.NewPostStore.err.ingredients && <>
+                                        { this.props.NewPostStore.err.ingredients[i] && <small className="h5 text-red d-block">{this.props.NewPostStore.err.ingredients[i]}</small> }
+                                        </>
+                                        }
+                                    </>
+                                )})}
                             </div>
                             <br />
                             <button className="btn btn-default mt-n4 mb-4" onClick={this.props.NewPostStore.addIngredientClick}>Add new ingredient</button><br />

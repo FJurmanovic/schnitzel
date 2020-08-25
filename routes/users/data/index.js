@@ -1,7 +1,8 @@
 const   express = require("express"),
         router = express.Router(),
         bcrypt = require("bcryptjs"),
-        jwt = require("jsonwebtoken");
+        jwt = require("jsonwebtoken"),
+        { check, validationResult} = require("express-validator");
 
 const User = require("../../../model/User");
 const Post = require("../../../model/Post");
@@ -89,65 +90,92 @@ router.get('/:userId', auth, async (req, res) => {
   }
 });
 
-router.put('/', auth, async (req, res) => {
-  const { email, username } = req.body;
-  try {
-    if(req.user.id == "5ed4ce7841cc3c001cfa6bfb"){
-      res.send({
-        type: "demo",
-        message: "You cannot edit demo account"
-      })
-      return
-    }
+router.put('/', auth,
+  [
+    check("username", "Please Enter a Valid Username") //Checks if "username" request is empty
+    .optional()
+    .not()
+    .isEmpty()
+    .isLength({
+      min: 2,
+      max: 10
+    }),
+    check("email", "Please enter a valid email")
+    .optional()
+    .isEmail(), //Checks if "email" request is email
+    check("password", "Please enter a valid password")
+    .optional()
+    .isLength({ //Checks if "password" request is smaller than 6 characters
+        min: 6
+    })
+  ], 
+  async (req, res) => {
+    const errors = validationResult(req);
 
-    const [findUser, findEmail] = await Promise.all([User.findOne({username}), User.findOne({email})]);
-
-    let user = new editUser(req.body);
-
-    if ('password' in req.body) {
-      const salt = await bcrypt.genSalt(10);
-      const hashpassword = await bcrypt.hash(req.body.password, salt);
-      user.password = hashpassword;
-    }
-
-    if(!findUser && !findEmail) {
-      await User.findByIdAndUpdate(req.user.id, user);
-    } else {
-      !!findUser && res.send({
-        type: "username",
-        message: "Username already exists"
-      });
-      !!findEmail && res.send({
-        type: "email",
-        message: "Email already exists"
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        errors: errors.array()
       });
     }
 
-    const payload = {
-      user: {
-        id: req.user.id
+    const { email, username } = req.body;
+    try {
+      if(req.user.id == "5ed4ce7841cc3c001cfa6bfb"){
+        res.send({
+          type: "demo",
+          message: "You cannot edit demo account"
+        })
+        return
       }
-    };
 
-    jwt.sign(
-      payload,
-      "secret",
-      {
-        expiresIn: 3600
-      },
-      (err, token) => {
-        if (err) throw err;
-        res.status(200).json({
-          token
+      const [findUser, findEmail] = await Promise.all([User.findOne({username}), User.findOne({email})]);
+
+      let user = new editUser(req.body);
+
+      if ('password' in req.body) {
+        const salt = await bcrypt.genSalt(10);
+        const hashpassword = await bcrypt.hash(req.body.password, salt);
+        user.password = hashpassword;
+      }
+
+      if(!findUser && !findEmail) {
+        await User.findByIdAndUpdate(req.user.id, user);
+      } else {
+        !!findUser && res.send({
+          type: "username",
+          message: "Username already exists"
+        });
+        !!findEmail && res.send({
+          type: "email",
+          message: "Email already exists"
         });
       }
-    );
-  } catch (e) {
-    res.status(401).json({
-      type: "fetch",
-      message: "Error in fetching user"
-    });
-  }
+
+      const payload = {
+        user: {
+          id: req.user.id
+        }
+      };
+
+      jwt.sign(
+        payload,
+        "secret",
+        {
+          expiresIn: 3600
+        },
+        (err, token) => {
+          if (err) throw err;
+          res.status(200).json({
+            token
+          });
+        }
+      );
+    } catch (e) {
+      res.status(401).json({
+        type: "fetch",
+        message: "Error in fetching user"
+      });
+    }
 });
 
 module.exports = router;
