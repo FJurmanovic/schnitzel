@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import {Provider} from 'mobx-react';
 
 import {App} from './components';
-import {AuthStore, LoginStore, RegisterStore, EditProfileStore, PostsStore, ProfileStore, FormStore} from './stores';
+import {AuthStore, LoginStore, RegisterStore, EditProfileStore, PostsStore, ProfileStore, FormStore, FullPostStore} from './stores';
 
 import './common/styles/Main.scss';
 import './common/styles/Chevron.scss';
@@ -21,6 +21,7 @@ const Application = () =>
         ProfileStore={ProfileStore}
         NewPostStore={new FormStore("new")}
         EditPostStore={new FormStore("edit")}
+        FullPostStore={FullPostStore}
     >
         <App />
     </Provider>;

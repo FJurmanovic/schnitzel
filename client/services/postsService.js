@@ -14,6 +14,9 @@ class PostsService {
     getPost = async (token, id) => {
         return await HttpClient.get(url + `/${id}`, {}, {"token": token});
     }
+    getEditPost = async (token, id) => {
+        return await HttpClient.get(url + `/edit-data/${id}`, {}, {"token": token});
+    }
     deletePost = async (token, postId) => {
         return await HttpClient.delete(url + `/${postId}`, {}, {"token": token});
     }

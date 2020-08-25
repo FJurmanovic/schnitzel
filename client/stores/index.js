@@ -6,3 +6,4 @@ export {default as FormStore} from './formStore';
 
 export {default as PostsStore} from './postsStore';
 export {default as ProfileStore} from './profileStore';
+export {default as FullPostStore} from './fullPostStore';

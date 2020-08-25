@@ -44,7 +44,7 @@ class FormStore {
     }
 
     getData = async (postId) => {
-        const data = await this.postsService.getPost(this.authStore.token, postId);
+        const data = await this.postsService.getEditPost(this.authStore.token, postId);
         if(data.id) {
             this.titleValue = data.title;
             this.typeValue = data.type;

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {BrowserRouter as Router, Switch, Route, Redirect} from 'react-router-dom';
 
-import {Landing, Login, Register, EditProfile, Feed, Explore, ExploreCategory, Profile, EditPost} from '../pages';
+import {Landing, Login, Register, EditProfile, Feed, Explore, ExploreCategory, Profile, EditPost, FullPost} from '../pages';
 import {Navbar} from './';
 import { observer, inject } from 'mobx-react';
 
@@ -40,6 +40,9 @@ const AppRouter = ({store, auth}) =>
                     </Route>
                     <Route path="/post/edit/:postId">
                         { auth ? <EditPost /> : <Redirect to="/" /> }
+                    </Route>
+                    <Route path="/post/:postId">
+                        { auth ? <FullPost /> : <Redirect to="/" /> }
                     </Route>
                     <Route path="/:profileName">
                         { auth ? <Profile /> : <Redirect to="/" /> }

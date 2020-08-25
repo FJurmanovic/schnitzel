@@ -75,6 +75,17 @@ router.get('/:postId', auth, async (req, res) => {
     const {user: {id}, params: {postId}} = req;
     try {
         const post = await Post.findById(postId);
+        let item = await Items(post, id);
+        res.json(item);
+    } catch (e) {
+        res.status(500).send("Error fetching");
+    }
+});
+
+router.get('/edit-data/:postId', auth, async (req, res) => {
+    const {user: {id}, params: {postId}} = req;
+    try {
+        const post = await Post.findById(postId);
         if(post.userId !== id) {
             res.status(401).send("This is not your post");
             return;
