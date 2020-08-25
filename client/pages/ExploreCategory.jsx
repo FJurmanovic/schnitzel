@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { Link, withRouter } from 'react-router-dom';
 
+import { firstUpper, categories } from '../common/js';
+
 import { Post } from '../components/Post';
 
 @inject("ExploreCategoryStore")
@@ -29,7 +31,20 @@ class ExploreCategory extends Component {
     }
 
     render() {
-        return (
+        return <>
+            <div className="d-flex">
+                <div className="d-inline-block mx-auto">
+                    <Link className="btn btn-lightgreen btn-rounder mx-1 my-1" to={`/explore`}>All</Link>
+                    {categories.map((category, key) => {
+                        return <React.Fragment key={key}>
+                            <Link className={`btn ${category === this.props.match.params.categoryId ? "btn-lightblue" : "btn-lightgreen" }  btn-rounder mx-1 my-1`} to={`/explore/f/${category}`}>{firstUpper(category)}</Link>
+                        </React.Fragment>
+                    })}
+                </div>
+            </div>
+            
+            <hr />
+
             <div className="posts" onScroll={this.props.ExploreCategoryStore.handleScroll}>
                 { this.props.ExploreCategoryStore.loadingPost 
                 ? <>
@@ -60,6 +75,7 @@ class ExploreCategory extends Component {
                                 removePoint={this.props.ExploreCategoryStore.removePoint} 
                                 authUser={this.props.ExploreCategoryStore.userData.id} 
                                 getUserData={this.props.ExploreCategoryStore.getUserData} 
+                                removePost={this.props.ExploreCategoryStore.removePost}
                                 from="explore" 
                             />
                     })
@@ -70,7 +86,7 @@ class ExploreCategory extends Component {
                 }</>
                 }
             </div>
-        );
+        </>;
     }
 }
 

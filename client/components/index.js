@@ -4,3 +4,4 @@ export {default as NewPost} from './NewPost';
 export {Post} from './Post';
 export {Popover} from './Popover';
 export {Followers} from './Followers';
+export {Ingredient} from './Ingredient';

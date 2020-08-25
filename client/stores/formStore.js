@@ -1,12 +1,18 @@
-import {observable, computed} from 'mobx';
-import {AuthStore} from './';
+import {observable, computed, runInAction} from 'mobx';
+import {AuthStore, PostsStore} from './';
+import { PostsService } from '../services';
 
 const path = require('path');
 
 class FormStore {
     constructor(type) {
         this.formType = type;
+        this.postsService = new PostsService();
+        this.authStore = AuthStore;
     }
+
+    @observable postObject = {};
+    @observable postId = null;
 
     @observable titleValue = null;
     @observable typeValue = "post";
@@ -33,20 +39,23 @@ class FormStore {
         this.directionsValue = null;
         this.isRecipe = false,
         this.selectedFile = null;
+        this.showNew = false;
         this.err = {};
     }
 
-    currentData = () => {
-        if (this.userData.id) {
-            this.usernameValue = this.userData.username;
-            this.emailValue = this.userData.email;
-            this.passwordValue = null;
-            this.password2Value = null;
-            if(this.userData.isPrivate) {
-                this.privacyValue = "private"; 
-            } else {
-                this.privacyValue = "public";
-            }
+    getData = async (postId) => {
+        const data = await this.postsService.getPost(this.authStore.token, postId);
+        if(data.id) {
+            this.titleValue = data.title;
+            this.typeValue = data.type;
+            this.privacyValue = data.isPrivate ? "private" : "public" ;
+            this.descriptionValue = data.description;
+            this.categoriesValue = data.categories;
+            this.numIngredientsValue = data.ingredients.length;
+            this.ingredientsValue = [...data.ingredients];
+            this.directionsValue = data.directions;
+            this.showNew = true;
+            this.postId = postId;
         }
     }
 
@@ -71,7 +80,8 @@ class FormStore {
         this.descriptionValue = value;
     }
 
-    addIngredientClick = () => {
+    addIngredientClick = (event) => {
+        event.preventDefault();
         this.ingredientsValue.push(new Ingredient());
         this.numIngredientsValue++;
     }
@@ -104,13 +114,11 @@ class FormStore {
         }
     }
 
-    submitClick = (event) => {
-        event.preventDefault();
+    submitClick = (event, history) => {
         let postObject = {};
         let privacy = this.privacyValue == "private";
 
-
-        if(this.validation()) return;
+        if(this.validation()) return event.preventDefault();
 
         let data = new FormData();
         data.append('file', this.selectedFile);
@@ -147,7 +155,55 @@ class FormStore {
             }
         }
 
-        console.log(postObject);
+        if(this.formType === "edit") {
+            event.preventDefault();
+            return this.putPost(postObject, history);
+        };
+
+        return this.postPost(postObject);
+    }
+
+    putPost = async (object, history) => {
+        try { 
+            const data = await this.postsService.putPost(this.authStore.token, this.postId, object);
+            if (data) {
+                history.goBack();
+            }
+        } catch (error) {
+            console.log(error);
+            runInAction(() => {
+                this.status = "error";
+            });
+        }
+    }
+
+    postPost = async (object) => {
+        try { 
+            const data = await this.postsService.postPost(this.authStore.token, object);
+            return data;
+        } catch (error) {
+            console.log(error);
+            runInAction(() => {
+                this.status = "error";
+            });
+        }
+    }
+
+    getPost = async (postId) => {
+        try { 
+            const data = await this.postsService.getPost(this.authStore.token, postId);
+            runInAction(() => {
+                if(data.id) {
+                    this.postObject = data;
+                }
+            });
+            return data;
+        } catch (error) {
+            console.log(error);
+            runInAction(() => {
+                this.status = "error";
+            });
+        }
     }
 
     validation = () => {
@@ -165,12 +221,14 @@ class FormStore {
         if(this.categoriesValue.length < 1) err.categories = "You need to select at least one category";
 
         if(this.typeValue === "recipe") {
-            if(this.ingredientsValue.length < 1) err.ingredients.empty = "You need to add at least one ingredient";
+            if(isEmpty(this.ingredientsValue)) err.ingredients.empty = "You need to add at least one ingredient";
             else {
-                err.ingredients = [];
                 this.ingredientsValue.forEach((ingredient, key) => {
-                    if(ingredient.name == null || ingredient.name.length < 1) err.ingredients[key] = "Ingredient name cannot be empty";
-                })
+                    if(ingredient.name == null || ingredient.name.length < 1) {
+                        if (!err.ingredients) err.ingredients = []; 
+                        err.ingredients[key] = "Ingredient name cannot be empty";
+                    }
+                });
             }
             if(this.directionsValue.length < 1) err.directions = "Directions cannot be blank";
         }   

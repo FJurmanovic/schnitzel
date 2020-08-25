@@ -1,7 +1,7 @@
 class HttpClient {
     
-    post(url, data) {
-        let headers = new Headers();
+    post(url, data, headersParam) {
+        let headers = new Headers(headersParam);
         headers.append("Content-Type", "application/json");
         let options = {
             method: "POST",

@@ -6,3 +6,4 @@ export {default as Feed} from './Feed';
 export {default as Explore} from './Explore';
 export {default as ExploreCategory} from './ExploreCategory';
 export {default as Profile} from './Profile';
+export {default as EditPost} from './EditPost';

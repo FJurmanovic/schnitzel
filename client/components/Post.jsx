@@ -3,6 +3,8 @@ import {Link} from 'react-router-dom';
 
 import {Popover} from './';
 
+import {firstUpper} from '../common/js';
+
 const OpenButton = (props) => {
     if (props.from == "home") {   
         return <Link to={`/post/${props.id}`}>{props.children}</Link>
@@ -13,7 +15,7 @@ const OpenButton = (props) => {
     }
 }
 
-export const Post = ({post, iter, userdata, addPoint, removePoint, authUser, from, getUserData}) => {
+export const Post = ({post, iter, userdata, addPoint, removePoint, authUser, from, getUserData, removePost}) => {
 
     const [isPointed, setIsPointed] = useState(post.isPointed);
 

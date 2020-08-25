@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 
 import { Post } from '../components/Post';
 
+import { firstUpper, categories } from '../common/js';
+
 @inject("ExploreStore")
 @observer
 class Explore extends Component {
@@ -20,7 +22,20 @@ class Explore extends Component {
     }
 
     render() {
-        return (
+        return <>
+            <div className="d-flex">
+                <div className="d-inline-block mx-auto">
+                    <Link className="btn btn-lightgreen btn-rounder mx-1 my-1" to={`/explore`}>All</Link>
+                    {categories.map((category, key) => {
+                        return <React.Fragment key={key}>
+                            <Link className="btn btn-lightgreen btn-rounder mx-1 my-1" to={`/explore/f/${category}`}>{firstUpper(category)}</Link>
+                        </React.Fragment>
+                    })}
+                </div>
+            </div>
+            
+            <hr />
+
             <div className="posts" onScroll={this.props.ExploreStore.handleScroll}>
                 { this.props.ExploreStore.loadingPost 
                 ? <>
@@ -51,6 +66,7 @@ class Explore extends Component {
                                 removePoint={this.props.ExploreStore.removePoint} 
                                 authUser={this.props.ExploreStore.userData.id} 
                                 getUserData={this.props.ExploreStore.getUserData} 
+                                removePost={this.props.ExploreStore.removePost}
                                 from="explore" 
                             />
                     })
@@ -61,7 +77,7 @@ class Explore extends Component {
                 }</>
                 }
             </div>
-        );
+        </>;
     }
 }
 

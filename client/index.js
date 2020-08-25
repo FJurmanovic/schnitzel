@@ -20,6 +20,7 @@ const Application = () =>
         ExploreCategoryStore={new PostsStore("explore")}
         ProfileStore={ProfileStore}
         NewPostStore={new FormStore("new")}
+        EditPostStore={new FormStore("edit")}
     >
         <App />
     </Provider>;

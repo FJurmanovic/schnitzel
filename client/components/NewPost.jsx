@@ -2,17 +2,7 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import {firstUpper, categories} from '../common/js';
 
-const Ingredient = ({ingredient, i, ingredientNameChange, ingredientAmountChange, ingredientUnitChange}) => {
-    const [name, setName] = React.useState(ingredient.name);
-    const [amount, setAmount] = React.useState(ingredient.amount);
-    const [unit, setUnit] = React.useState(ingredient.unit);
-
-    return <div className="ingredient">
-        <input className="ingr-item" type="text" value={name || ""} onChange={(e) => {ingredientNameChange(e.target.value, i); setName(e.target.value)}} placeholder="Ingredient" />
-        <input className="ingr-item" type="number" value={amount || ""} onChange={(e) => {ingredientAmountChange(e.target.value, i); setAmount(e.target.value)}} placeholder="Amount" />
-        <input className="ingr-item" type="text" value={unit || ""} onChange={(e) => {ingredientUnitChange(e.target.value, i); setUnit(e.target.value)}} placeholder="Unit" />
-    </div>
-}
+import { Ingredient } from './';
 
 @inject("NewPostStore")
 @observer
@@ -22,7 +12,7 @@ class NewPost extends React.Component {
             { this.props.NewPostStore.showNew
             ?   <div className="new-post">
                     <button className="btn btn-link float-right mr-9 mt-n3" onClick={this.props.NewPostStore.toggleShow}>Cancel</button>
-                    <form onSubmit={(e) => this.props.NewPostStore.submitClick(e)} className="col-7 mx-auto">
+                    <form onSubmit={(e) => this.props.NewPostStore.submitClick(e)} className="col-7 mx-auto" method="post">
                         <label>Title:<br />
                             <input type="text" value={this.props.NewPostStore.titleValue || ""} onChange={(e) => this.props.NewPostStore.titleChange(e.target.value)} className="width-full py-3 f4" required />
                             { this.props.NewPostStore.err.title &&
@@ -89,7 +79,7 @@ class NewPost extends React.Component {
                                 )})}
                             </div>
                             <br />
-                            <button className="btn btn-default mt-n4 mb-4" onClick={this.props.NewPostStore.addIngredientClick}>Add new ingredient</button><br />
+                            <button className="btn btn-default mt-n4 mb-4" onClick={(e) => this.props.NewPostStore.addIngredientClick(e)}>Add new ingredient</button><br />
                             <label className="">Directions:<br />
                                 <textarea 
                                     onChange={(e) => this.props.NewPostStore.directionsChange(e.target.value)}

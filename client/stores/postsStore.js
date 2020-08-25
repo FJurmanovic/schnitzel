@@ -68,6 +68,18 @@ class PostsStore {
         this.isPrivate = false;
     }
 
+    removePost = async (id) => {
+        try { 
+            const data = await this.postsService.deletePost(this.authStore.token, id);
+            return data;
+        } catch (error) {
+            console.log(error);
+            runInAction(() => {
+                this.status = "error";
+            });
+        }
+    }
+
     postsGet = async (callback) => {
         if (this.page === 1) this.loadingPost = true;
         if(!this.last) {

@@ -71,6 +71,45 @@ router.get('/', auth, async (req, res) => {
     }
 });
 
+router.get('/:postId', auth, async (req, res) => {
+    const {user: {id}, params: {postId}} = req;
+    try {
+        const post = await Post.findById(postId);
+        if(post.userId !== id) {
+            res.status(401).send("This is not your post");
+            return;
+        }
+
+        let user = await User.findById(id);
+
+        if(user == null){
+            user = {"username": "DeletedUser"}
+        }
+        
+        let postMap = {};
+    
+        postMap["id"] = post._id;
+        postMap["title"] = post.title;
+        postMap["type"] = post.type;
+        postMap["isPrivate"] = post.isPrivate || false;
+        postMap["hasPhoto"] = post.hasPhoto || false;
+        postMap["photoExt"] = post.photoExt || '';
+        postMap["description"] = post.description;
+        postMap["categories"] = post.categories;
+        if(post.type == "recipe"){
+            postMap["ingredients"] = post.ingredients;
+            postMap["directions"] = post.directions;
+        }
+        postMap["userId"] = post.userId;
+        postMap["username"] = user.username;
+        postMap["createdAt"] = post.createdAt;
+
+        res.json(postMap);
+    } catch (e) {
+        res.status(500).send("Error fetching");
+    }
+});
+
 router.post('/', auth, 
     [
         check("title", "Please Enter a Valid Title") //Checks if title is empty
@@ -122,6 +161,51 @@ router.post('/', auth,
             console.log(err.message);
             res.status(500).send("Error in fetching");
         }
+});
+
+router.put('/:postId', auth, 
+    [
+        check("title", "Please Enter a Valid Title") //Checks if title is empty
+        .not()
+        .isEmpty(),
+        check("description", "Please enter a valid description").not() //Checks if description is empty
+        .isEmpty()
+    ],
+    async (req, res) => {
+        const { body: { title, type, isPrivate, description, categories, ingredients, directions }, params: {postId}, user: {id} } = req;
+        try { 
+            let post = await Post.findById(postId);
+            if(post.userId !== id) {
+                res.status(401).send("This is not your post");
+                return;
+            }
+
+            post = await Post.findByIdAndUpdate(postId, {title, type, isPrivate, description, categories, ingredients, directions, updatedAt: Date()})
+
+            res.send({id: post.id})
+        } catch (err) {
+            console.log(err.message);
+            res.status(500).send("Error in fetching");
+        }
+});
+
+
+router.delete('/:postId', auth, async (req, res) => {
+    const {user: {id}, params: {postId}} = req;
+    try {
+        const post = await Post.findById(postId);
+        if(!!post && (post.userId == id)){
+            if(post.hasPhoto){
+                console.log("delete photo")
+            }
+          await Post.findByIdAndRemove(postId);
+          res.json("Removed post");
+          return;
+        }
+          res.send("Not your post");
+    } catch (e) {
+        res.status(500).send("Error deleting post")
+    }
 });
 
 module.exports = router;
