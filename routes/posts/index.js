@@ -45,7 +45,7 @@ router.get('/', auth, async (req, res) => {
         } else if (type === "explore") {
             if (category === "all") { 
                 options = {
-                    "isPrivate": false
+                    "isPrivate": false,
                 }
             } else {
                 options = {
@@ -55,16 +55,46 @@ router.get('/', auth, async (req, res) => {
             }
         }
         options.createdAt = {"$lte": firstDate}; 
-        const [posts, total] = await Promise.all([Post.find(options).skip((page - 1) * ppp).limit(ppp).sort('-createdAt'), Post.find(options)]);
+        let [posts, total] = await Promise.all([Post.find(options).skip((page - 1) * ppp).limit(ppp).sort('-createdAt'), Post.find(options)]);
+        let length = total.length;
         let items = [];
         for (post of posts) {
-            const item = await Items(post, req.user.id);
+            //const item = await Items(post, req.user.id, type);
+            let item = {};
+            let user = await User.findById(post.userId); // Change with another fetch action to get usernames after posts are fetched
+            if (user.isPrivate && user.id != req.user.id) {
+                length--;
+                continue;
+            }
+            if(!user){
+                user= {"username": "DeletedUser"}
+            }
+    
+            item.id = post._id;
+            item.title = post.title;
+            item.type = post.type;
+            item.username = user.username;
+            item.description = post.description;
+            item.comments = post.comments.length || 0;
+            item.isPrivate = post.isPrivate || false;
+            item.isPointed = post.points.filter(x => x.userId == req.user.id).map(x => x.userId == req.user.id)[0] || false;
+            item.hasPhoto = post.hasPhoto || false;
+            item.photoExt = post.photoExt || '';
+            item.points = post.points.length;
+            item.categories = post.categories;
+            if(post.type === "recipe"){
+                item.ingredients = post.ingredients;
+                item.directions = post.directions;
+            }
+            item.userId = post.userId;
+            item.createdAt = post.createdAt;
+            item.timeAgo = timeSince(post.createdAt);
             items.push(item);
         }
         res.json({
             "page": page,
             "ppp": ppp,
-            "total": total.length,
+            "total": length,
             "items": items
         });
     } catch (err) {
@@ -223,7 +253,7 @@ router.delete('/:postId', auth, async (req, res) => {
 
 module.exports = router;
 
-async function Items(object, userId) {
+async function Items(object, userId, type) {
     let user = await User.findById(object.userId);
     if(!user){
         user= {"username": "DeletedUser"}
@@ -262,9 +292,9 @@ function timeSince(datetime) {
         return `${time} months ago.`
     }else if ((time = Math.floor(seconds / 60 / 60 / 24)) > 1){
         return `${time} days ago.`
-    }else if ((time = Math.floor(seconds / 60 / 60) > 1)){
+    }else if ((time = Math.floor(seconds / 60 / 60)) > 1){
         return `${time} hours ago.`
-    }else if ((time = Math.floor(seconds / 60) > 1)) {
+    }else if ((time = Math.floor(seconds / 60)) > 1) {
         if (time >= 30) {
             return "30 minutes ago."
         }else if (time >= 15) {

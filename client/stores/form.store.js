@@ -167,7 +167,7 @@ class FormStore {
         try { 
             const data = await this.postsService.putPost(this.authStore.token, this.postId, object);
             if (data) {
-                history.goBack();
+                goBack.call(history);
             }
         } catch (error) {
             console.log(error);
@@ -258,4 +258,9 @@ function isEmpty(obj) {
     }
 
     return true;
+}
+
+function goBack() {
+    if (this.action == "PUSH") return this.goBack();
+    return this.push("/");
 }

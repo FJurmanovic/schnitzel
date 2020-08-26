@@ -72,6 +72,9 @@ const PostSchema = mongoose.Schema({ //Creates new mongoose schema(Model) for po
         default: Date.now
       }
     }],
+    isDeleted: {
+      type: Boolean
+    },
     createdAt: {
       type: Date,
       default: Date.now()
@@ -95,6 +98,9 @@ const PostSchema = mongoose.Schema({ //Creates new mongoose schema(Model) for po
           default: Date.now
         }
       }],
+      isDeleted: {
+        type: Boolean
+      },
       createdAt: {
         type: Date,
         default: Date.now()

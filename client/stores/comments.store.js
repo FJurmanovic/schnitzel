@@ -34,6 +34,24 @@ class CommentsStore {
         return this.comments.length;
     }
 
+    deleteComment = async (id) => {
+        let object = {
+            type: this.type,
+            postId: this.postId
+        };
+
+        if(this.type == "comment") {
+            object.commentId = id;
+        }else if (this.type == "reply") {
+            object.commentId = this.commentId;
+            object.replyId = id;
+        }
+        const data = await this.postsService.deleteComment(this.authStore.token, object);
+        if(data) {
+            location.reload();
+        }
+    }
+
     togglePoints = (id) => {
         let commentKey = this.comments.map((x) => x.id).indexOf(id);
         let object = {
@@ -50,24 +68,18 @@ class CommentsStore {
             this.comments[commentKey].points--;
             this.comments[commentKey].isPointed = false;
             this.postsService.deletePoint(this.authStore.token, this.postId, object);
-
         } else {
             this.comments[commentKey].points++;
             this.comments[commentKey].isPointed = true;
             this.postsService.putPoint(this.authStore.token, this.postId, object);
-
         }
-        console.log(this.type, this.postId, this.commentId, id);
-        console.log()
-        console.log(this.comments[0].id)
     }
 
     setId = (postId, commentId, hasComments) => {
         this.postId = postId || null;
         this.commentId = commentId || null;
-
         if(this.type === "comment" && this.postId || this.type === "reply" && this.postId && this.commentId) {
-            hasComments && this.getComments();
+            if(hasComments) this.getComments();
         }
     }
 

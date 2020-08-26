@@ -12,6 +12,8 @@ const OpenButton = (props) => {
         return <Link to={`/post/${props.id}/1`}>{props.children}</Link>
     } else if (props.from == "explore") {
         return <Link to={`/post/${props.id}/2`}>{props.children}</Link>
+    } else if (props.from == "explore-category"){
+        return <Link to={`/post/${props.id}/3`}>{props.children}</Link>
     }
 }
 

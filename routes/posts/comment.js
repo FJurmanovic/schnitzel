@@ -71,7 +71,6 @@ router.get('/', auth, async (req, res) => {
 
 router.post('/', auth, async (req, res) => {
     const {user: {id}, body: {type, comment, postId, commentId}} = req;
-    console.log(id, type, postId, commentId, comment)
     try{
         let points = [];
 
@@ -93,6 +92,21 @@ router.post('/', auth, async (req, res) => {
     }
 });
 
+router.delete('/', auth, async (req, res) => {
+    const {user: {id}, body: {type, postId, commentId, replyId}} = req;
+    try {
+        if (type === "reply") {
+            await Post.findOneAndUpdate({"_id": postId, comments: {$elemMatch: { "_id": commentId, reply: {$elemMatch: { "_id": replyId, "userId": id } } } } }, {$push: { 'comments.$[comment].reply.$[repl].isDeleted': true} , $set: {'comments.$[comment].reply.$[repl].comment': "[ Reply deleted ]" } }, { arrayFilters: [{ 'comment._id': commentId }, { 'repl._id': replyId }] });
+        } else if (type === "comment") {
+            await Post.findOneAndUpdate({"_id": postId, comments: {$elemMatch: { "_id": commentId, "userId": id }}}, { $push: {'comments.$[comment].isDeleted': true}, $set: {'comments.$[comment].comment': "[ Comment deleted ]"} }, { arrayFilters: [{ 'comment._id': commentId }] });
+        }
+        res.status(200).send("Succesfully deleted comment")
+    } catch (err) {
+        console.log(err.message);
+        res.status(500).send("Error in fetching");
+    }
+})
+
 module.exports = router;
 
 async function Items(object, userId) {
@@ -106,6 +120,7 @@ async function Items(object, userId) {
         this.username = user.username;
         if (object.reply) this.replies = object.reply.length || 0;
         this.isPointed = object.points.filter(x => x.userId == userId).map(x => x.userId == userId)[0] || false;
+        this.isDeleted = object.isDeleted || false;
         this.points = object.points.length;
         this.userId = object.userId;
         this.createdAt = object.createdAt;
@@ -124,9 +139,9 @@ function timeSince(datetime) {
         return `${time} months ago.`
     }else if ((time = Math.floor(seconds / 60 / 60 / 24)) > 1){
         return `${time} days ago.`
-    }else if ((time = Math.floor(seconds / 60 / 60) > 1)){
+    }else if ((time = Math.floor(seconds / 60 / 60)) > 1){
         return `${time} hours ago.`
-    }else if ((time = Math.floor(seconds / 60) > 1)) {
+    }else if ((time = Math.floor(seconds / 60)) > 1) {
         if (time >= 30) {
             return "30 minutes ago."
         }else if (time >= 15) {

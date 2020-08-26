@@ -38,6 +38,7 @@ class FullPostStore {
         this.postObject = {};
         this.showPost = false;
         this.postId = null;
+        this.commentStore = new CommentsStore("comment");
     }
 
     submitClick = async(comment, type, postId, commentId, event) => {

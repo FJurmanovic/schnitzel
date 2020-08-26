@@ -46,10 +46,11 @@ if (devArg) { //If devArg is true, front-end will be webpack and not static file
     app.use(webpackHotMiddleware(compiler));
 }
 
+app.use("/api/logos", express.static(path.join(__dirname, '/static/logos')));
+
 app.get('*', (_, res) => {
     res.sendFile(HTML_FILE);
 });
-
 
 app.listen(PORT, () => {
     console.log(`Server started at PORT ${PORT}`);

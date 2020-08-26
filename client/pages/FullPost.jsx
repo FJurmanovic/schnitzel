@@ -8,18 +8,25 @@ import { Comments, NewComment } from '../components';
 @observer
 class FullPost extends Component {
     componentWillMount() {
+        document.body.style.overflow = "hidden";
         const {postId} = this.props.match.params;
         this.props.FullPostStore.componentMounted(postId);
     }
 
     componentWillUnmount() {
+        document.body.style.overflow = "visible";
         this.props.FullPostStore.toDefault();
+    }
+
+    goBack() {
+        if (this.props.history.action == "PUSH") return this.props.history.goBack();
+        return this.props.history.push("/");
     }
 
     render() {
         return <>
         { this.props.FullPostStore.showPost  &&
-            <div className='overlay' onClick={this.props.history.goBack}>
+            <div className='overlay' onClick={this.goBack.bind(this)}>
                 <div className='poston screen-post' onClick={(event) => event.stopPropagation()}>
                         { this.props.FullPostStore.postObject.hasPhoto && <div className="card-image"><img src={`https://storage.googleapis.com/schnitzel/post/${this.props.FullPostStore.postObject.id}/${this.props.FullPostStore.postObject.id}${this.props.FullPostStore.postObject.photoExt}`} className="card-img-top" /></div>}
                     <div className="screen-body">    

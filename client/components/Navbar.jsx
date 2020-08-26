@@ -1,6 +1,24 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import { observer, inject } from 'mobx-react';
-import {Link} from 'react-router-dom';
+import {Link, withRouter} from 'react-router-dom';
+import { getRandomInt } from '../common/js';
+
+const Logo = (props) => {
+  const logos = ["chicken", "hamburger", "beef", "salad"];
+  const [current, setCurrent] = useState(getRandomInt(0,3));
+  let random = () => {
+    let rnd = getRandomInt(0,3);
+    if (rnd == current) return random();
+    return rnd;
+  };
+  React.useEffect(() => {
+    setCurrent(random);
+  }, [props.change]);
+
+  return(
+    <img src={`/api/logos/${logos[current]}.svg`} className="logo"></img>
+  )
+}
 
 const NotLoggedLink = () =>
     <>
@@ -41,7 +59,9 @@ class Navbar extends Component {
         return (
             <header className="header border-bottom border-black p-5 f4">
                 <div className={this.props.AuthStore.isAuth ? "header-item--full" : "header-item--full"}>
-                    <Link to="/">Home</Link>
+                    <Link to="/">
+                      <Logo change={this.props.location.key} />
+                    </Link>
                 </div>
                 { this.props.AuthStore.isAuth ? <LoggedLink userData={this.props.AuthStore.userData} /> : <NotLoggedLink /> }
             </header>
@@ -49,4 +69,4 @@ class Navbar extends Component {
     }
 }
 
-export default Navbar;
+export default withRouter(Navbar);

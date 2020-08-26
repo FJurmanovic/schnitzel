@@ -5,9 +5,14 @@ import {Landing, Login, Register, EditProfile, Feed, Explore, ExploreCategory, P
 import {Navbar} from './';
 import { observer, inject } from 'mobx-react';
 
-const AppRouter = ({store, auth}) => 
+const closeDetails = function() {
+    let menu = document.getElementById("profile");
+    menu.removeAttribute("open");
+}
+
+const AppRouter = ({store, auth}) =>
     <Router>
-        <div className="App">
+        <div className="App" onClick={closeDetails}>
             <Navbar />
             <div className="container">
                 <Switch>
@@ -41,8 +46,41 @@ const AppRouter = ({store, auth}) =>
                     <Route path="/post/edit/:postId">
                         { auth ? <EditPost /> : <Redirect to="/" /> }
                     </Route>
+                    <Route path="/post/:postId/3">
+                        { auth 
+                        ? <>
+                            <ExploreCategory />
+                            <FullPost />
+                          </> 
+                        : <Redirect to="/" /> 
+                        }
+                    </Route>
+                    <Route path="/post/:postId/2">
+                        { auth 
+                        ? <>
+                            <Explore />
+                            <FullPost />
+                          </> 
+                        : <Redirect to="/" /> 
+                        }
+                    </Route>
+                    <Route path="/post/:postId/1">
+                        { auth 
+                        ? <>
+                            <Profile />
+                            <FullPost />
+                          </> 
+                        : <Redirect to="/" /> 
+                        }
+                    </Route>
                     <Route path="/post/:postId">
-                        { auth ? <FullPost /> : <Redirect to="/" /> }
+                        { auth 
+                        ? <>
+                            <Feed />
+                            <FullPost />
+                          </> 
+                        : <Redirect to="/" /> 
+                        }
                     </Route>
                     <Route path="/:profileName">
                         { auth ? <Profile /> : <Redirect to="/" /> }

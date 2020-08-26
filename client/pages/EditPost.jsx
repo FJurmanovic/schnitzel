@@ -18,12 +18,17 @@ class EditPost extends Component {
     componentWillUnmount() {
         this.props.EditPostStore.toDefault();
     }
+    
+    goBack() {
+        if (this.props.history.action == "PUSH") return this.props.history.goBack();
+        return this.props.history.push("/");
+    }
 
     render() {
         return <>
             { this.props.EditPostStore.showNew
             ?   <div className="new-post">
-                    <button className="btn btn-link float-right mr-9 mt-n3" onClick={this.props.history.goBack}>Cancel</button>
+                    <button className="btn btn-link float-right mr-9 mt-n3" onClick={this.goBack.bind(this)}>Cancel</button>
                     <form onSubmit={(e) => this.props.EditPostStore.submitClick(e, this.props.history)} className="col-7 mx-auto" method="post">
                         <label>Title:<br />
                             <input type="text" value={this.props.EditPostStore.titleValue || ""} onChange={(e) => this.props.EditPostStore.titleChange(e.target.value)} className="width-full py-3 f4" required />

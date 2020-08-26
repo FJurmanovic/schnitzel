@@ -32,6 +32,9 @@ class PostsService {
     postComment = async (token, object) => {
         return await HttpClient.post(url + "/comment", object, {"token": token});
     }
+    deleteComment = async (token, object) => {
+        return await HttpClient.delete(url + "/comment", object, {"token": token})
+    }
 }
 
 export default PostsService;

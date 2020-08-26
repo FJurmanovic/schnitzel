@@ -9,7 +9,6 @@ import { Post, NewPost } from '../components';
 class Feed extends Component {
     componentWillMount() {
         this.props.FeedStore.postsGet();
-
         window.addEventListener('scroll', this.props.FeedStore.handleScroll);
     }
 

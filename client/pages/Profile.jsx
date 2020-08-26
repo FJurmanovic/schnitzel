@@ -22,11 +22,12 @@ class Profile extends Component {
     componentDidUpdate(prevProps) {
         let { profileName } = this.props.match.params;
         window.removeEventListener('scroll', this.props.ProfileStore.handleScroll);
+        if (this.props.match.path !== prevProps.match.path) return;
         if (profileName !== prevProps.match.params.profileName) {
             this.props.ProfileStore.componentMounted(profileName, () => {
                 if (this.props.ProfileStore.myProfile && profileName) this.props.history.push("/profile");
-                window.addEventListener('scroll', this.props.ProfileStore.handleScroll)
             });
+            window.addEventListener('scroll', this.props.ProfileStore.handleScroll);
         }
     }
 

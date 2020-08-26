@@ -10,6 +10,7 @@ import { Post } from '../components/Post';
 @observer
 class ExploreCategory extends Component {
     componentWillMount() {
+        console.log("One");
         this.props.ExploreCategoryStore.setCategory(this.props.match.params.categoryId);
         this.props.ExploreCategoryStore.postsGet();
         window.addEventListener('scroll', this.props.ExploreCategoryStore.handleScroll);
@@ -23,6 +24,7 @@ class ExploreCategory extends Component {
 
     componentDidUpdate(prevProps) {
         window.removeEventListener('scroll', this.props.ExploreCategoryStore.handleScroll);
+        if (this.props.match.path !== prevProps.match.path) return;
         if (this.props.match.params.categoryId !== prevProps.match.params.categoryId) {
             this.props.ExploreCategoryStore.setCategory(this.props.match.params.categoryId);
             this.props.ExploreCategoryStore.postsGet(() => window.addEventListener('scroll', this.props.ExploreCategoryStore.handleScroll));
@@ -76,7 +78,7 @@ class ExploreCategory extends Component {
                                 authUser={this.props.ExploreCategoryStore.userData.id} 
                                 getUserData={this.props.ExploreCategoryStore.getUserData} 
                                 removePost={this.props.ExploreCategoryStore.removePost}
-                                from="explore" 
+                                from="explore-category" 
                             />
                     })
                 }
