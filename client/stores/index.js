@@ -1,9 +1,10 @@
-export {default as AuthStore} from './authStore';
-export {default as LoginStore} from './loginStore';
-export {default as RegisterStore} from './registerStore';
-export {default as EditProfileStore} from './editProfileStore';
-export {default as FormStore} from './formStore';
+export {default as AuthStore} from './auth.store';
+export {default as LoginStore} from './login.store';
+export {default as RegisterStore} from './register.store';
+export {default as EditProfileStore} from './editProfile.store';
+export {default as FormStore} from './form.store';
 
-export {default as PostsStore} from './postsStore';
-export {default as ProfileStore} from './profileStore';
-export {default as FullPostStore} from './fullPostStore';
+export {default as PostsStore} from './posts.store';
+export {default as ProfileStore} from './profile.store';
+export {default as FullPostStore} from './fullPost.store';
+export {default as CommentsStore} from './comments.store';

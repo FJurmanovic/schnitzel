@@ -26,6 +26,9 @@ class PostsService {
     deletePoint = async (token, postId, type) => {
         return await HttpClient.delete(url + "/point/" + postId, {type: type}, {"token": token});
     }
+    getComment = async (token, params) => {
+        return await HttpClient.get(url + "/comment", params, {"token": token});
+    }
 }
 
 export default PostsService;

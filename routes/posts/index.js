@@ -7,9 +7,11 @@ const Post = require("../../model/Post");
 
 const auth = require("../../middleware/auth");
 
-const point = require("./point");
+const point = require("./point"),
+      comment = require("./comment");
 
 router.use("/point", point);
+router.use("/comment", comment);
 
 router.get('/', auth, async (req, res) => {
     let page = Number(req.query.page) || 1,

@@ -2,7 +2,7 @@ import {observable, computed, runInAction} from 'mobx';
 
 import {PostsService, AuthService} from '../services';
 
-import {AuthStore} from './';
+import {AuthStore, CommentsStore} from './';
 
 class FullPostStore {
     constructor () {
@@ -12,6 +12,7 @@ class FullPostStore {
     @observable postObject = {};
     @observable showPost = false;
     @observable postId = null;
+    @observable CommentsStore = CommentsStore;
 
     componentMounted = async (postId) => {
         this.postId = postId;
@@ -29,6 +30,12 @@ class FullPostStore {
                 this.status = "error";
             });
         }
+    }
+
+    toDefault = () => {
+        this.postObject = {};
+        this.showPost = false;
+        this.postId = null;
     }
 }
 
