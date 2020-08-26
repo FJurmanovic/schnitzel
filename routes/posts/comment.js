@@ -69,6 +69,30 @@ router.get('/', auth, async (req, res) => {
     }
 });
 
+router.post('/', auth, async (req, res) => {
+    const {user: {id}, body: {type, comment, postId, commentId}} = req;
+    console.log(id, type, postId, commentId, comment)
+    try{
+        let points = [];
+
+        if (type === "reply") {
+            await Post.updateOne({_id: postId, 'comments._id': commentId}, { $addToSet: { 'comments.$.reply': {"userId": id, "comment": comment, "points": points} } }); //Adds new reply list to comment if commentId is present in req.body 
+            res.status(200).send("Added reply");
+            return;
+
+        } else if (type === "comment") {
+            await Post.findByIdAndUpdate(postId, { $push: { comments: {"userId": id, "comment": comment, "points": points}}}); //If there is no commentId, adds new comments list
+            res.status(200).send("Added comment");
+            return;
+        }
+            
+        res.send("Comment not added");
+    } catch (err) {
+        console.log(err.message);
+        res.status(500).send("Error in fetching");
+    }
+});
+
 module.exports = router;
 
 async function Items(object, userId) {

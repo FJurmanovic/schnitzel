@@ -20,14 +20,17 @@ class PostsService {
     deletePost = async (token, postId) => {
         return await HttpClient.delete(url + `/${postId}`, {}, {"token": token});
     }
-    putPoint = async (token, postId, type) => {
-        return await HttpClient.put(url + "/point/" + postId, {type: type}, {"token": token});
+    putPoint = async (token, postId, object) => {
+        return await HttpClient.put(url + "/point/" + postId, object, {"token": token});
     }
-    deletePoint = async (token, postId, type) => {
-        return await HttpClient.delete(url + "/point/" + postId, {type: type}, {"token": token});
+    deletePoint = async (token, postId, object) => {
+        return await HttpClient.delete(url + "/point/" + postId, object, {"token": token});
     }
     getComment = async (token, params) => {
         return await HttpClient.get(url + "/comment", params, {"token": token});
+    }
+    postComment = async (token, object) => {
+        return await HttpClient.post(url + "/comment", object, {"token": token});
     }
 }
 

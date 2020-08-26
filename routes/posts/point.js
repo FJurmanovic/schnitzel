@@ -6,12 +6,22 @@ const Post = require("../../model/Post");
 const auth = require("../../middleware/auth");
 
 router.put('/:postId', auth, async (req, res) => {
-    const {user: {id}, body: {type, userId}, params: {postId}} = req;
+    const {user: {id}, body: {type, commentId, replyId}, params: {postId}} = req;
     try {
-        let partOf = await Post.find({"_id": postId, 'points.userId': id}).count();
-        if (!partOf || partOf < 1) {
-            if(type === "post"){
+        if(type === "post") {
+            let partOf = await Post.find({"_id": postId, 'points.userId': id}).count();
+            if (!partOf || partOf < 1) {
                 await Post.findByIdAndUpdate(postId, { $push: { points: { "userId": id } }});
+            }
+        } else if (type === "comment") {
+            let partOf = await Post.find({"_id": postId, comments: {$elemMatch: { "_id": commentId, 'points.userId': id }} }).count();
+            if (!partOf || partOf < 1) {
+                await Post.findByIdAndUpdate({_id: postId}, { $addToSet: { 'comments.$[comment].points': {"userId": id} } }, { arrayFilters: [{ 'comment._id': commentId }] });
+            }
+        } else if (type === "reply") {
+            let partOf = await Post.find({"_id": postId, comments: {$elemMatch: { "_id": commentId, reply: {$elemMatch: { "_id": replyId, 'points.userId': id } } }} }).count();
+            if (!partOf || partOf < 1) {
+                await Post.findByIdAndUpdate({_id: postId}, { $addToSet: { 'comments.$[comment].reply.$[repl].points': {"userId": id} } }, { arrayFilters: [{ 'comment._id': commentId }, { 'repl._id': replyId }] });
             }
         } else {
             res.send("Could not add point");
@@ -26,12 +36,22 @@ router.put('/:postId', auth, async (req, res) => {
 });
 
 router.delete("/:postId", auth, async (req, res) => {    
-    const {user: {id}, body: {type, userId}, params: {postId}} = req;
+    const {user: {id}, body: {type, commentId, replyId}, params: {postId}} = req;
     try {
-        let partOf = await Post.find({"_id": postId, 'points.userId': id}).count();
-        if(partOf || partOf > 0) {
-            if(type === "post"){
+        if(type === "post") {
+            let partOf = await Post.find({"_id": postId, 'points.userId': id}).count();
+            if (partOf || partOf > 0) {
                 await Post.findByIdAndUpdate(postId, { $pull: { points: { "userId": id } }});
+            }
+        } else if (type === "comment") {
+            let partOf = await Post.find({"_id": postId, comments: {$elemMatch: { "_id": commentId, 'points.userId': id }} }).count();
+            if (partOf || partOf > 0) {
+                await Post.findByIdAndUpdate({_id: postId}, { $pull: { 'comments.$[comment].points': {"userId": id} } }, { arrayFilters: [{ 'comment._id': commentId }] });
+            }
+        } else if (type === "reply") {
+            let partOf = await Post.find({"_id": postId, comments: {$elemMatch: { "_id": commentId, reply: {$elemMatch: { "_id": replyId, 'points.userId': id } } }} }).count();
+            if (partOf || partOf > 0) {
+                await Post.findByIdAndUpdate({_id: postId}, { $pull: { 'comments.$[comment].reply.$[repl].points': {"userId": id} } }, { arrayFilters: [{ 'comment._id': commentId }, { 'repl._id': replyId }] });
             }
         } else {
             res.send("Could not remove point");

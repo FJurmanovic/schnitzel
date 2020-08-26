@@ -2,31 +2,26 @@ import React, { Component } from 'react';
 import { CommentsStore } from '../stores';
 import {observer, inject} from 'mobx-react';
 
+import { NewComment } from './';
 import {Link} from 'react-router-dom';
-
-const Comment = ({type, postId, commentid, submitClick}) => {
-    
-    return <form onSubmit={this.handleSubmit} className="mb-8">
-        <label>New comment: <br />
-            <textarea 
-                onChange={this.handleComment}
-                value={this.state.commentVal}
-                className="width-full"
-            />
-        </label>
-        <input type="submit" value="Submit" className="btn btn-default btn-squared px-6" />
-    </form>
-}
 
 @inject("FullPostStore")
 @observer
 class Comments extends Component {
     constructor(props) {
         super(props);
+        this.showReply = null;
     }
+
+    openReply = (id) => {
+        this.showReply = id;
+    }
+
     componentWillMount() {   
-        this.props.store.setId(this.props.id, this.props.commentId)
+        this.props.store.setId(this.props.id, this.props.commentId, this.props.hasComments);
     }
+
+
     render() {
         return <> { !this.props.store.loadingPost 
             ?   <> { this.props.store.comments.map((comment, k) => <React.Fragment key={k}>
@@ -38,13 +33,15 @@ class Comments extends Component {
                                 : <Link to={`/${comment.username}`}>{comment.username}</Link>
                                 }
                             </div>
-                            <div className="d-inline-block"><span>Points: {comment.points.length} <button className="btn-icon ml-n2" onClick={(e) => this.addPointToComment(e, k)}>{!comment.isPointed ? <div className="gg-chevron-up"></div> : <div className="gg-chevron-up text-blue"></div>}</button></span> <span><button onClick={(e) => this.openReply(e, k)}>Reply</button></span></div>
+                            <div className="d-inline-block"><span>Points: {comment.points} <button className="btn-icon ml-n2" onClick={() => this.props.store.togglePoints(comment.id)}>{!comment.isPointed ? <div className="gg-chevron-up"></div> : <div className="gg-chevron-up text-blue"></div>}</button></span> {this.props.store.type === "comment" && <span><button onClick={() => this.props.store.openReply(k)}>Reply</button></span>}</div>
                         </div>
-                        
                         <div className="cmnt text-bold">{comment.comment}</div>
-                        <ul>
-                            { comment.replies > 0 && <Comments store={new this.props.FullPostStore.CommentsStore("reply")} id={this.props.id} commentId={comment.id} /> }
-                        </ul>
+                            <div className="f6 mt-3">{comment.timeAgo} {this.props.store.type === "comment" && <span className="mx-4">Replies: {comment.replies}</span>}</div>
+                        {   this.props.store.type === "comment" && <ul>
+                                { this.props.store.showReply == k && <NewComment type="reply" postId={this.props.id} commentId={comment.id} submitClick={this.props.FullPostStore.submitClick}/> }
+                                <Comments store={comment.store} id={this.props.id} commentId={comment.id} hasComments={comment.replies > 0} /> 
+                            </ul>
+                        }
                     </div>
                 </React.Fragment>)}</>
             : <div></div>

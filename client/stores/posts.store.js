@@ -128,8 +128,11 @@ class PostsStore {
     }
 
     addPoint = async (id, type) => {
+        let object = {
+            type
+        }
         try { 
-            const data = await this.postsService.putPoint(this.authStore.token, id, type);
+            const data = await this.postsService.putPoint(this.authStore.token, id, object);
             return data;
         } catch (error) {
             console.log(error);
@@ -140,8 +143,11 @@ class PostsStore {
     }
 
     removePoint = async (id, type) => {
+        let object = {
+            type
+        }
         try { 
-            const data = await this.postsService.deletePoint(this.authStore.token, id, type);
+            const data = await this.postsService.deletePoint(this.authStore.token, id, object);
             return data;
         } catch (error) {
             console.log(error);
