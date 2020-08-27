@@ -23,8 +23,8 @@ MongoServer();
 const app = express(), //Creates express application
 DIST_DIR = path.join(__dirname, 'public'), //Path to front-end folder
 HTML_FILE = path.join(DIST_DIR, '/index.html'), //Entry html file
-PORT = process.env.PORT || 4000;
-
+PORT = process.env.PORT || 8080;
+app.set('trust proxy');
 app.use(bodyParser.json());
 
 app.use(cors());

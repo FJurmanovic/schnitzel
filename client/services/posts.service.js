@@ -1,4 +1,4 @@
-const url = "http://" + window.location.host + "/api/posts";
+const url = "https://" + window.location.host + "/api/posts";
 import {HttpClient} from './';
 
 class PostsService {

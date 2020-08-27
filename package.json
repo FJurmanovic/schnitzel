@@ -7,17 +7,17 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "start": "nodemon app.js --dev",
+    "start": "node server.js",
+    "dev": "nodemon server.js --dev",
     "client": "webpack-dev-server --mode development --hot",
-    "build": "webpack --mode production",
-    "server": "nodemon app.js"
+    "build": "webpack --mode production"
   },
   "nodemonConfig": {
     "ignore": [
       "client"
     ]
   },
-  "devDependencies": {
+  "dependencies": {
     "@babel/core": "^7.11.1",
     "@babel/preset-env": "^7.11.0",
     "@babel/preset-react": "^7.10.4",
@@ -53,9 +53,7 @@
     "webpack-dev-middleware": "^3.7.2",
     "webpack-dev-server": "^3.11.0",
     "webpack-hot-middleware": "^2.25.0",
-    "webpack-node-externals": "^2.5.1"
-  },
-  "dependencies": {
+    "webpack-node-externals": "^2.5.1",
     "mobx": "^5.15.6",
     "mobx-react": "^6.2.5",
     "react": "^16.13.1",

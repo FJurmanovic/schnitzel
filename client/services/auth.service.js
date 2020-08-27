@@ -1,4 +1,4 @@
-const url = "http://" + window.location.host + "/api/user";
+const url = "https://" + window.location.host + "/api/user";
 import {HttpClient} from './';
 
 class AuthService {
