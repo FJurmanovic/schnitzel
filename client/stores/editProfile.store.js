@@ -98,16 +98,18 @@ class EditProfileStore {
                 editObject.isPrivate = false;
             }
         }
-        if(this.editAvatar) {
+        if(this.selectedFile) {
             editObject.hasPhoto = true;
             editObject.photoExt = path.extname(this.selectedFile.name);
 
             let data = new FormData();
             data.append('file', this.selectedFile);
-            //AuthStore.uploadImage(data, "avatar");
-        }
-
+            AuthStore.authEdit(editObject, history, data);
+            return;
+        } 
+        
         AuthStore.authEdit(editObject, history);
+
     }
 }
 

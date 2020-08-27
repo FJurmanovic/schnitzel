@@ -220,6 +220,4 @@ function editUser (object) {
   if (object.email) this.email = object.email;
   if (object.username) this.username = object.username;
   if (object.privacy) this.isPrivate = object.isPrivate;
-  if (object.hasPhoto) this.hasPhoto = object.hasPhoto;
-  if (object.photoExt) this.photoExt = object.photoExt;
 }

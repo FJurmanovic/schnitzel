@@ -61,8 +61,8 @@ router.post("/", image, auth, (req, res) => { //Uploads the image to cloudinary
                             .webp({ lossless: true })
                             .toBuffer()
         blobStream.on('finish', async () => {
-            if(type === "post") await Post.findByIdAndUpdate(postid, { $set: { photoExt: ".webp" } });
-            if(type === "avatar") await User.findByIdAndUpdate(id, { $set: { photoExt: ".webp" } });
+            if(type === "post") await Post.findByIdAndUpdate(postid, { $set: { "photoExt": ".webp", "hasPhoto": true } });
+            if(type === "avatar") await User.findOneAndUpdate({'_id': id}, { $set: {"photoExt": ".webp", "hasPhoto": true} });
             res.status(200).send("Image uploaded");
         })
         blobStream.on('error', (err) => {

@@ -53,9 +53,11 @@ class FormStore {
             this.privacyValue = data.isPrivate ? "private" : "public" ;
             this.descriptionValue = data.description;
             this.categoriesValue = data.categories;
-            this.numIngredientsValue = data.ingredients.length;
-            this.ingredientsValue = [...data.ingredients];
-            this.directionsValue = data.directions;
+            if(data.type === "recipe") {
+                this.numIngredientsValue = data.ingredients.length;
+                this.ingredientsValue = [...data.ingredients];
+                this.directionsValue = data.directions;
+            }
             this.showNew = true;
             this.postId = postId;
         }

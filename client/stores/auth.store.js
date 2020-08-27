@@ -1,9 +1,11 @@
 import {observable, runInAction, computed} from 'mobx';
-import {AuthService} from '../services';
+import {AuthService, ImageService} from '../services';
+import auth from '../../middleware/auth';
 
 class AuthStore {
     constructor() {
         this.authService = new AuthService;
+        this.imageService = new ImageService;
     }
 
     @observable userData = {};
@@ -62,17 +64,33 @@ class AuthStore {
         }
     }
 
-    authEdit = async (editObject, history) => {
+    authEdit = async (editObject, history, file) => {
         try { 
+            console.log(file)
             const data = await this.authService.putData(editObject, this.token);
             runInAction(() => {
                 if(data.token){
                     this.token = data.token;
                     localStorage.setItem("token", data.token);
                     this.authorize();
-                    history.push("/");
+                    if(file) this.authAvatar(file, history);
+                    else history.push('/');
                 }
             })
+        } catch (error) {
+            console.log(error);
+            runInAction(() => {
+                this.status = "error";
+            });
+        }
+    }
+
+    authAvatar = async (object, history) => {
+        try { 
+            const data = await this.imageService.postImage(this.token, object, "avatar");
+            if(data) {
+                history.push("/");
+            }
         } catch (error) {
             console.log(error);
             runInAction(() => {

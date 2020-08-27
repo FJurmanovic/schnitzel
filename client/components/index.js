@@ -7,3 +7,4 @@ export {Popover} from './Popover';
 export {Followers} from './Followers';
 export {Ingredient} from './Ingredient';
 export {NewComment} from './NewComment';
+export {Switch} from './Switch';
