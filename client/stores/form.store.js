@@ -1,6 +1,7 @@
 import {observable, computed, runInAction} from 'mobx';
 import {AuthStore, PostsStore} from './';
-import { PostsService } from '../services';
+import { PostsService, ImageService } from '../services';
+import { type } from 'os';
 
 const path = require('path');
 
@@ -8,6 +9,7 @@ class FormStore {
     constructor(type) {
         this.formType = type;
         this.postsService = new PostsService();
+        this.imageService = new ImageService();
         this.authStore = AuthStore;
     }
 
@@ -119,6 +121,7 @@ class FormStore {
         let privacy = this.privacyValue == "private";
 
         if(this.validation()) return event.preventDefault();
+        event.preventDefault();
 
         let data = new FormData();
         data.append('file', this.selectedFile);
@@ -156,17 +159,17 @@ class FormStore {
         }
 
         if(this.formType === "edit") {
-            event.preventDefault();
-            return this.putPost(postObject, history);
+            return this.putPost(postObject, history, data);
         };
 
-        return this.postPost(postObject);
+        return this.postPost(postObject, data);
     }
 
-    putPost = async (object, history) => {
+    putPost = async (object, history, image) => {
         try { 
             const data = await this.postsService.putPost(this.authStore.token, this.postId, object);
             if (data) {
+                if(object.hasPhoto) this.postImage(image, data.id);
                 goBack.call(history);
             }
         } catch (error) {
@@ -177,10 +180,13 @@ class FormStore {
         }
     }
 
-    postPost = async (object) => {
+    postPost = async (object, image) => {
         try { 
             const data = await this.postsService.postPost(this.authStore.token, object);
-            return data;
+            if(data) {
+                if(object.hasPhoto) this.postImage(image, data.id);
+                else location.reload();
+            }
         } catch (error) {
             console.log(error);
             runInAction(() => {
@@ -198,6 +204,20 @@ class FormStore {
                 }
             });
             return data;
+        } catch (error) {
+            console.log(error);
+            runInAction(() => {
+                this.status = "error";
+            });
+        }
+    }
+
+    postImage = async (object, postId) => {
+        try { 
+            const data = await this.imageService.postImage(this.authStore.token, object, "post", postId);
+            if(data) {
+                location.reload();
+            }
         } catch (error) {
             console.log(error);
             runInAction(() => {

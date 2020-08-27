@@ -2,7 +2,18 @@ const   express = require("express"),
         router = express.Router(),
         bcrypt = require("bcryptjs"),
         jwt = require("jsonwebtoken"),
-        { check, validationResult} = require("express-validator");
+        { check, validationResult} = require("express-validator"),
+        path = require("path");
+
+const serviceKey = path.join(__dirname, '../../../keys.json')
+
+const {Storage} = require('@google-cloud/storage');
+const storage = new Storage({
+    keyFilename: serviceKey,
+    projectId: 'schnitzel-278322'
+});
+const bucket = storage.bucket("schnitzel");
+        
 
 const User = require("../../../model/User");
 const Post = require("../../../model/Post");
@@ -24,7 +35,19 @@ router.get('/', auth, async (req, res) => {
         userData["createdAt"] = user.createdAt;
         userData["isPrivate"] = user.isPrivate;
         userData["hasPhoto"] = user.hasPhoto || false;
-        userData["photoExt"] = user.photoExt || '';
+        
+        if(user.hasPhoto) {
+          let fileName = `avatar/${req.user.id}/${req.user.id}${user.photoExt}`;
+          const blob = bucket.file(fileName);
+          const blobStream = blob.getSignedUrl({
+              version: 'v4',
+              action: 'read',
+              expires: Date.now() + 1000 * 60 * 60 * 24 * 6
+          });
+
+          const [url] = await blobStream;
+          userData.url = url;
+      }
   
         let { following, followers } = user;
   
@@ -73,9 +96,22 @@ router.get('/:userId', auth, async (req, res) => {
     const isFollowing = profile.following.filter(x => x.userId == user._id).map(x => x.userId == user._id)[0] || false;
 
     let userData = {};
+
+    if(user.hasPhoto) {
+      let fileName = `avatar/${user._id}/${user._id}${user.photoExt}`;
+      const blob = bucket.file(fileName);
+      const blobStream = blob.getSignedUrl({
+          version: 'v4',
+          action: 'read',
+          expires: Date.now() + 1000 * 60 * 60 * 24 * 6
+      });
+
+      const [url] = await blobStream;
+      userData.url = url;
+  }
+
     userData["id"] = user._id;
     userData["hasPhoto"] = user.hasPhoto;
-    userData["photoExt"] = user.photoExt;
     userData["username"] = user.username;
     userData["isFollowing"] = isFollowing;
     userData["postNum"] = postNum;

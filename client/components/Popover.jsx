@@ -32,7 +32,7 @@ export const Popover = ({userId, username, getUserData, iter}) => {
             <Link className="popover-author" to={`/${username}`}>
                 <div className="" id={`popover_${iter}`}>
                     <div className="md-photo">
-                        {authorData.hasPhoto ? <img src={`https://storage.googleapis.com/schnitzel/avatar/${authorData.id}/${authorData.id}${authorData.photoExt}`} className="card-img-top" /> : <img src="https://storage.googleapis.com/schnitzel/default.jpg" className="card-img-top" />} 
+                        {authorData.hasPhoto ? <img src={authorData.url} className="card-img-top" /> : <img src="https://storage.googleapis.com/schnitzel/default.jpg" className="card-img-top" />} 
                         <span className="author-user">{username}</span>
                         <span className="author-post">Posts: {authorData.postNum}</span>
                     </div>

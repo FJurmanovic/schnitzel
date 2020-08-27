@@ -22,7 +22,7 @@ class Profile extends Component {
     componentDidUpdate(prevProps) {
         let { profileName } = this.props.match.params;
         window.removeEventListener('scroll', this.props.ProfileStore.handleScroll);
-        if (this.props.match.path !== prevProps.match.path) return;
+        if (this.props.match.path !== prevProps.match.path && prevProps.match.path == "/post/:postId/1") return;
         if (profileName !== prevProps.match.params.profileName) {
             this.props.ProfileStore.componentMounted(profileName, () => {
                 if (this.props.ProfileStore.myProfile && profileName) this.props.history.push("/profile");
@@ -36,7 +36,7 @@ class Profile extends Component {
             { this.props.ProfileStore.validProfile ? 
             <div onScroll={this.props.ProfileStore.handleScroll}>
                 <div>
-                    <div className="profile-image mx-auto text-center">{this.props.ProfileStore.profileData.hasPhoto ? <img src={`https://storage.googleapis.com/schnitzel/avatar/${this.props.ProfileStore.profileData.id}/${this.props.ProfileStore.profileData.id}${this.props.ProfileStore.profileData.photoExt}`} className="card-img-top" /> : <img src="https://storage.googleapis.com/schnitzel/default.jpg" className="card-img-top" />}</div>
+                    <div className="profile-image mx-auto text-center">{this.props.ProfileStore.profileData.hasPhoto ? <img src={this.props.ProfileStore.profileData.url} className="card-img-top" /> : <img src="https://storage.googleapis.com/schnitzel/default.jpg" className="card-img-top" />}</div>
                     <div className="mx-auto text-center">
                     <ul className="d-inline-block m-3 text-left">
                         <button className="btn btn-blue-transparent btn-rounder border-blue d-inline-block" onClick={this.props.ProfileStore.toggleFollowers}>Followers</button>

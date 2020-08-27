@@ -40,7 +40,7 @@ export const Post = ({post, iter, userdata, addPoint, removePoint, authUser, fro
     return <React.Fragment key={iter}>
         <>
             <div className="card col-9 my-6">
-                {post.hasPhoto && <div className="card-image"><OpenButton from={from} id={post.id}><img src={`https://storage.googleapis.com/schnitzel/post/${post.id}/${post.id}${post.photoExt}`} className="card-img-top" /></OpenButton></div>}
+                {post.hasPhoto && <div className="card-image"><OpenButton from={from} id={post.id}><img src={post.url} className="card-img-top" /></OpenButton></div>}
                 
                 <div className="f5 pr-5 mb-n3 mt-3 top-card">
                 {(userdata.id == post.userId || authUser == post.userId) &&<span className="float-right"><a href="./" onClick={() => removePost(post.id)}>Delete post</a> | <Link to={`/post/edit/${post.id}`}>Edit post</Link></span>}

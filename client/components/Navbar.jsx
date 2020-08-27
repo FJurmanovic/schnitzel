@@ -41,7 +41,7 @@ const NotLoggedLink = () =>
       </div>
       <div className="header-item">
         <details className="header-dropdown" id="profile">
-          <summary className="btn btn-default px-7 header-button"><span>{userData.username}</span><i className="arrow"></i><div className="sml-photo mx-auto text-center">{userData.hasPhoto ? <img src={`https://storage.googleapis.com/schnitzel/avatar/${userData.id}/${userData.id}${userData.photoExt}`} className="card-img-top" /> : <img src="https://storage.googleapis.com/schnitzel/default.jpg" className="card-img-top" />}</div></summary>
+          <summary className="btn btn-default px-7 header-button"><span>{userData.username}</span><i className="arrow"></i><div className="sml-photo mx-auto text-center">{userData.hasPhoto ? <img src={userData.url} className="card-img-top" /> : <img src="https://storage.googleapis.com/schnitzel/default.jpg" className="card-img-top" />}</div></summary>
           <ul className="header-dropdown-menu dropdown-menu-dark">
             <Link to="/profile" className="dropdown-item">View Profile</Link>
             <Link to="/profile/edit" className="dropdown-item">Edit Profile</Link>

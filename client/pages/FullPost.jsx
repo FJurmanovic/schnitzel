@@ -28,7 +28,7 @@ class FullPost extends Component {
         { this.props.FullPostStore.showPost  &&
             <div className='overlay' onClick={this.goBack.bind(this)}>
                 <div className='poston screen-post' onClick={(event) => event.stopPropagation()}>
-                        { this.props.FullPostStore.postObject.hasPhoto && <div className="card-image"><img src={`https://storage.googleapis.com/schnitzel/post/${this.props.FullPostStore.postObject.id}/${this.props.FullPostStore.postObject.id}${this.props.FullPostStore.postObject.photoExt}`} className="card-img-top" /></div>}
+                        { this.props.FullPostStore.postObject.hasPhoto && <div className="card-image"><img src={this.props.FullPostStore.postObject.url} className="card-img-top" /></div>}
                     <div className="screen-body">    
                         {(  this.props.FullPostStore.authStore.userData.id === this.props.FullPostStore.postObject.userId) && <span className="float-right"><a href="./" onClick={() => {removePost(this.props.FullPostStore.postObject.id); this.props.history.push("/")}}>Delete post</a> | <Link to={`/post/edit/${this.props.FullPostStore.postObject.id}`}>Edit post</Link></span>}
                         <h3>{this.props.FullPostStore.postObject.title}</h3>

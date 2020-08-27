@@ -2,11 +2,18 @@ class HttpClient {
     
     post(url, data, headersParam) {
         let headers = new Headers(headersParam);
-        headers.append("Content-Type", "application/json");
+        let body = null;
+        if(data instanceof FormData) {
+            body = data;
+        }
+        else {
+            body = JSON.stringify(data);
+            headers.append("Content-Type", "application/json");
+        } 
         let options = {
             method: "POST",
             headers: headers,
-            body: JSON.stringify(data)
+            body: body
         }
         const req = new Request(url, options);
 

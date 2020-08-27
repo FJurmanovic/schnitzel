@@ -1,6 +1,8 @@
 const   express = require("express"),
         router = express.Router(),
-        { check, validationResult} = require("express-validator");
+        { check, validationResult} = require("express-validator"),
+        path = require("path"),
+        sharp = require("sharp");
 
 const User = require("../../model/User");
 const Post = require("../../model/Post");
@@ -12,6 +14,15 @@ const point = require("./point"),
 
 router.use("/point", point);
 router.use("/comment", comment);
+
+const serviceKey = path.join(__dirname, '../../keys.json')
+
+const {Storage} = require('@google-cloud/storage');
+const storage = new Storage({
+    keyFilename: serviceKey,
+    projectId: 'schnitzel-278322'
+});
+const bucket = storage.bucket("schnitzel");
 
 router.get('/', auth, async (req, res) => {
     let page = Number(req.query.page) || 1,
@@ -69,6 +80,19 @@ router.get('/', auth, async (req, res) => {
             if(!user){
                 user= {"username": "DeletedUser"}
             }
+
+            if(post.hasPhoto) {
+                let fileName = `post/${post._id}/${post._id}${post.photoExt}`;
+                const blob = bucket.file(fileName);
+                const blobStream = blob.getSignedUrl({
+                    version: 'v4',
+                    action: 'read',
+                    expires: Date.now() + 1000 * 60 * 60 * 24 * 6
+                });
+
+                const [url] = await blobStream;
+                item.url = url;
+            }
     
             item.id = post._id;
             item.title = post.title;
@@ -79,7 +103,6 @@ router.get('/', auth, async (req, res) => {
             item.isPrivate = post.isPrivate || false;
             item.isPointed = post.points.filter(x => x.userId == req.user.id).map(x => x.userId == req.user.id)[0] || false;
             item.hasPhoto = post.hasPhoto || false;
-            item.photoExt = post.photoExt || '';
             item.points = post.points.length;
             item.categories = post.categories;
             if(post.type === "recipe"){
@@ -107,7 +130,46 @@ router.get('/:postId', auth, async (req, res) => {
     const {user: {id}, params: {postId}} = req;
     try {
         const post = await Post.findById(postId);
-        let item = await Items(post, id);
+        let item = {};
+        let user = await User.findById(post.userId); // Change with another fetch action to get usernames after posts are fetched
+        if (user.isPrivate && user.id != id) {
+            return;
+        }
+        if(!user){
+            user= {"username": "DeletedUser"}
+        }
+
+        if(post.hasPhoto) {
+            let fileName = `post/${post._id}/${post._id}${post.photoExt}`;
+            const blob = bucket.file(fileName);
+            const blobStream = blob.getSignedUrl({
+                version: 'v4',
+                action: 'read',
+                expires: Date.now() + 1000 * 60 * 60 * 24 * 6
+            });
+
+            const [url] = await blobStream;
+            item.url = url;
+        }
+
+        item.id = post._id;
+        item.title = post.title;
+        item.type = post.type;
+        item.username = user.username;
+        item.description = post.description;
+        item.comments = post.comments.length || 0;
+        item.isPrivate = post.isPrivate || false;
+        item.isPointed = post.points.filter(x => x.userId == id).map(x => x.userId == id)[0] || false;
+        item.hasPhoto = post.hasPhoto || false;
+        item.points = post.points.length;
+        item.categories = post.categories;
+        if(post.type === "recipe"){
+            item.ingredients = post.ingredients;
+            item.directions = post.directions;
+        }
+        item.userId = post.userId;
+        item.createdAt = post.createdAt;
+        item.timeAgo = timeSince(post.createdAt);
         res.json(item);
     } catch (e) {
         res.status(500).send("Error fetching");
