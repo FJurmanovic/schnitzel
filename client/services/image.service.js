@@ -1,4 +1,4 @@
-const url = "https://" + window.location.host + "/api/image";
+const url = "/api/image";
 import {HttpClient} from './';
 
 class ImageService {

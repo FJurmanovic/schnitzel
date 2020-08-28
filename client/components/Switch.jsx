@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-export const Switch = ({curr, onClick}) => {
+export const Switch = ({curr, onClick }) => {
     const [enabled, setEnabled] = useState(curr);
 
     const toggleClick = (e) => {

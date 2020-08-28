@@ -1,7 +1,9 @@
 import React, { Component, useState } from 'react';
 import { observer, inject } from 'mobx-react';
 import {Link, withRouter} from 'react-router-dom';
-import { getRandomInt } from '../common/js';
+import { getRandomInt, getTheme } from '../common/js';
+
+import {Switch} from './';
 
 const Logo = (props) => {
   const logos = ["chicken", "hamburger", "beef", "salad"];
@@ -19,6 +21,7 @@ const Logo = (props) => {
     <img src={`/api/logos/${logos[current]}.svg`} className="logo"></img>
   )
 }
+
 
 const NotLoggedLink = () =>
     <>
@@ -41,11 +44,21 @@ const NotLoggedLink = () =>
       </div>
       <div className="header-item">
         <details className="header-dropdown" id="profile">
-          <summary className="btn btn-default px-7 header-button"><span>{userData.username}</span><i className="arrow"></i><div className="sml-photo mx-auto text-center">{userData.hasPhoto ? <img src={userData.url} className="card-img-top" /> : <img src="https://storage.googleapis.com/schnitzel/default.jpg" className="card-img-top" />}</div></summary>
+          <summary className="btn btn-default px-7 header-button" onClick={(event) => event.stopPropagation()}><span>{userData.username}</span><i className="arrow"></i><div className="sml-photo mx-auto text-center">{userData.hasPhoto ? <img src={userData.url} className="card-img-top" /> : <img src="https://storage.googleapis.com/schnitzel/default.jpg" className="card-img-top" />}</div></summary>
           <ul className="header-dropdown-menu dropdown-menu-dark">
             <Link to="/profile" className="dropdown-item">View Profile</Link>
             <Link to="/profile/edit" className="dropdown-item">Edit Profile</Link>
             <li className="dropdown-divider"/>
+            <div className="dropdown-item" onClick={(event) => {
+              event.stopPropagation();
+              }}>
+              <Switch 
+                curr={getTheme("getBool")}
+                onClick={() => {
+                  getTheme("toggle");
+                }} 
+              /> 
+              <span>Dark mode</span></div>
             <Link to="/logout" className="dropdown-item">Logout</Link>
           </ul>
         </details>

@@ -4,10 +4,13 @@ import {Provider} from 'mobx-react';
 
 import {App} from './components';
 import {AuthStore, LoginStore, RegisterStore, EditProfileStore, PostsStore, ProfileStore, FormStore, FullPostStore} from './stores';
+import {getTheme} from './common/js';
 
 import './common/styles/Main.scss';
 import './common/styles/Chevron.scss';
 import './common/styles/Thorn.scss';
+
+getTheme("get");
 
 const Application = () => 
     <Provider

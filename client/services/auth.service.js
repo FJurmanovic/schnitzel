@@ -1,5 +1,6 @@
-const url = "https://" + window.location.host + "/api/user";
+const url = "/api/user";
 import {HttpClient} from './';
+
 
 class AuthService {
     postLogin = async (object) => {
