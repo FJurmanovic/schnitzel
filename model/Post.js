@@ -112,8 +112,7 @@ const PostSchema = mongoose.Schema({ //Creates new mongoose schema(Model) for po
     default: Date.now()
   },
   updatedAt: {
-    type: Date,
-    default: Date.now()
+    type: Date
   }
 });
 

@@ -95,11 +95,13 @@ router.post('/', auth, async (req, res) => {
 router.delete('/', auth, async (req, res) => {
     const {user: {id}, body: {type, postId, commentId, replyId}} = req;
     try {
+        let pst = null;
         if (type === "reply") {
-            await Post.findOneAndUpdate({"_id": postId, comments: {$elemMatch: { "_id": commentId, reply: {$elemMatch: { "_id": replyId, "userId": id } } } } }, {$push: { 'comments.$[comment].reply.$[repl].isDeleted': true} , $set: {'comments.$[comment].reply.$[repl].comment': "[ Reply deleted ]" } }, { arrayFilters: [{ 'comment._id': commentId }, { 'repl._id': replyId }] });
+            pst = await Post.findOneAndUpdate({"_id": postId, comments: {$elemMatch: { "_id": commentId, reply: {$elemMatch: { "_id": replyId, "userId": id } } } } }, { $set: {'comments.$[comment].reply.$[repl].comment': "[ Reply deleted ]", 'comments.$[comment].reply.$[repl].isDeleted': true} }, { arrayFilters: [{ 'comment._id': commentId }, { 'repl._id': replyId }] });
         } else if (type === "comment") {
-            await Post.findOneAndUpdate({"_id": postId, comments: {$elemMatch: { "_id": commentId, "userId": id }}}, { $push: {'comments.$[comment].isDeleted': true}, $set: {'comments.$[comment].comment': "[ Comment deleted ]"} }, { arrayFilters: [{ 'comment._id': commentId }] });
+            pst = await Post.findOneAndUpdate({"_id": postId, comments: {$elemMatch: { "_id": commentId, "userId": id }}}, { $set: {'comments.$[comment].comment': "[ Comment deleted ]", 'comments.$[comment].isDeleted': true} }, { arrayFilters: [{ 'comment._id': commentId }] });
         }
+        console.log(pst);
         res.status(200).send("Succesfully deleted comment")
     } catch (err) {
         console.log(err.message);
@@ -124,7 +126,11 @@ async function Items(object, userId) {
         this.points = object.points.length;
         this.userId = object.userId;
         this.createdAt = object.createdAt;
-        this.timeAgo = timeSince(object.createdAt);
+        if(!object.updatedAt){
+            this.timeAgo = "Posted " + timeSince(object.createdAt);
+        } else {
+            this.timeAgo = "Posted " + timeSince(object.createdAt) + ` <i>(Edited)</i>`;
+        }
     }
     
     return new constructor;

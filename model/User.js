@@ -32,6 +32,10 @@ const UserSchema = mongoose.Schema({ //Creates new mongoose schema for users
   followers: [{
     userId: String
   }],
+  points: {
+    type: Number,
+    default: 0
+  },
   createdAt: {
     type: Date,
     default: Date.now()

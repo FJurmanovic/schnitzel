@@ -10,7 +10,6 @@ import { Post } from '../components/Post';
 @observer
 class ExploreCategory extends Component {
     componentWillMount() {
-        console.log("One");
         this.props.ExploreCategoryStore.setCategory(this.props.match.params.categoryId);
         this.props.ExploreCategoryStore.postsGet();
         window.addEventListener('scroll', this.props.ExploreCategoryStore.handleScroll);

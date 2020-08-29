@@ -11,6 +11,6 @@ export const NewComment = ({type, postId, commentId, submitClick}) => {
                 className="width-full"
             />
         </label>
-        <input type="submit" value="Submit" className="btn btn-default btn-squared px-6" />
+        <input type="submit" value="Submit" className="btn btn-blue btn-squared px-6" />
     </form>
 }

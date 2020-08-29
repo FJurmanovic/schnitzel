@@ -117,6 +117,8 @@ router.get('/:userId', auth, async (req, res) => {
     userData["postNum"] = postNum;
     userData["isPrivate"] = user.isPrivate;
     userData["createdAt"] = user.createdAt;
+    userData["points"] = user.points || 0;
+    userData["followerNum"] = user.followers.length || 0;
     res.json(userData);
   } catch (e) {
     res.status(401).json({ 

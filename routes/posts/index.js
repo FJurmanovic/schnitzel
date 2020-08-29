@@ -111,7 +111,11 @@ router.get('/', auth, async (req, res) => {
             }
             item.userId = post.userId;
             item.createdAt = post.createdAt;
-            item.timeAgo = timeSince(post.createdAt);
+            if(!post.updatedAt){
+                item.timeAgo = "Posted " + timeSince(post.createdAt);
+            } else {
+                item.timeAgo = "Posted " + timeSince(post.createdAt) + ` <i>(Edited)</i>`;
+            }
             items.push(item);
         }
         res.json({
@@ -169,7 +173,11 @@ router.get('/:postId', auth, async (req, res) => {
         }
         item.userId = post.userId;
         item.createdAt = post.createdAt;
-        item.timeAgo = timeSince(post.createdAt);
+        if(!post.updatedAt){
+            item.timeAgo = "Posted " + timeSince(post.createdAt);
+        } else {
+            item.timeAgo = "Posted " + timeSince(post.createdAt) + ` <i>(Edited)</i>`;
+        }
         res.json(item);
     } catch (e) {
         res.status(500).send("Error fetching");
@@ -259,6 +267,7 @@ router.post('/', auth,
             }
             post.createdAt = new Date();
 
+
             await post.save();
 
             res.send({id: post.id})
@@ -285,7 +294,7 @@ router.put('/:postId', auth,
                 return;
             }
 
-            post = await Post.findByIdAndUpdate(postId, {title, type, isPrivate, description, categories, ingredients, directions, updatedAt: Date()})
+            post = await Post.findByIdAndUpdate(postId, {title, type, isPrivate, description, categories, ingredients, directions, updatedAt: new Date()})
 
             res.send({id: post.id})
         } catch (err) {

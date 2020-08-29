@@ -45,7 +45,7 @@ export const Post = ({post, iter, userdata, addPoint, removePoint, authUser, fro
                 <div className="f5 pr-5 mb-n3 mt-3 top-card">
                 {(userdata.id == post.userId || authUser == post.userId) &&<span className="float-right"><a href="./" onClick={() => removePost(post.id)}>Delete post</a> | <Link to={`/post/edit/${post.id}`}>Edit post</Link></span>}
                     <span className="author mr-2">Author: <span><Popover userId={post.userId} username={post.username} getUserData={getUserData} iter={iter} /></span></span>
-                <span className="f5 mx-2 date">Posted {post.timeAgo}</span>
+                <span className="f5 mx-2 date" dangerouslySetInnerHTML={{__html: post.timeAgo}}></span>
                 </div>
                 <div className="card-body">
                     <div className="labels my-1">

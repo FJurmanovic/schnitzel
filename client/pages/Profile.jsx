@@ -38,6 +38,7 @@ class Profile extends Component {
                 <div>
                     <div className="profile-image mx-auto text-center">{this.props.ProfileStore.profileData.hasPhoto ? <img src={this.props.ProfileStore.profileData.url} className="card-img-top" /> : <img src="https://storage.googleapis.com/schnitzel/default.jpg" className="card-img-top" />}</div>
                     <div className="mx-auto text-center">
+                        <div className="profile-info h4"><span>Followers: {this.props.ProfileStore.profileData.followerNum} </span> <span>Posts: {this.props.ProfileStore.profileData.postNum} </span> <span>Points: {this.props.ProfileStore.profileData.points} </span></div>
                     <ul className="d-inline-block m-3 text-left">
                         <button className="btn btn-blue-transparent btn-rounder border-blue d-inline-block" onClick={this.props.ProfileStore.toggleFollowers}>Followers</button>
                         { this.props.ProfileStore.showFollowers &&

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {BrowserRouter as Router, Switch, Route, Redirect} from 'react-router-dom';
+import {BrowserRouter as Router, Switch, Route, Redirect, withRouter} from 'react-router-dom';
 
 import {Landing, Login, Register, EditProfile, Feed, Explore, ExploreCategory, Profile, EditPost, FullPost} from '../pages';
 import {Navbar} from './';
@@ -7,8 +7,23 @@ import { observer, inject } from 'mobx-react';
 
 const closeDetails = function() {
     let menu = document.getElementById("profile");
-    menu.removeAttribute("open");
+    if (menu) menu.removeAttribute("open");
 }
+
+class DemoLogin extends Component {
+    componentWillMount() {
+        this.props.store.authLogin(
+            {
+                "email": "demo@demo.com",
+                "password": "demoacc"
+            }, this.props.history);
+    }
+    render() {
+        return <div>Logging into Demo Account</div>
+    }
+}
+
+const DemoLoginWithRouter = withRouter(DemoLogin);
 
 const AppRouter = ({store, auth}) =>
     <Router>
@@ -33,6 +48,13 @@ const AppRouter = ({store, auth}) =>
                     </Route>
                     <Route path="/register">
                         { auth ? <Redirect to="/" /> : <Register /> }
+                    </Route>
+                    <Route path="/demologin">
+                        {
+                            auth 
+                            ? <Redirect to="/" />   
+                            : <DemoLoginWithRouter store={store} />
+                        }
                     </Route>
                     <Route path="/logout">
                         <Logout authLogout={store.authLogout} />
@@ -81,6 +103,9 @@ const AppRouter = ({store, auth}) =>
                           </> 
                         : <Redirect to="/" /> 
                         }
+                    </Route>
+                    <Route path="/post">
+                        <Redirect to="/" />
                     </Route>
                     <Route path="/:profileName">
                         { auth ? <Profile /> : <Redirect to="/" /> }

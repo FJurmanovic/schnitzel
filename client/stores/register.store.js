@@ -46,8 +46,6 @@ class RegisterStore {
 
         const isPrivate = !(this.privacy === "public");
 
-        console.log(this.mailsMatch, this.passMatch)
-
         if(this.mailsMatch && this.passMatch) {
             const registerObject = {
                 username: this.usernameValue,

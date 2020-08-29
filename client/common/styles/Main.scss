@@ -171,6 +171,12 @@ body{
             }
         }
 
+        .profile-info {
+            span {
+                margin: 2px 12px;
+            }
+        }
+
         .folbtn {
             width: 200px;
         }
@@ -575,6 +581,12 @@ body{
 body.dark {
     background-color: #202020;
     color: #fbfafa !important;
+    .gg-chevron-up {
+        color: #afafaf;
+        &:hover {
+            color: #0059ff;
+        }
+    }
     header.header {
         background-color: #161616;
     }

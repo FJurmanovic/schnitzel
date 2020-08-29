@@ -30,7 +30,7 @@ class FullPost extends Component {
                 <div className='poston screen-post' onClick={(event) => event.stopPropagation()}>
                         { this.props.FullPostStore.postObject.hasPhoto && <div className="card-image"><img src={this.props.FullPostStore.postObject.url} className="card-img-top" /></div>}
                     <div className="screen-body">    
-                        {(  this.props.FullPostStore.authStore.userData.id === this.props.FullPostStore.postObject.userId) && <span className="float-right"><a href="./" onClick={() => {removePost(this.props.FullPostStore.postObject.id); this.props.history.push("/")}}>Delete post</a> | <Link to={`/post/edit/${this.props.FullPostStore.postObject.id}`}>Edit post</Link></span>}
+                        {(  this.props.FullPostStore.authStore.userData.id === this.props.FullPostStore.postObject.userId) && <span className="float-right"><a href="./" onClick={() => {this.props.FullPostStore.removePost(this.props.FullPostStore.postObject.id); this.props.history.push("/")}}>Delete post</a> | <Link to={`/post/edit/${this.props.FullPostStore.postObject.id}`}>Edit post</Link></span>}
                         <h3>{this.props.FullPostStore.postObject.title}</h3>
                         <div className="screen-description">{this.props.FullPostStore.postObject.description}</div>
                         {this.props.FullPostStore.postObject.type == "recipe" && <>
@@ -50,7 +50,7 @@ class FullPost extends Component {
                             : <Link to={`/${this.props.FullPostStore.postObject.username}`}>{this.props.FullPostStore.postObject.username}</Link>
                             }
                         </div>
-                        <div>Posted {this.props.FullPostStore.postObject.timeAgo}</div>
+                        <div dangerouslySetInnerHTML={{__html: this.props.FullPostStore.postObject.timeAgo}}></div>
                         
                         <div className="f5">Points: {this.props.FullPostStore.postObject.points} <button className="btn-icon ml-n2" onClick={this.props.FullPostStore.togglePoints}>{!this.props.FullPostStore.postObject.isPointed ? <div className="gg-chevron-up"></div> : <div className="gg-chevron-up text-blue"></div>}</button> <span className="mx-5">Comments: {this.props.FullPostStore.postObject.comments}</span></div>
                         <hr />

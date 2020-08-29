@@ -26,7 +26,7 @@ class AuthStore {
         if(!this.token) this.passedData = true;
     }
 
-    authLogin = async (loginObject, history) => {
+    authLogin = async (loginObject, history, callback) => {
         try { 
             const data = await this.authService.postLogin(loginObject);
             runInAction(() => {
@@ -34,7 +34,8 @@ class AuthStore {
                     this.token = data.token;
                     localStorage.setItem("token", data.token);
                     this.authorize();
-                    history.push("/");
+                    if (history) history.push("/");
+                    if(typeof callback == "function") callback();
                 }
             })
         } catch (error) {
@@ -66,7 +67,6 @@ class AuthStore {
 
     authEdit = async (editObject, history, file) => {
         try { 
-            console.log(file)
             const data = await this.authService.putData(editObject, this.token);
             runInAction(() => {
                 if(data.token){
@@ -117,7 +117,6 @@ class AuthStore {
     }
 
     authLogout = () => {
-        console.log("logged out")
         this.userData = {};
         this.token = null;
         localStorage.removeItem("token");

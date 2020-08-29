@@ -3,6 +3,7 @@ import {observable, computed, runInAction} from 'mobx';
 import {PostsService, AuthService} from '../services';
 
 import {AuthStore, CommentsStore} from './';
+import PostsStore from './posts.store';
 
 class FullPostStore {
     constructor () {
@@ -10,6 +11,7 @@ class FullPostStore {
         this.postsService = new PostsService();
         this.commentStore = new CommentsStore("comment");
         this.CommentsStore = CommentsStore;
+        this.removePost = new PostsStore("post").removePost;
     }
     @observable postObject = {};
     @observable showPost = false;
