@@ -70,8 +70,10 @@ class PostsStore {
 
     removePost = async (id) => {
         try { 
-            const data = await this.postsService.deletePost(this.authStore.token, id);
-            return data;
+            if(window.confirm("Are you sure you want to remove a post?")){
+                const data = await this.postsService.deletePost(this.authStore.token, id);
+                return data;
+            }
         } catch (error) {
             console.log(error);
             runInAction(() => {

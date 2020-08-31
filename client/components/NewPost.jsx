@@ -94,7 +94,7 @@ class NewPost extends React.Component {
                         <input type="submit" value="Submit" className="btn btn-blue width-full" />
                     </form>
                 </div>
-                :   <button className="btn btn-blue-transparent d-block width-full py-4" onClick={this.props.NewPostStore.toggleShow}>New Post</button>
+                :   <button className="btn btn-blue-transparent d-block width-full py-4 border-blue" onClick={this.props.NewPostStore.toggleShow}>New Post</button>
                 } 
             </>
     }

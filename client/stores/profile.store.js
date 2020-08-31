@@ -1,6 +1,6 @@
 import {observable, computed, runInAction} from 'mobx';
 
-import {PostsStore} from './';
+import {PostsStore, FullPostStore} from './';
 
 class ProfileStore extends PostsStore {
     constructor(){
@@ -25,16 +25,24 @@ class ProfileStore extends PostsStore {
         return this.profileData.id === this.authStore.userData.id;
     }
     
+    @computed get postUsername () {
+        if(FullPostStore.postObject) {
+            return FullPostStore.postObject.username;
+        } 
+        return null;
+    }
+
     componentMounted = async (profileName, callback) => {
         this.isLoading = true;
         this.destroy();
         let data = null;
-        if (profileName) {
-            data = await this.searchUser(profileName)
-            if (data) this.profileId = data.id;
-        } 
-        else data = await this.searchUser(this.userData.username);
-
+        if(profileName !== this.profileData.username){
+            if (profileName) {
+                data = await this.searchUser(profileName)
+                if (data) this.profileId = data.id;
+            } 
+            else data = await this.searchUser(this.userData.username);
+        }
         runInAction(() => {
             if (data) if (!data.message) {
                 this.profileData = data;

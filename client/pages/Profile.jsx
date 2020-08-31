@@ -8,6 +8,7 @@ import { Post, Followers } from '../components';
 class Profile extends Component {
     componentWillMount() {
         let { profileName } = this.props.match.params;
+        if (this.props.match.path === "/profile") profileName = this.props.ProfileStore.userData.username;
         this.props.ProfileStore.componentMounted(profileName, () => {
             if (this.props.ProfileStore.myProfile && profileName) this.props.history.push("/profile");
         });
@@ -22,7 +23,7 @@ class Profile extends Component {
     componentDidUpdate(prevProps) {
         let { profileName } = this.props.match.params;
         window.removeEventListener('scroll', this.props.ProfileStore.handleScroll);
-        if (this.props.match.path !== prevProps.match.path && prevProps.match.path == "/post/:postId/1") return;
+        if (this.props.match.path !== prevProps.match.path && (prevProps.match.path == "/post/:postId/1" || this.props.match.path == "/post/:postId/1") && this.props.ProfileStore.profileData.username) return;
         if (profileName !== prevProps.match.params.profileName) {
             this.props.ProfileStore.componentMounted(profileName, () => {
                 if (this.props.ProfileStore.myProfile && profileName) this.props.history.push("/profile");
