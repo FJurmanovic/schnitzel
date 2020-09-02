@@ -36,10 +36,9 @@ class ProfileStore extends PostsStore {
         this.isLoading = true;
         this.destroy();
         let data = null;
-        if(profileName !== this.profileData.username){
+        if(profileName !== this.profileId){
             if (profileName) {
                 data = await this.searchUser(profileName)
-                if (data) this.profileId = data.id;
             } 
             else data = await this.searchUser(this.userData.username);
         }
@@ -50,8 +49,6 @@ class ProfileStore extends PostsStore {
             }
             this.isLoading = false;
         });
-
-        await this.postsGet();
 
         if(typeof(callback) === "function") callback();
     }
@@ -94,6 +91,10 @@ class ProfileStore extends PostsStore {
     searchUser = async(username) => {
         try { 
             const data = await this.getUserData(username);
+            if(data) {
+                this.profileId = data.id;
+                await this.postsGet();
+            }
             return data;
         } catch (error) {
             console.log(error);

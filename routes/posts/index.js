@@ -45,7 +45,11 @@ router.get('/', auth, async (req, res) => {
         } else if (type === "profile") {
             user = await User.findById(profileId);
             const followers = [...user.followers.map((x) => x.userId)];
-            if (followers.indexOf(req.user.id, 0) != -1 || !user.isPrivate){
+            if (profileId === req.user.id){
+                options = {
+                    "userId": profileId
+                }
+            } else if (followers.indexOf(req.user.id, 0) != -1 || !user.isPrivate){
                 options = {
                     "userId": profileId,
                     "isPrivate": false

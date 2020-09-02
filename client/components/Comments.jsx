@@ -44,7 +44,9 @@ class Comments extends Component {
                             </ul>
                         }
                     </div>
-                </React.Fragment>)}</>
+                </React.Fragment>)}
+                {!this.props.store.last && <button className="btn-link" onClick={this.props.store.getComments}>Load more</button>}
+                </>
             : <div></div>
         }</>
     }

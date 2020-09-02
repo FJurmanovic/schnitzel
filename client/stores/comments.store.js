@@ -80,6 +80,7 @@ class CommentsStore {
         this.commentId = commentId || null;
         if(this.type === "comment" && this.postId || this.type === "reply" && this.postId && this.commentId) {
             if(hasComments) this.getComments();
+            else this.last = true;
         }
     }
 
