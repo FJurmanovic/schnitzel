@@ -1,7 +1,12 @@
 import React, {useState} from 'react';
 import {Link} from 'react-router-dom';
+import {AuthService} from '../services';
+import {AuthStore} from '../stores';
 
 export const Popover = ({userId, username, getUserData, iter}) => {
+    const authService = new AuthService;
+    const authStore = AuthStore;
+
     const [authorData, setAuthorData] = useState(
         {
             id: '',
@@ -15,7 +20,7 @@ export const Popover = ({userId, username, getUserData, iter}) => {
     const getAuthorData = async(username) => {
         if(!isFetch){
             
-            let data = await getUserData(username);
+            let data = await authService.getUserData(username, authStore.token);
             if(data) {
                 setAuthorData(data);
                 setIsFetch(true);

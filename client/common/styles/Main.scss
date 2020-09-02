@@ -253,7 +253,7 @@ body{
                     border: 1px solid #b6b6b6;
                     border-radius: .2em;
                     margin-top: -1px;
-                    z-index: 100;
+                    z-index: 10000;
                     width: 200px;
                     height: 66px;
                 }
@@ -496,7 +496,7 @@ body{
             box-shadow: 1px 1px 5px -5px #868686;
             border-radius: 0.5em;
 
-            .card-img-top {
+            .card-image > .card-img-top {
                 width: 100% !important;
             }
         }

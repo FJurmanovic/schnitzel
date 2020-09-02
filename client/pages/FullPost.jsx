@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter, Link } from 'react-router-dom';
 
-import { Comments, NewComment } from '../components';
+import { Comments, NewComment, Popover } from '../components';
 
 @inject("FullPostStore")
 @observer
@@ -45,10 +45,10 @@ class FullPost extends Component {
                         </div>
                         <div className="screen-directions">{this.props.FullPostStore.postObject.directions}</div>
                         </>}
-                        <div>Author: <span></span>
+                        <div className="author">Author: <span></span>
                             {this.props.FullPostStore.postObject.username == "DeletedUser" 
                             ? <span>DeletedUser</span>
-                            : <Link to={`/${this.props.FullPostStore.postObject.username}`}>{this.props.FullPostStore.postObject.username}</Link>
+                            : <span><Popover userId={this.props.FullPostStore.postObject.userId} username={this.props.FullPostStore.postObject.username} iter="1" /></span>
                             }
                         </div>
                         <div dangerouslySetInnerHTML={{__html: this.props.FullPostStore.postObject.timeAgo}}></div>

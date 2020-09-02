@@ -109,6 +109,29 @@ router.delete('/', auth, async (req, res) => {
     }
 })
 
+router.put('/', auth, async (req, res) => {
+    const {user: {id}, body: {type, comment, postId, commentId, replyId}} = req;
+    try{
+        let points = [];
+
+        if (type === "reply") {
+            await Post.findOneAndUpdate({"_id": postId, comments: {$elemMatch: { "_id": commentId, reply: {$elemMatch: { "_id": replyId, "userId": id, "isDeleted": {$ne: true} } } } } }, { $set: { 'comments.$[comment].reply.$[repl].comment': comment, 'comments.$[comment].reply.$[repl].updatedAt': new Date() } }, { arrayFilters: [{ 'comment._id': commentId }, { 'repl._id': replyId }] }); //Adds new reply list to comment if commentId is present in req.body 
+            res.status(200).send("Succesfully edited reply");
+            return;
+
+        } else if (type === "comment") {
+            await Post.findOneAndUpdate({"_id": postId, comments: {$elemMatch: { "_id": commentId, "userId": id }}}, { $set: {'comments.$[comment].comment': comment, 'comments.$[comment].updatedAt': new Date()} }, { arrayFilters: [{ 'comment._id': commentId }] }); //If there is no commentId, adds new comments list
+            res.status(200).send("Succesfully edited comment");
+            return;
+        }
+            
+        res.send("Comment not added");
+    } catch (err) {
+        console.log(err.message);
+        res.status(500).send("Error in fetching");
+    }
+});
+
 module.exports = router;
 
 async function Items(object, userId) {

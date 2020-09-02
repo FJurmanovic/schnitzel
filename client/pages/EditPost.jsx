@@ -38,14 +38,14 @@ class EditPost extends Component {
                         </label>
                         <br />
                         <label>Type:<br />
-                            <select onChange={(e) => this.props.EditPostStore.typeChange(e.target.value)} className="width-full py-3 f4">
+                            <select value={this.props.EditPostStore.typeValue} onChange={(e) => this.props.EditPostStore.typeChange(e.target.value)} className="width-full py-3 f4">
                                 <option value="post">Showoff</option>
                                 <option value="recipe">Recipe</option>
                             </select>
                         </label>
                         <br />
                         <label>Post privacy:<br />
-                            <select onChange={(e) => this.props.EditPostStore.privacyChange(e.target.value)} className="width-full py-3 f4">
+                            <select value={this.props.EditPostStore.privacyValue} onChange={(e) => this.props.EditPostStore.privacyChange(e.target.value)} className="width-full py-3 f4">
                                 <option value="private">Private</option>
                                 <option value="public">Public</option>
                             </select>

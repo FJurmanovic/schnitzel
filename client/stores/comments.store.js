@@ -16,7 +16,26 @@ class CommentsStore {
     @observable page = 1;
     @observable ppp = 10;
 
+    @observable commentEdit = null;
+
     @observable loadingPost = false;
+
+    @observable isEditing = null;
+    editClick = (key) => {
+        if(this.isEditing === key) this.isEditing = null;
+        else this.isEditing = key;
+        this.commentEdit = null;
+    }
+    saveEdit = (type, replyId, commentId, postId) => {
+        if(this.commentEdit === null) {
+            event.preventDefault();
+            return this.editClick(null);
+        }
+        this.putComment(type, replyId, commentId, postId, this.commentEdit);
+    }
+    editChange = (value) => {
+        this.commentEdit = value;
+    }
 
     @observable showReply = null;
     openReply = (id) => {
@@ -50,6 +69,22 @@ class CommentsStore {
         if(data) {
             location.reload();
         }
+    }
+    putComment = async (type, replyId, commentId, postId, comment) => {
+        let object = {
+            type: type,
+            postId: postId,
+            comment: comment
+        };
+
+        if(this.type == "comment") {
+            object.commentId = replyId;
+        }else if (this.type == "reply") {
+            object.commentId = commentId;
+            object.replyId = replyId;
+        }
+        const data = await this.postsService.putComment(this.authStore.token, object);
+        return data;
     }
 
     togglePoints = (id) => {

@@ -33,7 +33,10 @@ class PostsService {
         return await HttpClient.post(url + "/comment", object, {"token": token});
     }
     deleteComment = async (token, object) => {
-        return await HttpClient.delete(url + "/comment", object, {"token": token})
+        return await HttpClient.delete(url + "/comment", object, {"token": token});
+    }
+    putComment = async (token, object) => {
+        return await HttpClient.put(url + "/comment", object, {"token": token});
     }
 }
 

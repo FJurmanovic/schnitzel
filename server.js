@@ -30,9 +30,11 @@ app.use(bodyParser.json());
 app.use(cors());
 
 
-app.use('/', express.static(DIST_DIR));
+if (!devArg) app.use('/', express.static(DIST_DIR));
 
 app.use('/api', api);
+
+app.use("/api/logos", express.static(path.join(__dirname, '/static/logos')));
 
 if (devArg) { //If devArg is true, front-end will be webpack and not static files from public
     config.entry.app.unshift('webpack-hot-middleware/client?reload=true&timeout=1000');
@@ -44,13 +46,12 @@ if (devArg) { //If devArg is true, front-end will be webpack and not static file
         publicPath: config.output.publicPath
     }));
     app.use(webpackHotMiddleware(compiler));
+} else {
+    app.get('*', (_, res) => {
+        res.sendFile(HTML_FILE);
+    });
 }
 
-app.use("/api/logos", express.static(path.join(__dirname, '/static/logos')));
-
-app.get('*', (_, res) => {
-    res.sendFile(HTML_FILE);
-});
 
 app.listen(PORT, () => {
     console.log(`Server started at PORT ${PORT}`);

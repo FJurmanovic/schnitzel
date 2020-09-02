@@ -79,6 +79,9 @@ const PostSchema = mongoose.Schema({ //Creates new mongoose schema(Model) for po
       type: Date,
       default: Date.now()
     },
+    updatedAt: {
+      type: Date
+    },
     reply: [{
       comment: {
         type: String,
@@ -104,6 +107,9 @@ const PostSchema = mongoose.Schema({ //Creates new mongoose schema(Model) for po
       createdAt: {
         type: Date,
         default: Date.now()
+      },
+      updatedAt: {
+        type: Date
       }
     }]
   }],
