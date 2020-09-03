@@ -1,8 +1,6 @@
-import {observable, computed, runInAction} from 'mobx';
-import {AuthStore, PostsStore} from './';
+import {observable, runInAction} from 'mobx';
+import {AuthStore} from './';
 import { PostsService, ImageService } from '../services';
-import { type } from 'os';
-
 const path = require('path');
 
 class FormStore {

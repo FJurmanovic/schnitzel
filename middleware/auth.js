@@ -1,12 +1,7 @@
 const jwt_decode = require("jwt-decode");
 
 module.exports = function(req, res, next) {
-  let token = '';
-  if(!req.header("token")){
-    token = req.body["token"];
-  }else{ 
-    token = req.header("token");
-  }
+  let token = req.header("token");
   if (!token) return res.status(401).json({ message: "Auth Error" });
 
   try {

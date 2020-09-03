@@ -9,11 +9,6 @@ import {Link} from 'react-router-dom';
 class Comments extends Component {
     constructor(props) {
         super(props);
-        this.showReply = null;
-    }
-
-    openReply = (id) => {
-        this.showReply = id;
     }
 
     componentWillMount() {   

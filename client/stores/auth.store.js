@@ -1,7 +1,5 @@
 import {observable, runInAction, computed} from 'mobx';
 import {AuthService, ImageService} from '../services';
-import auth from '../../middleware/auth';
-
 class AuthStore {
     constructor() {
         this.authService = new AuthService;
