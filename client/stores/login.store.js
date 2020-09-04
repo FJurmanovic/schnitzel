@@ -1,26 +1,20 @@
-import {observable, computed} from 'mobx';
+import {observable, computed, runInAction} from 'mobx';
 import {AuthStore} from './';
 
 class LoginStore {
-    @observable emailValue = null;
-    @observable passwordValue = null;
+    @observable errorMessage = null;
 
-    emailChange = (value) => {
-        this.emailValue = value;
-    }
-
-    passwordChange = (value) => {
-        this.passwordValue = value;
-    }
-
-    submitClick = (event, history) => {
+    submitClick = async(values, history) => {
         event.preventDefault();
         let loginObject = {
-            "email": this.emailValue,
-            "password": this.passwordValue
+            "email": values.email,
+            "password": values.password
         };
 
-        AuthStore.authLogin(loginObject, history);
+        const {message} = await AuthStore.authLogin(loginObject, history);
+        runInAction(() => {
+            this.errorMessage = message;
+        });
     }
 
     @computed get token() {

@@ -8,3 +8,8 @@ export {Followers} from './Followers';
 export {Ingredient} from './Ingredient';
 export {NewComment} from './NewComment';
 export {Switch} from './Switch';
+
+export {FormComponent} from './FormComponent';
+export {FormGroupComponent} from './FormGroupComponent';
+export {InputComponent} from './InputComponent';
+export {RadioComponent} from './RadioComponent';

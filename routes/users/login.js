@@ -10,7 +10,7 @@ router.post('/',
     [
     check("email", "Please enter a valid email").isEmail(), //Checks if email
     check("password", "Please enter a valid password").isLength({ //Checks if >6
-        min: 6
+        min: 3
     })
     ], 
     async (req, res) => {

@@ -5,6 +5,7 @@ import {Landing, Login, Register, EditProfile, Feed, Explore, ExploreCategory, P
 import {Navbar} from './';
 import { observer, inject } from 'mobx-react';
 
+
 const closeDetails = function() {
     let menu = document.getElementById("profile");
     if (menu) menu.removeAttribute("open");

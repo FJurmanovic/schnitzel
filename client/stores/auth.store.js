@@ -36,8 +36,8 @@ class AuthStore {
                     if(typeof callback == "function") callback();
                 }
             })
+            return data;
         } catch (error) {
-            console.log(error);
             runInAction(() => {
                 this.status = "error";
             });
@@ -55,6 +55,7 @@ class AuthStore {
                     history.push("/");
                 }
             })
+            return data;
         } catch (error) {
             console.log(error);
             runInAction(() => {
