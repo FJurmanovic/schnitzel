@@ -1,8 +1,15 @@
 import {observable, runInAction} from 'mobx';
-import {AuthStore} from './';
+import {AuthStore, DropdownStore} from './';
 
 class RegisterStore {
     @observable errorMessage = null;
+    @observable testDrop = new DropdownStore("Test", 0, this.testFunc, false);
+
+    testFunc = (searchPhrase) => {
+        return new Promise((resolve, reject) => {
+            resolve(["test", "tost", "test123", "hoola"]);
+        })
+    }
 
     submitClick = async (values, history) => {
         event.preventDefault();

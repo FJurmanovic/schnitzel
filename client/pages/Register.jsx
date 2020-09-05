@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import {withRouter} from 'react-router-dom';
 
-import {FormComponent, InputComponent, RadioComponent, FormGroupComponent} from '../components';
+import {FormComponent, InputComponent, RadioComponent, FormGroupComponent, DropdownComponent} from '../components';
 
 import {FormsService} from '../services';
 const fields = [
@@ -38,6 +38,12 @@ const fields = [
       default: "Private",
       value: "Private"
     },
+    {
+      name: "categories",
+      type: "checkbox",
+      rules: "required",
+      value: []
+    }
 ]
 
 
@@ -72,6 +78,7 @@ class Register extends Component {
                 <InputComponent className="width-full f5 py-2 my-2" message="Password (3-15 characters): " errorMessage="Password must be between 3 and 15 characters." name="password" />
                 <InputComponent className="width-full f5 py-2 my-2" message="Confirm Password: " errorMessage="Passwords do not match." name="passwordConfirm" />
             </FormComponent>
+            <DropdownComponent store={this.props.RegisterStore.testDrop} />
             {this.props.RegisterStore.errorMessage && <div className="mx-auto col-7 h4 text-red">{this.props.RegisterStore.errorMessage}</div>}
           </div>
         );

@@ -8,3 +8,4 @@ export {default as PostsStore} from './posts.store';
 export {default as ProfileStore} from './profile.store';
 export {default as CommentsStore} from './comments.store';
 export {default as FullPostStore} from './fullPost.store';
+export {default as DropdownStore} from './dropdown.store';

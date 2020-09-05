@@ -656,6 +656,22 @@ body.dark {
     }
 }
 
+.dropdown-custom {
+    span.dropdown-custom-fieldname {
+        cursor: pointer;
+    }
+    div.dropdown-custom-open {
+        input.dropdown-custom-search {
+
+        }
+        ul.dropdown-custom-list {
+            li.dropdown-custom-listitem {
+
+            }
+        }
+    }
+}
+
 .dropdown-item {
     .swc {
         .switch {

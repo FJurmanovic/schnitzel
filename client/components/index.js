@@ -13,3 +13,6 @@ export {FormComponent} from './FormComponent';
 export {FormGroupComponent} from './FormGroupComponent';
 export {InputComponent} from './InputComponent';
 export {RadioComponent} from './RadioComponent';
+export {CheckboxComponent} from './CheckboxComponent';
+export {TextAreaComponent} from './TextAreaComponent';
+export {DropdownComponent} from './DropdownComponent';
