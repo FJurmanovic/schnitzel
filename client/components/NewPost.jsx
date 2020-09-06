@@ -1,98 +1,99 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import {firstUpper, categories} from '../common/js';
+import {categories} from '../common/js';
 
-import { Ingredient } from './';
+import {Ingredient, FormComponent, InputComponent, FileComponent, CheckboxComponent, FormGroupComponent, DropdownComponent, TextAreaComponent} from './';
+
+import {FormsService} from '../services';
+const fields = [
+    {
+        name: "title",
+        type: "text",
+        rules: "required|string|between:1,50"
+    },
+    {
+        name: "type",
+        value: "showoff",
+        rules: "required"
+    },
+    {
+        name: "privacy",
+        value: "private",
+        rules: "required"
+    },
+    {
+        name: "image",
+        type: "file",
+        value: null,
+    },
+    {
+        name: "categories",
+        type: "checkbox",
+        value: [],
+        rules: "required"
+    },
+    {
+        name: "description",
+        rules: "required"
+    },
+    {
+        name: "ingredients",
+        value: [],
+        rules: "required_if:type,recipe"
+    },
+    {
+        name: "directions",
+        rules: "required_if:type,recipe"
+    }
+
+]
+
+
+const forms = new FormsService({fields});
 
 @inject("NewPostStore")
 @observer
 class NewPost extends React.Component {
+    constructor(props) {
+    super(props);
+    this.hooks = {
+        onSuccess(form) {
+            const file = form.$("image").files && form.$("image").files[0] || null;
+            props.NewPostStore.submitClick(form.values(), file, props.history);
+        },
+        onError(form) {
+          console.log(form.values())
+        } 
+      }
+}
     render() {
         return <>
             { this.props.NewPostStore.showNew
             ?   <div className="new-post">
-                    <button className="btn btn-link float-right mr-9 mt-n3" onClick={this.props.NewPostStore.toggleShow}>Cancel</button>
-                    <form onSubmit={(e) => this.props.NewPostStore.submitClick(e)} className="col-7 mx-auto" method="post">
-                        <label>Title:<br />
-                            <input type="text" value={this.props.NewPostStore.titleValue || ""} onChange={(e) => this.props.NewPostStore.titleChange(e.target.value)} className="width-full py-3 f4" required />
-                            { this.props.NewPostStore.err.title &&
-                                <small className="h5 text-red d-block">{this.props.NewPostStore.err.title}</small>
-                            }
-                        </label>
-                        <br />
-                        <label>Type:<br />
-                            <select onChange={(e) => this.props.NewPostStore.typeChange(e.target.value)} className="width-full py-3 f4">
-                                <option value="post">Showoff</option>
-                                <option value="recipe">Recipe</option>
-                            </select>
-                        </label>
-                        <br />
-                        <label>Post privacy:<br />
-                            <select onChange={(e) => this.props.NewPostStore.privacyChange(e.target.value)} className="width-full py-3 f4">
-                                <option value="private">Private</option>
-                                <option value="public">Public</option>
-                            </select>
-                        </label>
-                        <br />
-                        <label>Image:<br />
-                            <input type="file" onChange={(e) => this.props.NewPostStore.imageChange(e.target.files[0])} />
-                        </label>
-                        <br />
-                        <div className="f4">Category:<br /> 
+                    <FormComponent className="col-7 mx-auto" form={forms} onSubmit={(e) => forms.onSubmit(e, this.hooks)} onCancel={this.props.NewPostStore.toggleShow}>
+                        <InputComponent className="width-full py-3 f4" message="Title: " errorMessage="Title must have between 1 and 50 characters" name="title" />
+                        <DropdownComponent className="width-full f5 py-2 my-2" message="Type: " store={this.props.NewPostStore.typeStore} name="type" />
+                        <DropdownComponent className="width-full f5 py-2 my-2" message="Privacy: " store={this.props.NewPostStore.privacyStore} name="privacy" />
+                        <FileComponent message="Image: " name="image" />
+                        <FormGroupComponent>
+                            <div>Categories: </div>
                             {categories.map((category, key) => {
-                                return <React.Fragment key={key}>
-                                    <div className="btn-checkbox">
-                                        <input type="checkbox" name={category} id={category} checked={this.props.NewPostStore.categoriesValue.filter(x => x == category)[0] || false} onChange={(e) => this.props.NewPostStore.categoryChange(e)} value={category} />
-                                        <label htmlFor={category}> {firstUpper(category)}</label>
-                                    </div>
-                                </React.Fragment>   
+                                return <CheckboxComponent name="categories" value={category} key={key} />
                             })}
-                            { this.props.NewPostStore.err.categories &&
-                                <small className="h5 text-red d-block">{this.props.NewPostStore.err.categories}</small>
-                            }
-                        </div>
-                        <br />
-                        <label>Description:<br />
-                            <textarea 
-                                onChange={(e) => this.props.NewPostStore.descriptionChange(e.target.value)}
-                                value={this.props.NewPostStore.descriptionValue || ""}
-                                className="width-full py-3 f4"
-                                required
-                            />
-                            { this.props.NewPostStore.err.description &&
-                                <small className="h5 text-red d-block">{this.props.NewPostStore.err.description}</small>
-                            }
-                        </label>
-                        <br />
-                        {this.props.NewPostStore.typeValue == "recipe" &&
-                        <>
-                            <label>Ingredients:<br /></label>
-                            <div className="ingredients">
-                                {this.props.NewPostStore.ingredientsValue.map((ingredient, i) => {
-                                    return ( <>
-                                        <Ingredient err={this.props.NewPostStore.err.ingredient} key={i} ingredient={ingredient} i={i} ingredientNameChange={this.props.NewPostStore.ingredientNameChange} ingredientAmountChange={this.props.NewPostStore.ingredientAmountChange} ingredientUnitChange={this.props.NewPostStore.ingredientUnitChange} />
-                                        { this.props.NewPostStore.err.ingredients && <>
-                                        { this.props.NewPostStore.err.ingredients[i] && <small className="h5 text-red d-block">{this.props.NewPostStore.err.ingredients[i]}</small> }
-                                        </>
-                                        }
-                                    </>
-                                )})}
-                            </div>
-                            <br />
-                            <button className="btn btn-default mt-n4 mb-4" onClick={(e) => this.props.NewPostStore.addIngredientClick(e)}>Add new ingredient</button><br />
-                            <label className="">Directions:<br />
-                                <textarea 
-                                    onChange={(e) => this.props.NewPostStore.directionsChange(e.target.value)}
-                                    value={this.props.NewPostStore.directionsValue || ""}
-                                    className="width-full py-3 f4"
-                                    required
-                                />
-                            </label>
-                            <br />
-                        </>
+                        </FormGroupComponent>
+                        <TextAreaComponent className="width-full py-3 f4" message="Description: " name="description" />
+                        {this.props.NewPostStore.typeStore.textFieldName == "recipe" &&
+                            <FormGroupComponent>
+                                <FormGroupComponent className="ingredients">
+                                    {forms.$("ingredients").value.map((_, i) =>
+                                            <Ingredient key={i} i={i} name="ingredients" />           
+                                    )}
+                                </FormGroupComponent>
+                                <br /><button className="btn btn-default mt-n4 mb-4" onClick={(e) => this.props.NewPostStore.addIngredientClick(e, forms.$("ingredients"))}>Add new ingredient</button><br />
+                                <TextAreaComponent className="width-full py-3 f4" message="Directions: " name="directions" />
+                            </FormGroupComponent>
                         }
-                        <input type="submit" value="Submit" className="btn btn-blue width-full" />
-                    </form>
+                    </FormComponent>
                 </div>
                 :   <button className="btn btn-blue-transparent d-block width-full py-4 border-blue" onClick={this.props.NewPostStore.toggleShow}>New Post</button>
                 } 

@@ -1,60 +1,50 @@
 import {observable, runInAction} from 'mobx';
-import {AuthStore} from './';
+import {AuthStore, DropdownStore} from './';
 import { PostsService, ImageService } from '../services';
 const path = require('path');
 
 class FormStore {
     constructor(type) {
         this.formType = type;
-        this.postsService = new PostsService();
-        this.imageService = new ImageService();
+        this.postsService = new PostsService;
+        this.imageService = new ImageService;
         this.authStore = AuthStore;
     }
 
-    @observable postObject = {};
     @observable postId = null;
 
-    @observable titleValue = null;
-    @observable typeValue = "post";
-    @observable privacyValue = "private";
-    @observable descriptionValue = null;
-    @observable categoriesValue = [];
-    @observable numIngredientsValue = 1;
-    @observable ingredientsValue = [new Ingredient()];
-    @observable directionsValue = null;
-    @observable isRecipe = false;
-    @observable selectedFile = null;
-    @observable err = {};
+    @observable ingredientNum = 0;
+    @observable typeStore = new DropdownStore("showoff", 0, this.typeSearch, false);
+    @observable privacyStore = new DropdownStore("privacy", 0, this.privacySearch, false);
+
+    typeSearch = (searchPhrase) => {
+        return new Promise((resolve, reject) => {
+            resolve(["showoff", "recipe"].filter(x=>!x.search(searchPhrase)));
+        })
+    }
+    privacySearch = (searchPhrase) => {
+        return new Promise((resolve, reject) => {
+            resolve(["private", "public"].filter(x=>!x.search(searchPhrase)));
+        })
+    }
 
     @observable showNew = false;
 
-    toDefault = () => {
-        this.titleValue = null;
-        this.typeValue = "post";
-        this.privacyValue = "private";
-        this.descriptionValue = null;
-        this.categoriesValue = [];
-        this.numIngredientsValue = 1;
-        this.ingredientsValue = [new Ingredient()];
-        this.directionsValue = null;
-        this.isRecipe = false,
-        this.selectedFile = null;
-        this.showNew = false;
-        this.err = {};
-    }
-
-    getData = async (postId) => {
+    getData = async (postId, form) => {
         const data = await this.postsService.getEditPost(this.authStore.token, postId);
         if(data.id) {
-            this.titleValue = data.title;
-            this.typeValue = data.type;
-            this.privacyValue = data.isPrivate ? "private" : "public" ;
-            this.descriptionValue = data.description;
-            this.categoriesValue = data.categories;
+            form.$("title").value = data.title;
+            form.$("type").value = data.type;
+            this.typeStore = new DropdownStore(data.type, 0, this.typeSearch, false);
+            form.$("privacy").value = data.isPrivate ? "private" : "public";
+            this.privacyStore = new DropdownStore(data.isPrivate ? "private" : "public", 0, this.privacySearch, false);
+            form.$("description").value = data.description;
+            form.$("categories").value = data.categories;
             if(data.type === "recipe") {
-                this.numIngredientsValue = data.ingredients.length;
-                this.ingredientsValue = [...data.ingredients];
-                this.directionsValue = data.directions;
+                data.ingredients.map(ingredient => {
+                    this.addIngredientClick(null, form.$("ingredients"), ingredient.name, ingredient.amount, ingredient.unit);
+                });
+                form.$("directions").value = data.directions;
             }
             this.showNew = true;
             this.postId = postId;
@@ -63,98 +53,54 @@ class FormStore {
 
     toggleShow = () => {
         this.showNew = !this.showNew;
-        if(!this.showNew) this.toDefault(); 
     }
 
-    titleChange = (value) => {
-        this.titleValue = value;
-    }
-
-    typeChange = (value) => {
-        this.typeValue = value;
-    }
-
-    privacyChange = (value) => {
-        this.privacyValue = value;
-    }
-
-    descriptionChange = (value) => {
-        this.descriptionValue = value;
-    }
-
-    addIngredientClick = (event) => {
-        event.preventDefault();
-        this.ingredientsValue.push(new Ingredient());
-        this.numIngredientsValue++;
-    }
-
-    ingredientNameChange = (value, id) => {
-        this.ingredientsValue[id].name = value;
-    }
-
-    ingredientAmountChange = (value, id) => {
-        this.ingredientsValue[id].amount = value;
-    }
-
-    ingredientUnitChange = (value, id) => {
-        this.ingredientsValue[id].unit = value;
-    }
-
-    directionsChange = (value) => {
-        this.directionsValue = value;
-    }
-
-    imageChange = (value) => {
-        this.selectedFile = value;
-    }
-
-    categoryChange = (event) => {
-        if(event.target.checked){
-            this.categoriesValue.push(event.target.name);
-        }else{
-            this.categoriesValue.splice(this.categoriesValue.findIndex(x => x == event.target.name), 1);
+    addIngredientClick = (event, form, name, amount, unit) => {
+        event && event.preventDefault();
+        const object = {
+            name: name || "",
+            amount: amount || "",
+            unit: unit || ""
         }
+        form.value = [...form.value, object];
     }
-
-    submitClick = (event, history) => {
+    
+    submitClick = (values, file, history) => {
         let postObject = {};
-        let privacy = this.privacyValue == "private";
-
-        if(this.validation()) return event.preventDefault();
-        event.preventDefault();
+        let privacy = values.privacy == "private";
 
         let data = new FormData();
-        data.append('file', this.selectedFile);
+        data.append('file', file);
 
-        if(this.typeValue === "post") {
+        if(values.type === "showoff") {
             postObject = {
-                title: this.titleValue,
-                type: this.typeValue,
+                title: values.title,
+                type: "post",
                 isPrivate: privacy,
-                description: this.descriptionValue,
-                categories: this.categoriesValue,
+                description: values.description,
+                categories: values.categories,
             }
-            if(this.selectedFile == null) {
+            if(file == null) {
                 postObject.hasPhoto = false;
             } else {
                 postObject.hasPhoto = true;
-                postObject.photoExt = path.extname(this.selectedFile.name);
+                postObject.photoExt = path.extname(file.name);
             }
-        } else if (this.typeValue === "recipe") {
+        } else if (values.type === "recipe") {
             postObject = {
-                title: this.titleValue,
-                type: this.typeValue,
+                title: values.title,
+                type: "recipe",
                 isPrivate: privacy,
-                description: this.descriptionValue,
-                categories: this.categoriesValue,
-                ingredients: this.ingredientsValue,
-                directions: this.directionsValue
+                description: values.description,
+                categories: values.categories,
+                ingredients: values.ingredients,
+                directions: values.directions
             }
-            if(this.selectedFile == null) {
+            if(file == null) {
                 postObject.hasPhoto = false;
             } else {
                 postObject.hasPhoto = true;
-                postObject.photoExt = path.extname(this.selectedFile.name);
+                postObject.photoExt = path.extname(file.name);
             }
         }
 

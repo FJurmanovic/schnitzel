@@ -22,15 +22,15 @@ class DropdownStore {
     @observable fieldArray = [];
     @observable searchPhrase = "";
 
-    destroy = () => {
-        this.defaultConstructor();
-        this.isOpen = false;
-        this.fieldArray = [];
-        this.searchPhrase = "";
-    }
-
     toggleDropdown = () => {
         this.isOpen = !this.isOpen;
+        if(this.isOpen && !this.initFetch && !this.fieldArray.length) {
+            this.getSearch();
+        }
+    }
+
+    openDropdown = () => {
+        this.isOpen = true;
     }
 
     phraseChange = (value) => {
@@ -41,7 +41,7 @@ class DropdownStore {
     textChange = (value, key) => {
         this.textFieldName = value;
         this.keyFieldName = key;
-        this.searchPhrase = "";
+        this.phraseChange("");
         this.toggleDropdown();
     }
 

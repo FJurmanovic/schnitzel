@@ -16,3 +16,4 @@ export {RadioComponent} from './RadioComponent';
 export {CheckboxComponent} from './CheckboxComponent';
 export {TextAreaComponent} from './TextAreaComponent';
 export {DropdownComponent} from './DropdownComponent';
+export {FileComponent} from './FileComponent';
