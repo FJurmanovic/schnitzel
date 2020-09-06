@@ -43,6 +43,10 @@ const fields = [
       type: "checkbox",
       rules: "required",
       value: []
+    },
+    {
+      name: "test",
+      value: ""
     }
 ]
 
@@ -59,6 +63,7 @@ class Register extends Component {
           props.RegisterStore.submitClick(form.values(), props.history);
         },
         onError(form) {
+          console.log(form.values())
         } 
       }
     }
@@ -77,8 +82,8 @@ class Register extends Component {
                 </FormGroupComponent>
                 <InputComponent className="width-full f5 py-2 my-2" message="Password (3-15 characters): " errorMessage="Password must be between 3 and 15 characters." name="password" />
                 <InputComponent className="width-full f5 py-2 my-2" message="Confirm Password: " errorMessage="Passwords do not match." name="passwordConfirm" />
+                <DropdownComponent store={this.props.RegisterStore.testDrop} name="test" />
             </FormComponent>
-            <DropdownComponent store={this.props.RegisterStore.testDrop} />
             {this.props.RegisterStore.errorMessage && <div className="mx-auto col-7 h4 text-red">{this.props.RegisterStore.errorMessage}</div>}
           </div>
         );

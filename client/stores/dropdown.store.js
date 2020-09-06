@@ -1,6 +1,8 @@
-import {observable, computed, runInAction} from 'mobx';
+import {observable, runInAction} from 'mobx';
 
 class DropdownStore {
+    @observable textFieldName;
+    @observable keyFieldName;
     constructor (textFieldName, keyFieldName, fetchFunc, initFetch) {
         this.textFieldName = textFieldName;
         this.keyFieldName = keyFieldName;
@@ -9,10 +11,23 @@ class DropdownStore {
         if(this.initFetch) {
             this.getSearch();
         }
+        this.defaultConstructor = () => {
+            this.textFieldName = textFieldName;
+            this.keyFieldName = keyFieldName;
+            this.fetchFunc = fetchFunc;
+            this.initFetch = initFetch;
+        }
     }
     @observable isOpen = false;
     @observable fieldArray = [];
     @observable searchPhrase = "";
+
+    destroy = () => {
+        this.defaultConstructor();
+        this.isOpen = false;
+        this.fieldArray = [];
+        this.searchPhrase = "";
+    }
 
     toggleDropdown = () => {
         this.isOpen = !this.isOpen;
@@ -21,6 +36,13 @@ class DropdownStore {
     phraseChange = (value) => {
         this.searchPhrase = value;
         this.getSearch();
+    }
+
+    textChange = (value, key) => {
+        this.textFieldName = value;
+        this.keyFieldName = key;
+        this.searchPhrase = "";
+        this.toggleDropdown();
     }
 
     getSearch = async() => {

@@ -657,16 +657,86 @@ body.dark {
 }
 
 .dropdown-custom {
-    span.dropdown-custom-fieldname {
+    text-align: center;
+    div.dropdown-custom-top {
+        position: relative;
+        background-color: #ffffff;
+        color: #09090a;
+        border-radius: .2em;
         cursor: pointer;
+        padding: 4px 0;
+        font-weight: 500;
+        font-size: 16px;
+        &::after {
+            content: "";  
+            position: absolute;
+            right: 0;
+            margin-top: 8px;
+            margin-right: 4px;
+            width: 0; 
+            height: 0; 
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 8px solid #2e2e2e;
+        }
+        &.--open {
+            border-bottom-right-radius: 0;
+            border-bottom-left-radius: 0;
+            &::after {
+                content: "";  
+                position: absolute;
+                right: 0;
+                margin-top: 8px;
+                margin-right: 4px;
+                width: 0; 
+                height: 0; 
+                border-left: 8px solid transparent;
+                border-right: 8px solid transparent;
+                border-bottom: 8px solid #2e2e2e;
+                border-top: none;
+            }
+        }
+        span.dropdown-custom-fieldname {
+            -webkit-touch-callout: none; 
+            -webkit-user-select: none; 
+            -khtml-user-select: none; 
+            -moz-user-select: none; 
+            -ms-user-select: none; 
+            user-select: none;
+        }
     }
     div.dropdown-custom-open {
+        background-color: #fbfafa;
+        border-bottom-right-radius: .2em;
+        border-bottom-left-radius: .2em;
+        font-size: 16px;
         input.dropdown-custom-search {
-
+            position: relative;
+            width: calc(100% - 2 * 2px);
+            margin: 2px;
+            background-color: #fbfbfb;
+            border: 1px solid #9c9c9c;
+            border-radius: .3em;
+            &:hover {
+                border: 1px solid #b6b6b6;
+            }
         }
         ul.dropdown-custom-list {
+            padding: 1px 0;
             li.dropdown-custom-listitem {
-
+                margin: 2px;
+                list-style-type: none;
+                color: #0e0d0d;
+                -webkit-touch-callout: none; 
+                -webkit-user-select: none; 
+                -khtml-user-select: none; 
+                -moz-user-select: none; 
+                -ms-user-select: none; 
+                user-select: none;
+                cursor: pointer;
+                &:hover {
+                    background-color: #c6d8ff;
+                }
             }
         }
     }
