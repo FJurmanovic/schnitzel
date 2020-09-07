@@ -1,8 +1,6 @@
-import {observable, runInAction} from 'mobx';
+import {observable, action} from 'mobx';
 
 class DropdownStore {
-    @observable textFieldName;
-    @observable keyFieldName;
     constructor (textFieldName, keyFieldName, fetchFunc, initFetch) {
         this.textFieldName = textFieldName;
         this.keyFieldName = keyFieldName;
@@ -11,16 +9,11 @@ class DropdownStore {
         if(this.initFetch) {
             this.getSearch();
         }
-        this.defaultConstructor = () => {
-            this.textFieldName = textFieldName;
-            this.keyFieldName = keyFieldName;
-            this.fetchFunc = fetchFunc;
-            this.initFetch = initFetch;
-        }
     }
     @observable isOpen = false;
     @observable fieldArray = [];
-    @observable searchPhrase = "";
+
+    searchPhrase = "";
 
     toggleDropdown = () => {
         this.isOpen = !this.isOpen;
@@ -45,16 +38,16 @@ class DropdownStore {
         this.toggleDropdown();
     }
 
+    @action setFieldArray = (value) => {
+        this.fieldArray = value || [];
+    }
+
     getSearch = async() => {
         try {
             const data = await this.fetchFunc(this.searchPhrase);
-            runInAction(() => {
-                this.fieldArray = data || [];
-            });
+            this.setFieldArray(data);
         } catch (error) {
-            runInAction(() => {
-                this.status = "error";
-            });
+            this.status = "error";
         }
     }
 }

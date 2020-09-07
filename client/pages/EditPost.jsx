@@ -95,8 +95,8 @@ class EditPost extends Component {
                                 return <CheckboxComponent name="categories" value={category} key={key} />
                             })}
                         </FormGroupComponent>
-                        <TextAreaComponent className="width-full py-3 f4" message="Description: " name="description" />
-                        {this.props.EditPostStore.typeStore.textFieldName == "recipe" &&
+                        <TextAreaComponent className="width-full py-3 f5" message="Description: " name="description" />
+                        {forms.$("type").value == "recipe" &&
                             <FormGroupComponent>
                                 <FormGroupComponent className="ingredients">
                                     {forms.$("ingredients").value.map((_, i) =>
@@ -104,7 +104,7 @@ class EditPost extends Component {
                                     )}
                                 </FormGroupComponent>
                                 <br /><button className="btn btn-default mt-n4 mb-4" onClick={(e) => this.props.EditPostStore.addIngredientClick(e, forms.$("ingredients"))}>Add new ingredient</button><br />
-                                <TextAreaComponent className="width-full py-3 f4" message="Directions: " name="directions" />
+                                <TextAreaComponent className="width-full py-3 f5" message="Directions: " name="directions" />
                             </FormGroupComponent>
                         }
                     </FormComponent>

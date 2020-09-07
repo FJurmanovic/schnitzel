@@ -1,4 +1,4 @@
-import {observable, runInAction} from 'mobx';
+import {observable, action} from 'mobx';
 import {AuthStore, DropdownStore} from './';
 import { PostsService, ImageService } from '../services';
 const path = require('path');
@@ -13,7 +13,6 @@ class FormStore {
 
     @observable postId = null;
 
-    @observable ingredientNum = 0;
     @observable typeStore = new DropdownStore("showoff", 0, this.typeSearch, false);
     @observable privacyStore = new DropdownStore("privacy", 0, this.privacySearch, false);
 
@@ -30,8 +29,7 @@ class FormStore {
 
     @observable showNew = false;
 
-    getData = async (postId, form) => {
-        const data = await this.postsService.getEditPost(this.authStore.token, postId);
+    @action setData = (form, data) => {
         if(data.id) {
             form.$("title").value = data.title;
             form.$("type").value = data.type;
@@ -49,6 +47,11 @@ class FormStore {
             this.showNew = true;
             this.postId = postId;
         }
+    }
+
+    getData = async (postId, form) => {
+        const data = await this.postsService.getEditPost(this.authStore.token, postId);
+        this.setData(form, data);
     }
 
     toggleShow = () => {
@@ -120,9 +123,6 @@ class FormStore {
             }
         } catch (error) {
             console.log(error);
-            runInAction(() => {
-                this.status = "error";
-            });
         }
     }
 
@@ -135,28 +135,9 @@ class FormStore {
             }
         } catch (error) {
             console.log(error);
-            runInAction(() => {
-                this.status = "error";
-            });
         }
     }
 
-    getPost = async (postId) => {
-        try { 
-            const data = await this.postsService.getPost(this.authStore.token, postId);
-            runInAction(() => {
-                if(data.id) {
-                    this.postObject = data;
-                }
-            });
-            return data;
-        } catch (error) {
-            console.log(error);
-            runInAction(() => {
-                this.status = "error";
-            });
-        }
-    }
 
     postImage = async (object, postId) => {
         try { 
@@ -166,9 +147,6 @@ class FormStore {
             }
         } catch (error) {
             console.log(error);
-            runInAction(() => {
-                this.status = "error";
-            });
         }
     }
 

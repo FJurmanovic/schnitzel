@@ -82,7 +82,7 @@ class NewPost extends React.Component {
                             })}
                         </FormGroupComponent>
                         <TextAreaComponent className="width-full py-3 f4" message="Description: " name="description" />
-                        {this.props.NewPostStore.typeStore.textFieldName == "recipe" &&
+                        {forms.$("type").value == "recipe" &&
                             <FormGroupComponent>
                                 <FormGroupComponent className="ingredients">
                                     {forms.$("ingredients").value.map((_, i) =>
