@@ -50,8 +50,7 @@ class Feed extends Component {
                                 key={key} 
                                 iter={key} 
                                 userdata={this.props.FeedStore.userData}
-                                addPoint={this.props.FeedStore.addPoint} 
-                                removePoint={this.props.FeedStore.removePoint} 
+                                togglePoint={this.props.FeedStore.togglePoint}  
                                 authUser={this.props.FeedStore.userData.id} 
                                 getUserData={this.props.FeedStore.getUserData} 
                                 removePost={this.props.FeedStore.removePost}

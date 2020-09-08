@@ -72,8 +72,7 @@ class ExploreCategory extends Component {
                                 key={key} 
                                 iter={key} 
                                 userdata={this.props.ExploreCategoryStore.userData} 
-                                addPoint={this.props.ExploreCategoryStore.addPoint} 
-                                removePoint={this.props.ExploreCategoryStore.removePoint} 
+                                togglePoint={this.props.ExploreCategoryStore.togglePoint}  
                                 authUser={this.props.ExploreCategoryStore.userData.id} 
                                 getUserData={this.props.ExploreCategoryStore.getUserData} 
                                 removePost={this.props.ExploreCategoryStore.removePost}

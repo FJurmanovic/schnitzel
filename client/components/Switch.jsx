@@ -1,16 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { observer } from 'mobx-react';
 
-export const Switch = ({curr, onClick }) => {
-    const [enabled, setEnabled] = useState(curr);
-
-    const toggleClick = (e) => {
-        setEnabled(!enabled);
-        onClick(e, !enabled);
-    }
-
-    return <div className="d-inline-block swc">
-        <div aria-checked={enabled} className="switch" onClick={toggleClick}>
+export const Switch = observer(({store}) => 
+    <div className="d-inline-block swc">
+        <div aria-checked={store.enabled} className="switch" onClick={store.toggleClick}>
             <div className="toggle"></div>
         </div>
     </div>
-}
+);

@@ -1,4 +1,4 @@
-import {observable, computed} from 'mobx';
+import {observable, computed, action} from 'mobx';
 import {AuthStore} from './';
 
 const path = require('path');
@@ -24,6 +24,11 @@ class EditProfileStore {
     @computed get userData () {
         return AuthStore.userData;
     }
+
+    @action toggleUsername = () => this.editUsername = !this.editUsername;
+    @action toggleEmail = () => this.editEmail = !this.editEmail;
+    @action togglePassword = () => this.editPassword = !this.editPassword;
+    @action togglePrivacy = () => this.editPrivacy = !this.editPrivacy;
 
     toDefault = () => {
         this.usernameValue = null;

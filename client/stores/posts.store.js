@@ -157,7 +157,21 @@ class PostsStore {
                 this.status = "error";
             });
         }
+    }
 
+    togglePoint = (id, type) => {
+        const key = this.posts.map((post, _) => post.id).indexOf(id);
+        if(type === "post") {
+            if(this.posts[key].isPointed){
+                this.removePoint(id, type);
+                this.posts[key].isPointed = false;
+                this.posts[key].points--;
+            } else {
+                this.addPoint(id, type);
+                this.posts[key].isPointed = true;
+                this.posts[key].points++;
+            }
+        }
     }
 }
 

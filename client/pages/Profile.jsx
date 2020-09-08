@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter, Link } from 'react-router-dom';
 import { Post, Followers } from '../components';
+import { FollowersStore } from '../stores';
 
 @inject("ProfileStore")
 @observer
@@ -46,6 +47,7 @@ class Profile extends Component {
                         { this.props.ProfileStore.showFollowers &&
                             <Followers 
                                 type="followers" 
+                                store={new FollowersStore(this.props.ProfileStore.getFollowers, this.props.ProfileStore.profileData.id)}
                                 ownerId={this.props.ProfileStore.profileData.id} 
                                 exitScreen={this.props.ProfileStore.toggleFollowers} 
                                 removeAction={this.props.ProfileStore.profileData.removeFollower} 
@@ -58,6 +60,7 @@ class Profile extends Component {
                         { this.props.ProfileStore.showFollowing &&
                             <Followers 
                                 type="following" 
+                                store={new FollowersStore(this.props.ProfileStore.getFollowing, this.props.ProfileStore.profileData.id)}
                                 ownerId={this.props.ProfileStore.profileData.id} 
                                 exitScreen={this.props.ProfileStore.toggleFollowing} 
                                 removeAction={this.props.ProfileStore.profileData.removeFollowing} 

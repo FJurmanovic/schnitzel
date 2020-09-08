@@ -62,8 +62,7 @@ class Explore extends Component {
                                 key={key} 
                                 iter={key} 
                                 userdata={this.props.ExploreStore.userData} 
-                                addPoint={this.props.ExploreStore.addPoint} 
-                                removePoint={this.props.ExploreStore.removePoint} 
+                                togglePoint={this.props.ExploreStore.togglePoint} 
                                 authUser={this.props.ExploreStore.userData.id} 
                                 getUserData={this.props.ExploreStore.getUserData} 
                                 removePost={this.props.ExploreStore.removePost}

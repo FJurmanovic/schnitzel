@@ -3,6 +3,7 @@ import { observer, inject } from 'mobx-react';
 import {withRouter} from 'react-router-dom';
 
 import {Switch} from '../components';
+import {SwitchStore} from '../stores';
 
 @inject("EditProfileStore")
 @observer
@@ -42,13 +43,13 @@ class EditProfile extends Component {
               }
               
               <hr />
-              <div className="lbl"><Switch curr={this.props.EditProfileStore.editUsername} onClick={(e, enabled) => {this.props.EditProfileStore.editUsername = enabled}} /><span>Change username</span></div>
+              <div className="lbl"><Switch store={new SwitchStore(this.props.EditProfileStore.editUsername, this.props.EditProfileStore.toggleUsername)} /><span>Change username</span></div>
                 <input className="width-full py-3 f4" type="text" disabled={!this.props.EditProfileStore.editUsername} value={this.props.EditProfileStore.usernameValue || ""} onChange={(e) => this.props.EditProfileStore.usernameChange(e.target.value)} />
                 <br />
-                <div className="lbl"><Switch curr={this.props.EditProfileStore.editEmail} onClick={(e, enabled) => {this.props.EditProfileStore.editEmail = enabled}} /><span>Change e-mail</span></div>
+                <div className="lbl"><Switch store={new SwitchStore(this.props.EditProfileStore.editEmail, this.props.EditProfileStore.toggleEmail)} /><span>Change e-mail</span></div>
                 <input className="width-full py-3 f4" type="email" disabled={!this.props.EditProfileStore.editEmail} value={this.props.EditProfileStore.emailValue || ""} onChange={(e) => this.props.EditProfileStore.emailChange(e.target.value)} />
                 <br />
-              <div className="lbl"><Switch curr={this.props.EditProfileStore.editPassword} onClick={(e, enabled) => {this.props.EditProfileStore.editPassword = enabled}} /><span>Change password</span></div>
+              <div className="lbl"><Switch store={new SwitchStore(this.props.EditProfileStore.editPassword, this.props.EditProfileStore.togglePassword)} /><span>Change password</span></div>
               {this.props.EditProfileStore.editPassword
               && <><label>New password:<br />
                 <input className="width-full py-3 f4" type="password" value={this.props.EditProfileStore.passwordValue || ""} onChange={(e) => this.props.EditProfileStore.passwordChange(e.target.value)} />
@@ -58,7 +59,7 @@ class EditProfile extends Component {
                 <input className="width-full py-3 f4" type="password" value={this.props.EditProfileStore.password2Value || ""} onChange={(e) => this.props.EditProfileStore.password2Change(e.target.value)} />
                 </label></>
               }
-              <div className="lbl"><Switch curr={this.props.EditProfileStore.editPrivacy} onClick={(e, enabled) => {this.props.EditProfileStore.editPrivacy = enabled}} /><span>Change privacy</span></div>
+              <div className="lbl"><Switch store={new SwitchStore(this.props.EditProfileStore.editPrivacy, this.props.EditProfileStore.togglePrivacy)} /><span>Change privacy</span></div>
               {this.props.EditProfileStore.editPrivacy && <>
                 <div className="btn-radio">
                   <input id="private" type="radio" value="private" checked={this.props.EditProfileStore.privacyValue === "private"} onChange={(e) => this.props.EditProfileStore.privacyChange(e.target.value)}/>

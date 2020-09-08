@@ -4,6 +4,7 @@ import {Link, withRouter} from 'react-router-dom';
 import { getRandomInt, getTheme } from '../common/js';
 
 import {Switch} from './';
+import {SwitchStore} from '../stores';
 
 const Logo = (props) => {
   const logos = ["chicken", "hamburger", "beef", "salad"];
@@ -53,10 +54,9 @@ const NotLoggedLink = () =>
               event.stopPropagation();
               }}>
               <Switch 
-                curr={getTheme("getBool")}
-                onClick={() => {
+                store={new SwitchStore(getTheme("getBool"), () => {
                   getTheme("toggle");
-                }} 
+                })}
               /> 
               <span>Dark mode</span></div>
             <Link to="/logout" className="dropdown-item">Logout</Link>

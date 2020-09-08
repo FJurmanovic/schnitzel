@@ -3,6 +3,8 @@ import { inject, observer } from 'mobx-react';
 import { withRouter, Link } from 'react-router-dom';
 
 import { Comments, NewComment, Popover } from '../components';
+import {PopoverStore, NewCommentStore} from '../stores';
+
 
 @inject("FullPostStore")
 @observer
@@ -48,7 +50,7 @@ class FullPost extends Component {
                         <div className="author">Author: <span></span>
                             {this.props.FullPostStore.postObject.username == "DeletedUser" 
                             ? <span>DeletedUser</span>
-                            : <span><Popover userId={this.props.FullPostStore.postObject.userId} username={this.props.FullPostStore.postObject.username} iter="1" /></span>
+                            : <span><Popover store={new PopoverStore} username={this.props.FullPostStore.postObject.username} iter="1" /></span>
                             }
                         </div>
                         <div dangerouslySetInnerHTML={{__html: this.props.FullPostStore.postObject.timeAgo}}></div>
@@ -56,9 +58,7 @@ class FullPost extends Component {
                         <div className="f5">Points: {this.props.FullPostStore.postObject.points} <button className="btn-icon ml-n2" onClick={this.props.FullPostStore.togglePoints}>{!this.props.FullPostStore.postObject.isPointed ? <div className="gg-chevron-up"></div> : <div className="gg-chevron-up text-blue"></div>}</button> <span className="mx-5">Comments: {this.props.FullPostStore.postObject.comments}</span></div>
                         <hr />
                         <NewComment
-                            type="comment"
-                            postId={this.props.FullPostStore.postObject.id}
-                            submitClick={this.props.FullPostStore.submitClick}
+                            store={new NewCommentStore("comment", this.props.FullPostStore.postObject.id, null, this.props.FullPostStore.submitClick)}
                         />
                         <div className="comments">
                             <Comments store={this.props.FullPostStore.commentStore} id={this.props.FullPostStore.postObject.id} hasComments={this.props.FullPostStore.postObject.comments > 0} />
