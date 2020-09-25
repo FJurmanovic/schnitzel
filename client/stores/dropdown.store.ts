@@ -24,6 +24,7 @@ class DropdownStore {
 
     openDropdown = () => {
         this.isOpen = true;
+        if(!this.initFetch && !this.fieldArray.length) this.getSearch();
     }
 
     phraseChange = (value) => {
