@@ -1,3 +1,4 @@
 {
-    "presets": ["@babel/preset-react", "@babel/preset-env", "mobx"]
+    "presets": ["@babel/preset-react", "@babel/preset-env", "mobx", "@babel/preset-typescript"],
+    "plugins": [["@babel/plugin-proposal-decorators", { "legacy": true }], "@babel/proposal-object-rest-spread", ["@babel/proposal-class-properties", { "loose" : true }]]
 }

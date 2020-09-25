@@ -3,7 +3,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
     entry: {
-        app: ['babel-polyfill', './client/index.js']
+        app: ['babel-polyfill', './client/index']
     },
     output: {
         path: path.join(__dirname, 'public'),
@@ -13,7 +13,7 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.(js|jsx)$/,
+                test: /\.(js|ts)x?$/,
                 exclude: /node_modules/,
                 use: {
                     loader: 'babel-loader'
@@ -46,7 +46,7 @@ module.exports = {
         })
     ],
     resolve: {
-        extensions: ['.js', '.jsx']
+        extensions: ['.js', '.jsx', '.ts', '.tsx']
     },
     devServer: {
         historyApiFallback: true,
