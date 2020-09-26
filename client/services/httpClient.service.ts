@@ -1,8 +1,15 @@
+type BodyType = string | FormData;
+type OptionsType = {
+    method: string,
+    headers?: Headers,
+    body?: BodyType
+}
+
 class HttpClient {
     
-    post(url, data, headersParam) {
-        let headers = new Headers(headersParam);
-        let body = null;
+    post(url: string, data: Object, headersParam: HeadersInit): Promise<any> {
+        let headers: Headers = new Headers(headersParam);
+        let body: BodyType = null;
         if(data instanceof FormData) {
             body = data;
         }
@@ -10,54 +17,54 @@ class HttpClient {
             body = JSON.stringify(data);
             headers.append("Content-Type", "application/json");
         } 
-        let options = {
+        let options: OptionsType = {
             method: "POST",
             headers: headers,
             body: body
         }
-        const req = new Request(url, options);
+        const req: Request = new Request(url, options);
 
         return createRequest(req)
     }
     
-    put(url, data, headersParam) {
-        let headers = new Headers(headersParam);
+    put(url: string, data: Object, headersParam: HeadersInit): Promise<any> {
+        let headers: Headers = new Headers(headersParam);
         headers.append("Content-Type", "application/json");
-        let options = {
+        let options: OptionsType = {
             method: "PUT",
             headers: headers,
             body: JSON.stringify(data)
         }
-        const req = new Request(url, options);
+        const req: Request = new Request(url, options);
 
         return createRequest(req)
     }
     
-    delete(url, data, headersParam) {
-        let headers = new Headers(headersParam);
+    delete(url: string, data: Object, headersParam: HeadersInit): Promise<any> {
+        let headers: Headers = new Headers(headersParam);
         headers.append("Content-Type", "application/json");
-        let options = {
+        let options: OptionsType = {
             method: "DELETE",
             headers: headers,
             body: JSON.stringify(data)
         }
-        const req = new Request(url, options);
+        const req: Request = new Request(url, options);
 
         return createRequest(req)
     }
     
-    get(url, params, headersParam) {
-        let headers = new Headers(headersParam);
-        let options = {
+    get(url: string, params: Object, headersParam: HeadersInit): Promise<any> {
+        let headers: Headers = new Headers(headersParam);
+        let options: OptionsType = {
             method: "GET",
             headers: headers
         }
-        let paramsPath = "";
+        let paramsPath: string = "";
         if(params) {
             let urlParams = new URLSearchParams(Object.entries(params));
             paramsPath = "?" + urlParams;
         }
-        const req = new Request(url + paramsPath, options);
+        const req: Request = new Request(url + paramsPath, options);
 
         return createRequest(req)
     }
@@ -65,22 +72,22 @@ class HttpClient {
 
 export default new HttpClient();
 
-async function createRequest(request) {
-    let response = await fetch(request);
+async function createRequest(request: Request): Promise<Response> {
+    let response: Response = await fetch(request);
     if (!response.ok && response.status !== 403 && response.status !== 400) {
         throw new Error(`HTTP error! status: ${response.status}`);
     } else {
         if(response.headers.get('Content-Type') !== null){
-            let newResponse = await createResponse(response);
+            let newResponse: Response = await createResponse(response);
             return newResponse;
         }
         return response;
     }
 }
 
-async function createResponse(response) {
-    const type = response.headers.get('Content-Type');
-    const body = () => {
+async function createResponse(response: Response): Promise<any> {
+    const type: string = response.headers.get('Content-Type');
+    const body = (): Promise<any> => {
         if (type.indexOf('application/json') !== -1){
             return response.json();
         }

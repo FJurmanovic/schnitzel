@@ -1,8 +1,8 @@
-const url = "/api/image";
+const url:string = "/api/image";
 import {HttpClient} from './';
 
 class ImageService {
-    postImage = async (token, data, type, postId) => {
+    postImage = async (token: string, data: Object, type: string, postId: string): Promise<any> => {
         return await HttpClient.post(url, data, {"token": token, "type": type, "postId": postId});
     }
 }
