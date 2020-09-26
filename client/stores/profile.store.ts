@@ -1,8 +1,12 @@
-import {observable, computed, runInAction} from 'mobx';
+import {observable, computed, action} from 'mobx';
 
 import {PostsStore, FullPostStore} from './';
 
 class ProfileStore extends PostsStore {
+    getFollowers: Function;
+    getFollowing: Function;
+    putFollow: Function;
+    deleteFollow: Function;
     constructor(){
         super("profile");
         this.getFollowers = this.authStore.getFollowers;
@@ -11,69 +15,67 @@ class ProfileStore extends PostsStore {
         this.deleteFollow = this.authStore.deleteFollow;
     }
 
-    @observable profileData = {};
-    @observable validProfile = false;
+    @observable profileData: any = {};
+    @observable validProfile: boolean = false;
 
-    @observable showFollowers = false;
-    @observable showFollowing = false;
+    @observable showFollowers: boolean = false;
+    @observable showFollowing: boolean = false;
 
-    @observable followers = [];
-    @observable following = [];
+    @observable followers: Array<any> = [];
+    @observable following: Array<any> = [];
 
 
-    @computed get myProfile () {
+    @computed get myProfile (): boolean {
         return this.profileData.id === this.authStore.userData.id;
     }
     
-    @computed get postUsername () {
+    @computed get postUsername (): string {
         if(FullPostStore.postObject) {
             return FullPostStore.postObject.username;
         } 
         return null;
     }
 
-    componentMounted = async (profileName, callback) => {
+    @action componentMounted = async (profileName: string, callback?: Function): Promise<any> => {
         this.isLoading = true;
         this.destroy();
-        let data = null;
+        let data: any = null;
         if(profileName !== this.profileId){
             if (profileName) {
                 data = await this.searchUser(profileName)
             } 
             else data = await this.searchUser(this.userData.username);
         }
-        runInAction(() => {
-            if (data) if (!data.message) {
-                this.profileData = data;
-                this.validProfile = true;
-            }
-            this.isLoading = false;
-        });
+        if (data) if (!data.message) {
+            this.profileData = data;
+            this.validProfile = true;
+        }
+        this.isLoading = false;
 
         if(typeof(callback) === "function") callback();
     }
 
-    toggleFollowers = () => {
+    @action toggleFollowers = (): void => {
         this.showFollowers = !this.showFollowers;
     }
 
-    toggleFollowing = () => {
+    @action toggleFollowing = (): void => {
         this.showFollowing = !this.showFollowing;
     }
 
-    followClick = () => {
+    @action followClick = (): void => {
         if (this.myProfile && this.profileData.isFollowing) return;
         this.profileData.isFollowing = true;
         this.putFollow(this.profileData.id);
     }
 
-    unfollowClick = () => {
+    @action unfollowClick = () => {
         if (this.myProfile && !this.profileData.isFollowing) return;
         this.profileData.isFollowing = false;
         this.deleteFollow(this.profileData.id);
     }
     
-    destroy = () => {
+    @action destroy = (): void => {
         this.posts = [];
         this.page = 1;
         this.ppp = 10;
@@ -88,7 +90,7 @@ class ProfileStore extends PostsStore {
         this.followers = [];
     }
 
-    searchUser = async(username) => {
+    @action searchUser = async(username): Promise<any> => {
         try { 
             const data = await this.getUserData(username);
             if(data) {
@@ -98,9 +100,6 @@ class ProfileStore extends PostsStore {
             return data;
         } catch (error) {
             console.log(error);
-            runInAction(() => {
-                this.status = "error";
-            });
         }
     }
 

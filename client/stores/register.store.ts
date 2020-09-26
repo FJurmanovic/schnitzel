@@ -1,13 +1,13 @@
-import {observable, runInAction} from 'mobx';
+import {observable, action} from 'mobx';
 import {AuthStore} from './';
 
 class RegisterStore {
-    @observable errorMessage = null;
+    @observable errorMessage: string = null;
 
-    submitClick = async (values, history) => {
+    @action submitClick = async (values: any, history: any): Promise<void> => {
         event.preventDefault();
 
-        const isPrivate = !(values.privacy === "Public");
+        const isPrivate: boolean = !(values.privacy === "Public");
         
         const registerObject = {
             username: values.username,
@@ -17,9 +17,7 @@ class RegisterStore {
         }
 
         const {message} = await AuthStore.authRegister(registerObject, history);
-        runInAction(() => {
-            this.errorMessage = message;
-        });
+        this.errorMessage = message;
     }
 }
 

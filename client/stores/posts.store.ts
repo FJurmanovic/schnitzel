@@ -1,51 +1,76 @@
-import {observable, computed, runInAction} from 'mobx';
+import {observable, computed, action} from 'mobx';
 
 import {PostsService, AuthService} from '../services';
 
 import {AuthStore} from './';
 
+type UserType = {
+    username: string,
+    url?: string,
+    isPrivate: boolean,
+    id: string,
+    hasPhoto?: boolean,
+    following: any[],
+    followers: any[],
+    email: string,
+    createdAt: Date
+} | {id?: string, username?: string}
+
+type PostOption = {
+    page: number,
+    ppp: number,
+    type: string,
+    category: string,
+    firstDate?: Date,
+    profileId?: string
+}
+
 class PostsStore {
+    postsService: PostsService;
+    authService: AuthService;
+    authStore: typeof AuthStore;
+    type: string;
     constructor (type) {
         this.postsService = new PostsService;
         this.authService = new AuthService;
         this.authStore = AuthStore;
         this.type = type;
     }
-    @observable posts = [];
-    @observable page = 1;
-    @observable ppp = 10;
-    @observable category = "all";
+    @observable posts: Array<any> = [];
+    @observable page: number = 1;
+    @observable ppp: number = 10;
+    @observable category: string = "all";
 
-    @observable last = false;
+    @observable last: boolean = false;
 
-    @observable loadingPost = false;
-    @observable isLoading = false;
+    @observable loadingPost: boolean = false;
+    @observable isLoading: boolean = false;
 
-    @observable profileId = null;
-    @observable isPrivate = false;
+    @observable profileId: string = null;
+    @observable isPrivate: boolean = false;
 
 
-    @computed get firstDate () {
+    @computed get firstDate (): Date {
         if(this.posts.length > 0) return this.posts[0].createdAt
         
         return null;
     }
 
-    @computed get totalCurrent () {
+    @computed get totalCurrent (): number {
         return this.posts.length;
     }
 
-    @computed get userData () {
+    @computed get userData (): UserType {
         return this.authStore.userData;
     }
 
-    setCategory = (category) => {
+    @action setCategory = (category): void => {
         this.destroy();
         this.category = category || "all";
 
     }
 
-    handleScroll = () => {
+    handleScroll = (): void => {
         const windowHeight = "innerHeight" in window ? window.innerHeight : document.documentElement.offsetHeight;
         const body = document.body;
         const html = document.documentElement;
@@ -57,7 +82,7 @@ class PostsStore {
         }
     }
 
-    destroy = () => {
+    @action destroy = (): void => {
         this.posts = [];
         this.page = 1;
         this.ppp = 10;
@@ -68,7 +93,7 @@ class PostsStore {
         this.isPrivate = false;
     }
 
-    removePost = async (id) => {
+    removePost = async (id): Promise<void> => {
         try { 
             if(window.confirm("Are you sure you want to remove a post?")){
                 const data = await this.postsService.deletePost(this.authStore.token, id);
@@ -76,60 +101,49 @@ class PostsStore {
             }
         } catch (error) {
             console.log(error);
-            runInAction(() => {
-                this.status = "error";
-            });
         }
     }
 
-    postsGet = async (callback) => {
+    @action postsGet = async (callback?: Function): Promise<void> => {
         if (this.page === 1) this.loadingPost = true;
         if(!this.last) {
-            let postsOptions = {
+            let postsOptions: PostOption = {
                 "page": this.page,
                 "ppp": this.ppp,
                 "type": this.type,
-                "category": this.category
+                "category": this.category,
             }
             if (this.page !== 1) postsOptions.firstDate = this.firstDate;
             if (this.profileId) postsOptions.profileId = this.profileId;
             try { 
                 const data = await this.postsService.getPosts(this.authStore.token, postsOptions);
-                runInAction(() => {
-                    if(data.items){
-                        if(this.page == 1) this.posts = data.items;
-                        else this.posts.push(...data.items);
-                        if (this.totalCurrent >= data.total){
-                            this.last = true;
-                        } else this.page++;
-                        this.loadingPost = false;
-                    }
-                    if(data.status == 403) this.isPrivate = true;
-                    else this.isPrivate = false;
-                    if(typeof(callback) === "function") callback();
-                })
+                if(data.items){
+                    if(this.page == 1) this.posts = data.items;
+                    else this.posts.push(...data.items);
+                    if (this.totalCurrent >= data.total){
+                        this.last = true;
+                    } else this.page++;
+                    this.loadingPost = false;
+                }
+                if(data.status == 403) this.isPrivate = true;
+                else this.isPrivate = false;
+                if(typeof(callback) === "function") callback();
             } catch (error) {
                 console.log(error);
-                runInAction(() => {
-                    this.status = "error";
-                });
             }
         }
     }
 
-    getUserData = async (username) => {
+    getUserData = async (username: string): Promise<any> => {
         try { 
             const data = await this.authService.getUserData(username, this.authStore.token);
             return data;
         } catch (error) {
             console.log(error);
-            runInAction(() => {
-                this.status = "error";
-            });
         }
     }
 
-    addPoint = async (id, type) => {
+    addPoint = async (id: string, type: string): Promise<any> => {
         let object = {
             type
         }
@@ -138,13 +152,10 @@ class PostsStore {
             return data;
         } catch (error) {
             console.log(error);
-            runInAction(() => {
-                this.status = "error";
-            });
         }
     }
 
-    removePoint = async (id, type) => {
+    removePoint = async (id: string, type: string): Promise<any> => {
         let object = {
             type
         }
@@ -153,13 +164,10 @@ class PostsStore {
             return data;
         } catch (error) {
             console.log(error);
-            runInAction(() => {
-                this.status = "error";
-            });
         }
     }
 
-    togglePoint = (id, type) => {
+    togglePoint = (id: string, type: string): void => {
         const key = this.posts.map((post, _) => post.id).indexOf(id);
         if(type === "post") {
             if(this.posts[key].isPointed){

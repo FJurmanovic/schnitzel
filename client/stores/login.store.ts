@@ -1,10 +1,10 @@
-import {observable, computed, runInAction} from 'mobx';
+import {observable, computed, action} from 'mobx';
 import {AuthStore} from './';
 
 class LoginStore {
     @observable errorMessage = null;
 
-    submitClick = async(values, history) => {
+    @action submitClick = async(values, history): Promise<void> => {
         event.preventDefault();
         let loginObject = {
             "email": values.email,
@@ -12,12 +12,10 @@ class LoginStore {
         };
 
         const {message} = await AuthStore.authLogin(loginObject, history);
-        runInAction(() => {
-            this.errorMessage = message;
-        });
+        this.errorMessage = message;
     }
 
-    @computed get token() {
+    @computed get token(): string {
         return AuthStore.token;
     }
 }

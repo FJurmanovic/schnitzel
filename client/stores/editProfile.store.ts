@@ -3,34 +3,63 @@ import {AuthStore} from './';
 
 const path = require('path');
 
+type UserType = {
+    username: string,
+    url?: string,
+    isPrivate: boolean,
+    id: string,
+    hasPhoto?: boolean,
+    following: any[],
+    followers: any[],
+    email: string,
+    createdAt: Date
+} | {id?: string, username?: string, email?: string, isPrivate?: boolean}
+
+type TokenType = {
+    token: string
+}
+
+type AuthType = {
+    username: string,
+    password: string
+} | {
+    username?: string,
+    email?: string,
+    password?: string,
+    isPrivate?: boolean,
+    hasPhoto?: boolean,
+    photoExt?: string,
+    url?: string
+}
+
 class EditProfileStore {
-    @observable usernameValue = null;
-    @observable emailValue = null;
-    @observable passwordValue = null;
-    @observable password2Value = null;
-    @observable privacyValue = null;
-    @observable editEmail = false;
-    @observable editPassword = false;
-    @observable editUsername = false;
-    @observable editPrivacy = false;
-    @observable editAvatar = false;
-    @observable selectedFile = null;
-    @observable err = [];
+    @observable usernameValue: string = null;
+    @observable emailValue: string = null;
+    @observable passwordValue: string = null;
+    @observable password2Value: string = null;
+    @observable privacyValue: string = null;
+    @observable editEmail: boolean = false;
+    @observable editPassword: boolean = false;
+    @observable editUsername: boolean = false;
+    @observable editPrivacy: boolean = false;
+    @observable editAvatar: boolean = false;
+    @observable selectedFile: File = null;
+    @observable err: Array<any> = [];
     
-    @computed get passMatch () {
+    @computed get passMatch (): boolean {
         return this.passwordValue === this.password2Value;
     }
 
-    @computed get userData () {
+    @computed get userData (): UserType {
         return AuthStore.userData;
     }
 
-    @action toggleUsername = () => this.editUsername = !this.editUsername;
-    @action toggleEmail = () => this.editEmail = !this.editEmail;
-    @action togglePassword = () => this.editPassword = !this.editPassword;
-    @action togglePrivacy = () => this.editPrivacy = !this.editPrivacy;
+    @action toggleUsername = (): boolean => this.editUsername = !this.editUsername;
+    @action toggleEmail = (): boolean => this.editEmail = !this.editEmail;
+    @action togglePassword = (): boolean => this.editPassword = !this.editPassword;
+    @action togglePrivacy = (): boolean => this.editPrivacy = !this.editPrivacy;
 
-    toDefault = () => {
+    @action toDefault = (): void => {
         this.usernameValue = null;
         this.emailValue = null;
         this.passwordValue = null;
@@ -45,7 +74,7 @@ class EditProfileStore {
         this.err = [];
     }
 
-    currentData = () => {
+    @action currentData = (): void => {
         if (this.userData.id) {
             this.usernameValue = this.userData.username;
             this.emailValue = this.userData.email;
@@ -59,33 +88,33 @@ class EditProfileStore {
         }
     }
 
-    emailChange = (value) => {
+    @action emailChange = (value: string): void => {
         this.emailValue = value;
     }
 
-    passwordChange = (value) => {
+    @action passwordChange = (value: string): void => {
         this.passwordValue = value;
     }
 
-    password2Change = (value) => {
+    @action password2Change = (value: string): void => {
         this.password2Value = value;
     }
 
-    usernameChange = (value) => {
+    @action usernameChange = (value: string): void => {
         this.usernameValue = value;
     }
 
-    privacyChange = (value) => {
+    @action privacyChange = (value: string): void => {
         this.privacyValue = value;
     }
     
-    imageChange = (value) => {
+    @action imageChange = (value: File): void => {
         this.selectedFile = value;
     }
 
-    submitClick = (event, history) => {
+    @action submitClick = (event: any, history: any): void => {
         event.preventDefault();
-        let editObject = {};
+        let editObject: AuthType = {};
 
         if(this.editUsername) editObject.username = this.usernameValue;
         if(this.editEmail) editObject.email = this.emailValue;
@@ -113,7 +142,7 @@ class EditProfileStore {
             return;
         } 
         
-        AuthStore.authEdit(editObject, history);
+        AuthStore.authEdit(editObject, history, null);
 
     }
 }

@@ -1,6 +1,10 @@
 import {observable, action} from 'mobx';
 
 class DropdownStore {
+    textFieldName: string;
+    keyFieldName: number;
+    fetchFunc: Function;
+    initFetch: boolean;
     constructor (textFieldName, keyFieldName, fetchFunc, initFetch) {
         this.textFieldName = textFieldName;
         this.keyFieldName = keyFieldName;
@@ -11,44 +15,44 @@ class DropdownStore {
         }
     }
     @observable isOpen = false;
-    @observable fieldArray = [];
+    @observable fieldArray: Array<any> = [];
 
-    searchPhrase = "";
+    searchPhrase: string = "";
 
-    toggleDropdown = () => {
+    toggleDropdown = (): void => {
         this.isOpen = !this.isOpen;
         if(this.isOpen && !this.initFetch && !this.fieldArray.length) {
             this.getSearch();
         }
     }
 
-    openDropdown = () => {
+    openDropdown = (): void => {
         this.isOpen = true;
         if(!this.initFetch && !this.fieldArray.length) this.getSearch();
     }
 
-    phraseChange = (value) => {
+    phraseChange = (value: string): void => {
         this.searchPhrase = value;
         this.getSearch();
     }
 
-    textChange = (value, key) => {
+    textChange = (value: string, key: number): void => {
         this.textFieldName = value;
         this.keyFieldName = key;
         this.phraseChange("");
         this.toggleDropdown();
     }
 
-    @action setFieldArray = (value) => {
+    @action setFieldArray = (value: Array<any>): void => {
         this.fieldArray = value || [];
     }
 
-    getSearch = async() => {
+    getSearch = async(): Promise<void> => {
         try {
-            const data = await this.fetchFunc(this.searchPhrase);
+            const data: Array<any> = await this.fetchFunc(this.searchPhrase);
             this.setFieldArray(data);
         } catch (error) {
-            this.status = "error";
+            console.log(error)
         }
     }
 }

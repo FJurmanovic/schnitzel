@@ -1,60 +1,100 @@
-import {observable, computed, runInAction} from 'mobx';
+import {observable, computed, action} from 'mobx';
 import {AuthStore} from './';
 import {PostsService} from '../services';
 
+type CommentObject = {
+    comment: string,
+    createdAt: Date,
+    id: string,
+    isDeleted: boolean,
+    isPointed: boolean,
+    points: number,
+    timeago: string,
+    userId: string,
+    username: string,
+    last?: boolean
+}
+
+type CommentType = Array<CommentObject>;
+
+type CommentObjectType = {
+    type: string,
+    postId?: string,
+    commentId?: string,
+    replyId?: string,
+    comment?: string
+}
+
+type ParamsType = {
+    page: number,
+    ppp: number,
+    postId?: string,
+    type?: string,
+    commentId?: string
+}
+
 class CommentsStore {
-    constructor(type, data) {
+    type: string;
+    commentData: CommentType;
+    postsService: PostsService;
+    authStore: typeof AuthStore;
+
+    constructor(type, data?) {
         this.type = type;
         this.commentData = data;
         this.postsService = new PostsService;
         this.authStore = AuthStore;
     }
 
-    @observable comments = [];
-    @observable postId = null;
-    @observable commentId = null;
-    @observable page = 1;
-    @observable ppp = 10;
+    @observable comments: CommentType = [];
+    @observable postId: string = null;
+    @observable commentId: string = null;
+    @observable page: number = 1;
+    @observable ppp: number = 10;
 
-    @observable commentEdit = null;
+    @observable commentEdit: string = null;
 
-    @observable loadingPost = false;
+    @observable loadingPost: boolean = false;
 
-    @observable isEditing = null;
-    editClick = (key) => {
+    @observable isEditing: number = null;
+
+    @observable last: boolean = false;
+    @observable isPrivate: boolean = false;
+    
+    @action editClick = (key: number): void => {
         if(this.isEditing === key) this.isEditing = null;
         else this.isEditing = key;
         this.commentEdit = null;
     }
-    saveEdit = (type, replyId, commentId, postId) => {
+    @action saveEdit = (type: string, replyId: string, commentId: string, postId: string): void => {
         if(this.commentEdit === null) {
             event.preventDefault();
             return this.editClick(null);
         }
         this.putComment(type, replyId, commentId, postId, this.commentEdit);
     }
-    editChange = (value) => {
+    @action editChange = (value: string): void => {
         this.commentEdit = value;
     }
 
     @observable showReply = null;
-    openReply = (id) => {
+    @action openReply = (id: string): void => {
         if(this.showReply === id) this.showReply = null;
         else this.showReply = id;
     }
 
-    @computed get firstDate () {
+    @computed get firstDate (): Date {
         if(this.comments.length > 0) return this.comments[0].createdAt
         
         return null;
     }
 
-    @computed get totalCurrent () {
+    @computed get totalCurrent (): number {
         return this.comments.length;
     }
 
-    deleteComment = async (id) => {
-        let object = {
+    @action deleteComment = async (id: string): Promise<void> => {
+        let object: CommentObjectType = {
             type: this.type,
             postId: this.postId
         };
@@ -70,8 +110,8 @@ class CommentsStore {
             location.reload();
         }
     }
-    putComment = async (type, replyId, commentId, postId, comment) => {
-        let object = {
+    @action putComment = async (type: string, replyId: string, commentId: string, postId: string, comment: string): Promise<any> => {
+        let object: CommentObjectType = {
             type: type,
             postId: postId,
             comment: comment
@@ -87,9 +127,9 @@ class CommentsStore {
         return data;
     }
 
-    togglePoints = (id) => {
+    @action togglePoints = (id: string): void => {
         let commentKey = this.comments.map((x) => x.id).indexOf(id);
-        let object = {
+        let object: CommentObjectType = {
             type: this.type,
         };
 
@@ -110,7 +150,7 @@ class CommentsStore {
         }
     }
 
-    setId = (postId, commentId, hasComments) => {
+    @action setId = (postId: string, commentId:string, hasComments: boolean): void => {
         this.postId = postId || null;
         this.commentId = commentId || null;
         if(this.type === "comment" && this.postId || this.type === "reply" && this.postId && this.commentId) {
@@ -119,8 +159,9 @@ class CommentsStore {
         }
     }
 
-    getComments = async () => {
-        let params = {
+
+    @action getComments = async (callback?: Function): Promise<void> => {
+        let params: ParamsType = {
             page: this.page,
             ppp: this.ppp,
             postId: this.postId
@@ -133,29 +174,24 @@ class CommentsStore {
         }
         try { 
             let data = await this.postsService.getComment(this.authStore.token, params);
-            runInAction(() => {
-                if(data.items){
-                    if(this.type === "comment") {
-                        for(const [key, comment] of data.items.entries()) {
-                            data.items[key].store = new CommentsStore("reply", comment);
-                        }
+            if(data.items){
+                if(this.type === "comment") {
+                    for(const [key, comment] of data.items.entries()) {
+                        data.items[key].store = new CommentsStore("reply", comment);
                     }
-                    if(this.page == 1) this.comments = data.items;
-                    else this.comments.push(...data.items);
-                    if (this.totalCurrent >= data.total){
-                        this.last = true;
-                    } else this.page++;
-                    this.loadingPost = false;
                 }
-                if(data.status == 403) this.isPrivate = true;
-                else this.isPrivate = false;
-                if(typeof(callback) === "function") callback();
-            })
+                if(this.page == 1) this.comments = data.items;
+                else this.comments.push(...data.items);
+                if (this.totalCurrent >= data.total){
+                    this.last = true;
+                } else this.page++;
+                this.loadingPost = false;
+            }
+            if(data.status == 403) this.isPrivate = true;
+            else this.isPrivate = false;
+            if(typeof(callback) === "function") callback();
         } catch (error) {
             console.log(error);
-            runInAction(() => {
-                this.status = "error";
-            });
         }
     }
 }

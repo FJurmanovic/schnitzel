@@ -1,121 +1,146 @@
-import {observable, runInAction, computed} from 'mobx';
+import {observable, runInAction, computed, action} from 'mobx';
+import { Token } from 'typescript';
 import {AuthService, ImageService} from '../services';
+
+type UserType = {
+    username: string,
+    url?: string,
+    isPrivate: boolean,
+    id: string,
+    hasPhoto?: boolean,
+    following: any[],
+    followers: any[],
+    email: string,
+    createdAt: Date
+} | {id?: string}
+
+type TokenType = {
+    token?: string,
+    message?: string
+}
+
+type AuthType = {
+    username: string,
+    password: string
+} | {
+    username?: string,
+    email?: string,
+    password?: string,
+    isPrivate?: boolean,
+    hasPhoto?: boolean,
+    photoExt?: string,
+    url?: string
+}
+
+type FollowType = [
+    {
+        userId: string,
+        username: string
+    }
+]
+
 class AuthStore {
+    authService: AuthService;
+    imageService: ImageService;
     constructor() {
         this.authService = new AuthService;
         this.imageService = new ImageService;
     }
 
-    @observable userData = {};
-    @observable token = null;
-    @observable status = null;
-    @observable passedData = false;
+    @observable userData: UserType = {};
+    @observable token: string = null;
+    @observable status: string = null;
+    @observable passedData: boolean = false;
 
-    @computed get isAuth() {
+    @computed get isAuth(): boolean {
         if (!!this.token) {
             return !!this.userData.id;
         }
         return false;
     }
 
-    authorize = () => {
+    authorize = (): void => {
         this.token = localStorage.getItem("token") || null;
         this.token && this.authData();
         if(!this.token) this.passedData = true;
     }
 
-    authLogin = async (loginObject, history, callback) => {
+    @action authLogin = async (loginObject: AuthType, history: any, callback?: Function): Promise<TokenType>  => {
         try { 
-            const data = await this.authService.postLogin(loginObject);
-            runInAction(() => {
-                if(data.token){
-                    this.token = data.token;
-                    localStorage.setItem("token", data.token);
-                    this.authorize();
-                    if (history) history.push("/");
-                    if(typeof callback == "function") callback();
-                }
-            })
+            const data: TokenType = await this.authService.postLogin(loginObject);
+            if(data.token){
+                this.token = data.token;
+                localStorage.setItem("token", data.token);
+                this.authorize();
+                if (history) history.push("/");
+                if(typeof callback == "function") callback();
+            }
             return data;
         } catch (error) {
-            runInAction(() => {
-                this.status = "error";
-            });
+            this.status = "error";
         }
     }
 
-    authRegister = async (registerObject, history) => {
+    @action authRegister = async (registerObject: AuthType, history: any): Promise<TokenType> => {
         try { 
-            const data = await this.authService.postRegister(registerObject);
-            runInAction(() => {
-                if(data.token){
-                    this.token = data.token;
-                    localStorage.setItem("token", data.token);
-                    this.authorize();
-                    history.push("/");
-                }
-            })
+            const data: TokenType = await this.authService.postRegister(registerObject);
+            if(data.token){
+                this.token = data.token;
+                localStorage.setItem("token", data.token);
+                this.authorize();
+                history.push("/");
+            }
             return data;
         } catch (error) {
             console.log(error);
-            runInAction(() => {
-                this.status = "error";
-            });
+            this.status = "error";
         }
     }
 
-    authEdit = async (editObject, history, file) => {
+    @action authEdit = async (editObject: AuthType, history: any, file: FormData): Promise<TokenType> => {
         try { 
-            const data = await this.authService.putData(editObject, this.token);
-            runInAction(() => {
-                if(data.token){
-                    this.token = data.token;
-                    localStorage.setItem("token", data.token);
-                    this.authorize();
-                    if(file) this.authAvatar(file, history);
-                    else history.push('/');
-                }
-            })
+            const data: TokenType = await this.authService.putData(editObject, this.token);
+            if(data.token){
+                this.token = data.token;
+                localStorage.setItem("token", data.token);
+                this.authorize();
+                if(file) this.authAvatar(file, history);
+                else history.push('/');
+            }
+            return data;
         } catch (error) {
             console.log(error);
-            runInAction(() => {
-                this.status = "error";
-            });
+            this.status = "error";
         }
     }
 
-    authAvatar = async (object, history) => {
+    @action authAvatar = async (object: FormData, history: any): Promise<void> => {
         try { 
-            const data = await this.imageService.postImage(this.token, object, "avatar");
+            const data = await this.imageService.postImage(this.token, object, "avatar", null);
             if(data) {
                 history.push("/");
             }
         } catch (error) {
             console.log(error);
-            runInAction(() => {
                 this.status = "error";
-            });
         }
     }
 
-    authData = async () => {
+    @action authData = async (): Promise<UserType> => {
         try { 
-            const data = await this.authService.getData(this.token);
-            runInAction(() => {
-                if(data.id){
-                    this.userData = data;
-                }
-                this.passedData = true;
-            })
+            const data: UserType = await this.authService.getData(this.token);
+            if(data.id){
+                this.userData = data;
+            }
+            this.passedData = true;
+            return data;
         } catch (error) {
             console.log(error);
-            runInAction(() => {
-                this.status = "error";
-            });
+            this.status = "error";
         }
     }
 
-    authLogout = () => {
+    @action authLogout = (): boolean => {
         this.userData = {};
         this.token = null;
         localStorage.removeItem("token");
@@ -123,33 +148,29 @@ class AuthStore {
         return true;
     }
 
-    getFollowers = async(id) => {
+    @action getFollowers = async(id: string): Promise<FollowType> => {
         try { 
-            const data = await this.authService.getFollowers(id, this.token);
+            const data: FollowType = await this.authService.getFollowers(id, this.token);
             return data;
         } catch (error) {
             console.log(error);
-            runInAction(() => {
-                this.status = "error";
-            });
+            this.status = "error";
         }
     }
 
-    getFollowing = async(id) => {
+    @action getFollowing = async(id: string): Promise<FollowType> => {
         try { 
-            const data = await this.authService.getFollowing(id, this.token);
+            const data: FollowType = await this.authService.getFollowing(id, this.token);
             return data;
         } catch (error) {
             console.log(error);
-            runInAction(() => {
-                this.status = "error";
-            });
+            this.status = "error";
         }
     }
 
-    putFollow = async(id) => {
+    @action putFollow = async(id: string): Promise<any> => {
         try {
-            const data = await this.authService.putFollow(id, this.token);
+            const data: any = await this.authService.putFollow(id, this.token);
             return data;
         } catch (error) {
             console.log(error);
@@ -159,24 +180,10 @@ class AuthStore {
         }
     }
 
-    deleteFollow = async(id) => {
+    @action deleteFollow = async(id: string): Promise<any> => {
         try {
-            const data = await this.authService.deleteFollow(id, this.token);
+            const data: any = await this.authService.deleteFollow(id, this.token);
             return data;
-        } catch (error) {
-            console.log(error);
-            runInAction(() => {
-                this.status = "error";
-            });
-        }
-    }
-
-    uploadImage = (object, headers) => {
-        try { 
-            //await this.authService.postImage(object, headers);
-            runInAction(() => {
-                console.log("Image uploaded");
-            })
         } catch (error) {
             console.log(error);
             runInAction(() => {
