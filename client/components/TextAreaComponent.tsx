@@ -1,7 +1,16 @@
 import React from 'react';
 import {observer} from 'mobx-react';
 
-export const TextAreaComponent = observer(({message, errorMessage, name, form, className, autoFocus}) => 
+type TextAreaType = {
+    message?: string,
+    errorMessage?: string,
+    name?: string,
+    form?: any,
+    className?: string,
+    autoFocus?: boolean
+}
+
+export const TextAreaComponent = observer(({message, errorMessage, name, form, className, autoFocus}: TextAreaType) => 
     <div>
         <label>
             {message && <div>{message}</div>}

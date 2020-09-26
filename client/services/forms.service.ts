@@ -3,6 +3,11 @@ import dvr from "mobx-react-form/lib/validators/DVR";
 import validatorjs from "validatorjs";
 
 class FormsService extends Form {
+  onSubmit: any;
+  $: any;
+  constructor(props) {
+    super(props)
+  }
   plugins() {
     return {
       dvr: dvr(validatorjs)

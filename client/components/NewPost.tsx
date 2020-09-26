@@ -51,21 +51,28 @@ const fields = [
 
 const forms = new FormsService({fields});
 
+interface NewPostProps {
+    NewPostStore: any,
+    history: any
+}
+
 @inject("NewPostStore")
 @observer
-class NewPost extends React.Component {
+class NewPost extends React.Component<NewPostProps> {
+    hooks: any;
+
     constructor(props) {
-    super(props);
-    this.hooks = {
-        onSuccess(form) {
-            const file = form.$("image").files && form.$("image").files[0] || null;
-            props.NewPostStore.submitClick(form.values(), file, props.history);
-        },
-        onError(form) {
-          console.log(form.values())
-        } 
-      }
-}
+        super(props);
+        this.hooks = {
+            onSuccess(form) {
+                const file = form.$("image").files && form.$("image").files[0] || null;
+                props.NewPostStore.submitClick(form.values(), file, props.history);
+            },
+            onError(form) {
+            console.log(form.values())
+            } 
+        }
+    }
     render() {
         return <>
             { this.props.NewPostStore.showNew

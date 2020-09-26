@@ -6,6 +6,11 @@ import { getRandomInt, getTheme } from '../common/js';
 import {Switch} from './';
 import {SwitchStore} from '../stores';
 
+interface NavbarProps {
+  AuthStore: any,
+  location: any
+}
+
 const Logo = (props) => {
   const logos = ["chicken", "hamburger", "beef", "salad"];
   const [current, setCurrent] = useState(getRandomInt(0,3));
@@ -67,7 +72,7 @@ const NotLoggedLink = () =>
 
 @inject("AuthStore")
 @observer
-class Navbar extends Component {
+class Navbar extends Component<NavbarProps> {
     render() {
         return (
             <header className="header border-bottom border-black p-5 f4">

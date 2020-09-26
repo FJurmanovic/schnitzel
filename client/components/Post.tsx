@@ -21,7 +21,17 @@ const OpenButton = (props) => {
     }
 }
 
-export const Post = observer(({post, iter, userdata, togglePoint, authUser, from, getUserData, removePost}) => 
+type PostType = {
+    post: any,
+    iter: number,
+    userdata: any,
+    togglePoint: any,
+    authUser: any,
+    from: any,
+    removePost: any
+}
+
+export const Post = observer(({post, iter, userdata, togglePoint, authUser, from, removePost}: PostType) => 
     <React.Fragment key={iter}>
         <div className="card col-9 my-6">
             {post.hasPhoto && <div className="card-image"><OpenButton from={from} id={post.id}><img src={post.url} className="card-img-top" /></OpenButton></div>}

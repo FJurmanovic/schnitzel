@@ -1,7 +1,11 @@
 import React from 'react';
 import { observer } from 'mobx-react';
 
-export const NewComment = observer(({store}) => 
+type NewCommentType = {
+    store: any
+}
+
+export const NewComment = observer(({store}: NewCommentType) => 
     <form onSubmit={(e) => store.submitClick(store.value, store.type, store.postId, store.commentId, e)} className="mb-8">
         <label>New comment: <br />
             <textarea 

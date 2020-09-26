@@ -1,7 +1,16 @@
 import React from 'react';
 import {observer} from 'mobx-react';
 
-export const InputComponent = observer(({message, errorMessage, name, form, className, autoFocus}) => 
+type InputType = {
+    message?: string,
+    errorMessage?: string,
+    name?: string,
+    form?: any,
+    className?: string,
+    autoFocus?: boolean
+}
+
+export const InputComponent = observer(({message, errorMessage, name, form, className, autoFocus}: InputType) => 
     <div>
         <label>
             {message && <div>{message}</div>}

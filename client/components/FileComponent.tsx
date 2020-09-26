@@ -1,7 +1,15 @@
 import React from 'react';
 import {observer} from 'mobx-react';
 
-export const FileComponent = observer(({message, errorMessage, name, form, className}) => 
+type FileType = {
+    message?: string,
+    errorMessage?: string,
+    name?: string,
+    form?: any,
+    className?: string
+}
+
+export const FileComponent = observer(({message, errorMessage, name, form, className}: FileType) => 
     <div>
         <label>
             {message && <div>{message}</div>}

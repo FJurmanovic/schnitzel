@@ -2,7 +2,13 @@ import React from 'react';
 import {Link} from 'react-router-dom';
 import { observer } from 'mobx-react';
 
-export const Popover = observer(({store, username, iter}) => 
+type PopoverType = {
+    store: any,
+    username: string,
+    iter: number
+}
+
+export const Popover = observer(({store, username, iter}: PopoverType) => 
     <>
         {username == "DeletedUser" 
         ? <span>DeletedUser</span>

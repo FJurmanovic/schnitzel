@@ -1,17 +1,25 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {BrowserRouter as Router, Switch, Route, Redirect, withRouter} from 'react-router-dom';
 
 import {Landing, Login, Register, EditProfile, Feed, Explore, ExploreCategory, Profile, EditPost, FullPost} from '../pages';
 import {Navbar} from './';
 import { observer, inject } from 'mobx-react';
 
+interface DemoProps {
+    store: any,
+    history: any
+}
+
+interface AppProps {
+    AuthStore: any
+}
 
 const closeDetails = function() {
     let menu = document.getElementById("profile");
     if (menu) menu.removeAttribute("open");
 }
 
-class DemoLogin extends Component {
+class DemoLogin extends Component<DemoProps> {
     componentWillMount() {
         this.props.store.authLogin(
             {
@@ -122,7 +130,7 @@ const Logout = ({authLogout}) => {
 
 @inject("AuthStore")
 @observer
-class App extends Component {
+class App extends Component<AppProps> {
     componentWillMount() {
         this.props.AuthStore.authorize();
     }

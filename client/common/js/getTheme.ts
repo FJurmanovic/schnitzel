@@ -1,4 +1,4 @@
-export const getTheme = (type, mode) => {
+export const getTheme = (type, mode?) => {
     if(type === "get") {
         let theme = mode || localStorage.getItem("theme") || "dark";
         let body = document.querySelector("body");

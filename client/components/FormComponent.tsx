@@ -1,11 +1,21 @@
 import React from 'react';
 import {observer} from 'mobx-react';
 
-export const FormComponent = observer(({onSubmit, onCancel, children, form, className}) => 
+type FormType = {
+    onSubmit?: any,
+    onCancel?: any,
+    children?: Array<any>,
+    form?: any,
+    className?: string
+}
+
+const cloneElement: any = React.cloneElement;
+
+export const FormComponent = observer(({onSubmit, onCancel, children, form, className}: FormType) => 
     <form onSubmit={onSubmit} className={className}>
         {React.Children.map(children, child => {
             if (React.isValidElement(child) && (child.type !== "div" && child.type !== "span" && child.type !== "button" && child.type !== "br")) {
-                return React.cloneElement(child, {form})
+                return cloneElement(child, { form })
             }
             return child;
         })}

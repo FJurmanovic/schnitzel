@@ -1,7 +1,13 @@
 import React from 'react';
 import {observer} from 'mobx-react';
 
-export const CheckboxComponent = observer(({name, form, value}) => 
+type CheckboxType = {
+    name: string,
+    form?: any,
+    value: string
+}
+
+export const CheckboxComponent = observer(({name, form, value}: CheckboxType) => 
     <div className="btn-checkbox">
         <input type="checkbox" {...form.$(name).bind({id: value, value: value, onChange: () => {
             if(form.$(name).value.indexOf(value) === -1){

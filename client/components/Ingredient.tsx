@@ -1,7 +1,13 @@
 import React from 'react';
 import {observer} from 'mobx-react';
 
-export const Ingredient = observer(({form, i, name}) => 
+type IngredientType = {
+    form?: any,
+    i: number,
+    name: string 
+}
+
+export const Ingredient = observer(({form, i, name}: IngredientType) => 
     <div className="ingredient">
         {form.$(name).value[i] && <>
             <input className="ingr-item" {...form.$(name).bind({id: `ing-name-${i}`, type: "text", value: form.$(name).value[i].name, onChange: (e) => form.$(name).value[i].name = e.target.value, placeholder: "Ingredient"})} />

@@ -2,13 +2,20 @@ import React, { Component } from 'react';
 import {observer, inject} from 'mobx-react';
 
 import { NewComment, Popover } from './';
-import {Link} from 'react-router-dom';
 
 import {PopoverStore, NewCommentStore} from '../stores';
 
+interface CommentsProps {
+    store: any,
+    FullPostStore?: any,
+    id: string,
+    commentId: string,
+    hasComments: boolean
+}
+
 @inject("FullPostStore")
 @observer
-class Comments extends Component {
+class Comments extends Component<CommentsProps> {
     constructor(props) {
         super(props);
     }

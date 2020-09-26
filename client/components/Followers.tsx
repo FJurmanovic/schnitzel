@@ -3,7 +3,13 @@ import {Link} from 'react-router-dom';
 import { observer } from 'mobx-react';
 import {firstUpper} from '../common/js';
 
-export const Followers = observer(({type, store, exitScreen}) => 
+type FollowersType = {
+    type?: string,
+    store?: any,
+    exitScreen?: any
+}
+
+export const Followers = observer(({type, store, exitScreen}: FollowersType) => 
     <div className="overlay" onClick={exitScreen}>
         <div className="followers" onClick={(e) => store.stayHere(e)}>
             <div className="flwrs">
