@@ -52,8 +52,8 @@ const fields = [
 const forms = new FormsService({fields});
 
 interface NewPostProps {
-    NewPostStore: any,
-    history: any
+    NewPostStore?: any,
+    history?: any
 }
 
 @inject("NewPostStore")

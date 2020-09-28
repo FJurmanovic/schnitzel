@@ -6,9 +6,14 @@ import { firstUpper, categories } from '../common/js';
 
 import { Post } from '../components/Post';
 
+type ExploreCategoryProps = {
+    ExploreCategoryStore?: any;
+    match?: any;
+}
+
 @inject("ExploreCategoryStore")
 @observer
-class ExploreCategory extends Component {
+class ExploreCategory extends Component<ExploreCategoryProps> {
     componentWillMount() {
         this.props.ExploreCategoryStore.setCategory(this.props.match.params.categoryId);
         this.props.ExploreCategoryStore.postsGet();
@@ -74,7 +79,6 @@ class ExploreCategory extends Component {
                                 userdata={this.props.ExploreCategoryStore.userData} 
                                 togglePoint={this.props.ExploreCategoryStore.togglePoint}  
                                 authUser={this.props.ExploreCategoryStore.userData.id} 
-                                getUserData={this.props.ExploreCategoryStore.getUserData} 
                                 removePost={this.props.ExploreCategoryStore.removePost}
                                 from="explore-category" 
                             />

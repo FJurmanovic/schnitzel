@@ -5,10 +5,15 @@ import { withRouter, Link } from 'react-router-dom';
 import { Comments, NewComment, Popover } from '../components';
 import {PopoverStore, NewCommentStore} from '../stores';
 
+type FullPostProps = {
+    match?: any;
+    history?: any;
+    FullPostStore?: any;
+}
 
 @inject("FullPostStore")
 @observer
-class FullPost extends Component {
+class FullPost extends Component<FullPostProps> {
     componentWillMount() {
         document.body.style.overflow = "hidden";
         const {postId} = this.props.match.params;
@@ -50,7 +55,7 @@ class FullPost extends Component {
                         <div className="author">Author: <span></span>
                             {this.props.FullPostStore.postObject.username == "DeletedUser" 
                             ? <span>DeletedUser</span>
-                            : <span><Popover store={new PopoverStore} username={this.props.FullPostStore.postObject.username} iter="1" /></span>
+                            : <span><Popover store={new PopoverStore} username={this.props.FullPostStore.postObject.username} iter={1} /></span>
                             }
                         </div>
                         <div dangerouslySetInnerHTML={{__html: this.props.FullPostStore.postObject.timeAgo}}></div>

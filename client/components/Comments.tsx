@@ -9,7 +9,7 @@ interface CommentsProps {
     store: any,
     FullPostStore?: any,
     id: string,
-    commentId: string,
+    commentId?: string,
     hasComments: boolean
 }
 

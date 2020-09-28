@@ -6,9 +6,13 @@ import { Post } from '../components/Post';
 
 import { firstUpper, categories } from '../common/js';
 
+type ExploreProps = {
+    ExploreStore?: any;
+}
+
 @inject("ExploreStore")
 @observer
-class Explore extends Component {
+class Explore extends Component<ExploreProps> {
     componentWillMount() {
         this.props.ExploreStore.postsGet();
 
@@ -64,7 +68,6 @@ class Explore extends Component {
                                 userdata={this.props.ExploreStore.userData} 
                                 togglePoint={this.props.ExploreStore.togglePoint} 
                                 authUser={this.props.ExploreStore.userData.id} 
-                                getUserData={this.props.ExploreStore.getUserData} 
                                 removePost={this.props.ExploreStore.removePost}
                                 from="explore" 
                             />

@@ -49,9 +49,15 @@ const fields = [
 
 const forms = new FormsService({fields});
 
+type RegisterProps = {
+  RegisterStore: any;
+  history: any;
+}
+
 @inject("RegisterStore")
 @observer
-class Register extends Component {
+class Register extends Component<RegisterProps> {
+    hooks: any;
     constructor(props) {
       super(props);
       this.hooks = {

@@ -4,9 +4,13 @@ import { Link } from 'react-router-dom';
 
 import { Post, NewPost } from '../components';
 
+type FeedProps = {
+    FeedStore?: any;
+}
+
 @inject("FeedStore")
 @observer
-class Feed extends Component {
+class Feed extends Component<FeedProps> {
     componentWillMount() {
         this.props.FeedStore.postsGet();
         window.addEventListener('scroll', this.props.FeedStore.handleScroll);
@@ -20,10 +24,7 @@ class Feed extends Component {
 
     render() {
         return <>
-            <NewPost 
-                showNew={this.props.FeedStore.showNew}
-                toggleNew={this.props.FeedStore.toggleNew}  
-            />
+            <NewPost />
             <div className="posts" onScroll={this.props.FeedStore.handleScroll}>
                 { this.props.FeedStore.loadingPost 
                 ? <>
@@ -52,7 +53,6 @@ class Feed extends Component {
                                 userdata={this.props.FeedStore.userData}
                                 togglePoint={this.props.FeedStore.togglePoint}  
                                 authUser={this.props.FeedStore.userData.id} 
-                                getUserData={this.props.FeedStore.getUserData} 
                                 removePost={this.props.FeedStore.removePost}
                                 from="home" 
                             />

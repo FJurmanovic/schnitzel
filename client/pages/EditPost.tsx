@@ -53,10 +53,17 @@ const fields = [
 
 const forms = new FormsService({fields});
 
+type EditPostProps = {
+    EditPostStore?: any;
+    match?: any;
+    history?: any;
+}
+
 
 @inject("EditPostStore")
 @observer
-class EditPost extends Component {
+class EditPost extends Component<EditPostProps> {
+    hooks: any;
     constructor(props) {
         super(props);
         this.hooks = {

@@ -21,10 +21,15 @@ const fields = [
 
 const forms = new FormsService({fields});
 
+type LoginProps = {
+    LoginStore?: any;
+    history?: any
+}
 
 @inject("LoginStore")
 @observer
-class Login extends Component {
+class Login extends Component<LoginProps> {
+    hooks: any;
     constructor(props) {
         super(props); 
         this.hooks = {

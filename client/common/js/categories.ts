@@ -1,1 +1,1 @@
-export const categories = ["other", "pizza", "chicken", "pork", "beef", "hamburger", "deserts", "snacks", "hot", "mild"];
+export const categories: Array<string> = ["other", "pizza", "chicken", "pork", "beef", "hamburger", "deserts", "snacks", "hot", "mild"];

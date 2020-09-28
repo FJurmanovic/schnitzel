@@ -1,4 +1,7 @@
-export const getTheme = (type, mode?) => {
+type ThemeTypes = "get" | "set" | "getBool" | "toggle";
+type ThemeModes = "dark" | "light"
+
+export const getTheme = (type: ThemeTypes, mode?: ThemeModes): any => {
     if(type === "get") {
         let theme = mode || localStorage.getItem("theme") || "dark";
         let body = document.querySelector("body");

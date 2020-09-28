@@ -4,9 +4,15 @@ import { withRouter, Link } from 'react-router-dom';
 import { Post, Followers } from '../components';
 import { FollowersStore } from '../stores';
 
+type ProfileProps = {
+    match?: any;
+    history?: any;
+    ProfileStore?: any;
+}
+
 @inject("ProfileStore")
 @observer
-class Profile extends Component {
+class Profile extends Component<ProfileProps> {
     componentWillMount() {
         let { profileName } = this.props.match.params;
         if (this.props.match.path === "/post/:postId/1") return;
@@ -48,10 +54,7 @@ class Profile extends Component {
                             <Followers 
                                 type="followers" 
                                 store={new FollowersStore(this.props.ProfileStore.getFollowers, this.props.ProfileStore.profileData.id)}
-                                ownerId={this.props.ProfileStore.profileData.id} 
                                 exitScreen={this.props.ProfileStore.toggleFollowers} 
-                                removeAction={this.props.ProfileStore.profileData.removeFollower} 
-                                getFollowerFunction={this.props.ProfileStore.getFollowers}
                             />
                         }
                     </ul>
@@ -61,10 +64,7 @@ class Profile extends Component {
                             <Followers 
                                 type="following" 
                                 store={new FollowersStore(this.props.ProfileStore.getFollowing, this.props.ProfileStore.profileData.id)}
-                                ownerId={this.props.ProfileStore.profileData.id} 
                                 exitScreen={this.props.ProfileStore.toggleFollowing} 
-                                removeAction={this.props.ProfileStore.profileData.removeFollowing} 
-                                getFollowerFunction={this.props.ProfileStore.getFollowing}
                             />
                         }
                     </ul>
@@ -104,10 +104,9 @@ class Profile extends Component {
                                 key={key} 
                                 iter={key} 
                                 userdata={this.props.ProfileStore.userData}
-                                addPoint={this.props.ProfileStore.addPoint} 
-                                removePoint={this.props.ProfileStore.removePoint} 
+                                togglePoint={this.props.ProfileStore.togglePoint}
                                 authUser={this.props.ProfileStore.userData.id} 
-                                getUserData={this.props.ProfileStore.getUserData} 
+                                removePost={this.props.ProfileStore.removePost}
                                 from="profile" 
                             />)}</>
                             }</>
@@ -116,7 +115,7 @@ class Profile extends Component {
                     ?   <div className="text-center f2 mb-8">There are no more posts to load. <br /> 
                         <Link to="/explore" className="btn btn-blue btn-rounder f3">Explore</Link> to find new posts</div> 
                     :   <div className="text-center f2 mb-8">
-                            <button className="btn btn-blue btn-squared p-4" onClick={this.handleNewPosts}>Load more posts</button>
+                            <button className="btn btn-blue btn-squared p-4" onClick={this.props.ProfileStore.handleScroll}>Load more posts</button>
                         </div>
                     } </> }
                 </div>

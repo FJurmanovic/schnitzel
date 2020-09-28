@@ -5,9 +5,14 @@ import {withRouter} from 'react-router-dom';
 import {Switch} from '../components';
 import {SwitchStore} from '../stores';
 
+type EditProfileProps = {
+  EditProfileStore?: any;
+  history?: any;
+}
+
 @inject("EditProfileStore")
 @observer
-class EditProfile extends Component {
+class EditProfile extends Component<EditProfileProps> {
   componentWillMount() {
     this.props.EditProfileStore.currentData();
   }
