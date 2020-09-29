@@ -9,7 +9,7 @@ const Post = require("../../model/Post");
 
 const auth = require("../../middleware/auth");
 
-router.get('/', async (req, res) => {
+router.get('/', auth, async (req, res) => {
     const {query: {searchQuery}} = req;
     try {
         const query = new RegExp(`^${searchQuery}`, "i");

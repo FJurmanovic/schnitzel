@@ -768,6 +768,104 @@ body.dark {
         }
     }
 }
+.search-custom {
+    left: calc(50% - 150px);
+    position: absolute;
+    text-align: center;
+    text-transform: capitalize;
+    width: 300px;
+    div.search-custom-top {
+        position: relative;
+        color: #09090a;
+        border-radius: 2px;
+        cursor: pointer;
+        font-weight: 500;
+        font-size: 16px;
+        input.search-custom-search {
+            position: relative;
+            width: calc(100% - 2 * 2px);
+            margin: 2px;
+            background-color: #fbfbfb;
+            border: 1px solid #d3d3d3;
+            border-radius: 1em;
+            font-size: 18px;
+            text-align: center;
+            &:active, &:focus {
+                outline: none;
+            }
+        }
+        &.--open {
+            input.search-custom-search {
+                border-radius: .5em;
+                border-bottom-right-radius: 0;
+                border-bottom-left-radius: 0;
+                border-bottom: 1px solid transparent;
+            }
+        }
+        span.search-custom-fieldname {
+            -webkit-touch-callout: none; 
+            -webkit-user-select: none; 
+            -khtml-user-select: none; 
+            -moz-user-select: none; 
+            -ms-user-select: none; 
+            user-select: none;
+        }
+    }
+    div.search-custom-open {
+        border: 1px solid transparent;
+        position: absolute;
+        width: calc(100% - 2 * 2px);
+        margin: 2px;
+        border-top: none;
+        margin-top: -2px !important;
+        background-color: #fbfafa;
+        border-bottom-right-radius: .2em;
+        border-bottom-left-radius: .2em;
+        border: 1px solid #d3d3d3;
+        font-size: 16px;
+        border-top: 1px solid #e8e8e8;
+        ul.search-custom-list {
+            padding: 1px 0;
+            max-height: 100px;
+            overflow-y: scroll;
+            &::-webkit-scrollbar{
+                display: none;
+            }
+            -ms-overflow-style: none;   
+            scrollbar-width: none; 
+            li.search-custom-listitem {
+                position: relative;
+                margin: 2px;
+                padding: 1px 0;
+                width: 100%;
+                list-style-type: none;
+                color: #0e0d0d;
+                -webkit-touch-callout: none; 
+                -webkit-user-select: none; 
+                -khtml-user-select: none; 
+                -moz-user-select: none; 
+                -ms-user-select: none; 
+                user-select: none;
+                cursor: pointer;
+                &:hover {
+                    background-color: #c6d8ff;
+                }
+                span.item-text {
+                    display: inline-block;
+                    width: calc(100% - 60px);
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                }
+                span.item-icon {
+                    position: absolute;
+                    top: 8px;
+                    left: 6px;
+                }
+            }
+        }
+    }
+}
 
 .dropdown-item {
     .swc {
@@ -829,13 +927,44 @@ body.dark {
     }
 }
 
-@media only screen and (max-width: 865px){
+.explore-btn-small {
+    display: none !important;
+}
+
+.header-small {
+    display: none;
+    .dropdown-item {
+        width: 100%;
+        height: 40px;
+        line-height: 40px;
+        display: block;
+        text-align: center;
+        .swc {
+            margin-top: 9px;
+        }
+    }
+}
+
+@media only screen and (max-width: 905px){
+    .search-custom {
+        position: relative;
+        left: 0;
+    }
     .container {
         .posts {
             .card {
                 width: 630px !important;
             }
         }
+    }
+}
+
+@media only screen and (max-width: 685px){
+    .explore-btn {
+        display: none !important;
+    }
+    .explore-btn-small {
+        display: block !important;
     }
 }
 
@@ -855,7 +984,34 @@ body.dark {
     }
 }
 
+@media only screen and (max-width: 590px){
+    .search-custom {
+        margin-left: 52px;
+        width: auto;
+    }
+}
+
+
 @media only screen and (max-width: 475px){
+    .header-small {
+        display: block;
+    }
+    .big-screen {
+        display: none !important;
+    }
+    details#profile.header-dropdown {
+        width: 0px;
+        height: 38px;
+        margin-right: 25px;
+        summary {
+            width: 38px !important;
+            height: 38px;
+            padding: 0 !important;
+        }
+        ul {
+            display: none !important;
+        }
+    }
     .container {
         .posts {
             .card {

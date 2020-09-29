@@ -3,3 +3,4 @@ export {default as AuthService} from './auth.service';
 export {default as PostsService} from './posts.service';
 export {default as ImageService} from './image.service';
 export {default as FormsService} from './forms.service';
+export {default as SearchService} from './search.service';

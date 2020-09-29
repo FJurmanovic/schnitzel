@@ -3,8 +3,20 @@ import { observer, inject } from 'mobx-react';
 import {Link, withRouter} from 'react-router-dom';
 import { getRandomInt, getTheme } from '../common/js';
 
-import {Switch} from './';
-import {SwitchStore} from '../stores';
+import {Switch, SearchComponent} from './';
+import {SwitchStore, SearchStore} from '../stores';
+
+import {FormsService} from '../services';
+const fields = [
+    {
+        name: "search",
+        type: "text",
+        rules: "required|string|between:1,50"
+    }
+];
+const forms = new FormsService({fields});
+
+const searchStore = new SearchStore("Search", 0);
 
 const themeSwitch = new SwitchStore(getTheme("getBool"), () => {
   getTheme("toggle");
@@ -47,15 +59,33 @@ const NotLoggedLink = () =>
       </div>
     </>
 
-  const LoggedLink = ({userData}) =>
+  const LoggedLink = observer(({userData, toggleMenu}) =>
     <>
-      <div className="header-item mr-5">
+      <div className="header-item">
+        <SearchComponent 
+          form={forms}
+          store={searchStore}
+          name="search"
+        />
+      </div>
+      <div className="header-item mr-5 explore-btn">
           <Link to="/explore" className="btn btn-white btn-rounder explore-btn">Explore</Link>
       </div>
       <div className="header-item">
         <details className="header-dropdown" id="profile">
-          <summary className="btn btn-default px-7 header-button" onClick={(event) => event.stopPropagation()}><span>{userData.username}</span><i className="arrow"></i><div className="sml-photo mx-auto text-center">{userData.hasPhoto ? <img src={userData.url} className="card-img-top" /> : <img src="https://storage.googleapis.com/schnitzel/default.jpg" className="card-img-top" />}</div></summary>
+          <summary className="btn btn-default px-7 header-button" onClick={(event) => {
+            event.stopPropagation();
+            toggleMenu(event);
+          }}>
+            <span className="big-screen">{userData.username}</span>
+            <i className="arrow big-screen"></i>
+            <div className="sml-photo mx-auto text-center">
+              {userData.hasPhoto ? <img src={userData.url} className="card-img-top" /> : <img src="https://storage.googleapis.com/schnitzel/default.jpg" className="card-img-top" />}
+            </div>
+          </summary>
           <ul className="header-dropdown-menu dropdown-menu-dark">
+            <Link to="/explore" className="dropdown-item explore-btn-small">Explore</Link>
+            <li className="dropdown-divider explore-btn-small"></li>
             <Link to="/profile" className="dropdown-item">View Profile</Link>
             <Link to="/profile/edit" className="dropdown-item">Edit Profile</Link>
             <li className="dropdown-divider"/>
@@ -72,20 +102,39 @@ const NotLoggedLink = () =>
         </details>
       </div>
     </>
-
+  );
 @inject("AuthStore")
 @observer
 class Navbar extends Component<NavbarProps> {
     render() {
         return (
+          <>
             <header className="header border-bottom border-black p-5 f4">
                 <div className={this.props.AuthStore.isAuth ? "header-item--full" : "header-item--full"}>
                     <Link to="/">
                       <Logo change={this.props.location.key} />
                     </Link>
                 </div>
-                { this.props.AuthStore.isAuth ? <LoggedLink userData={this.props.AuthStore.userData} /> : <NotLoggedLink /> }
+                { this.props.AuthStore.isAuth ? <LoggedLink userData={this.props.AuthStore.userData} toggleMenu={this.props.AuthStore.toggleMenu} /> : <NotLoggedLink /> }
             </header>
+            {this.props.AuthStore.menuShow && <div className="header-small">
+              <ul className="header-dropdown-menu dropdown-menu-dark">
+                <Link to="/explore" className="dropdown-item explore-btn-small">Explore</Link>
+                <li className="dropdown-divider explore-btn-small"></li>
+                <Link to="/profile" className="dropdown-item">View Profile</Link>
+                <Link to="/profile/edit" className="dropdown-item">Edit Profile</Link>
+                <div className="dropdown-item noselect" onClick={(event) => {
+                  event.stopPropagation();
+                  themeSwitch.toggleClick();
+                  }}>
+                  <Switch 
+                    store={themeSwitch}
+                  /> 
+                  <span>Dark mode</span></div>
+                <Link to="/logout" className="dropdown-item">Logout</Link>
+              </ul>
+            </div>}
+          </>
         );
     }
 }

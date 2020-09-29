@@ -13,3 +13,4 @@ export {default as PopoverStore} from './popover.store';
 export {default as FollowersStore} from './followers.store';
 export {default as SwitchStore} from './switch.store';
 export {default as NewCommentStore} from './newComment.store';
+export {default as SearchStore} from './search.store';

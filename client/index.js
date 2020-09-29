@@ -9,6 +9,7 @@ import {getTheme} from './common/js';
 import './common/styles/Main.scss';
 import './common/styles/Chevron.scss';
 import './common/styles/Thorn.scss';
+import './common/styles/Search.scss';
 
 getTheme("get");
 

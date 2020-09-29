@@ -51,12 +51,19 @@ class AuthStore {
     @observable token: string = null;
     @observable status: string = null;
     @observable passedData: boolean = false;
+    @observable menuShow: boolean = false; 
 
     @computed get isAuth(): boolean {
         if (!!this.token) {
             return !!this.userData.id;
         }
         return false;
+    }
+
+    @action toggleMenu = (e): void => {
+        let menu: any = document.getElementById("profile");
+        console.log()
+        this.menuShow = !menu.open;
     }
 
     authorize = (): void => {
