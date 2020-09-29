@@ -81,7 +81,7 @@ class EditProfile extends Component<EditProfileProps> {
               {(this.props.EditProfileStore.editUsername || this.props.EditProfileStore.editEmail || this.props.EditProfileStore.editPassword || this.props.EditProfileStore.editPrivacy || this.props.EditProfileStore.selectedFile) && 
                 <div>
                   <div>
-                    <div className="h4 text-lightred">This will change:</div>
+                    <div className="h4 text-red-light">This will change:</div>
                     {this.props.EditProfileStore.editUsername && <div className="f5">Username</div>}
                     {this.props.EditProfileStore.editEmail && <div className="f5">Email</div>}
                     {this.props.EditProfileStore.editPassword && <div className="f5">Password</div>}

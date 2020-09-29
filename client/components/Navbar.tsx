@@ -6,6 +6,10 @@ import { getRandomInt, getTheme } from '../common/js';
 import {Switch} from './';
 import {SwitchStore} from '../stores';
 
+const themeSwitch = new SwitchStore(getTheme("getBool"), () => {
+  getTheme("toggle");
+});
+
 interface NavbarProps {
   AuthStore: any,
   location: any
@@ -55,13 +59,12 @@ const NotLoggedLink = () =>
             <Link to="/profile" className="dropdown-item">View Profile</Link>
             <Link to="/profile/edit" className="dropdown-item">Edit Profile</Link>
             <li className="dropdown-divider"/>
-            <div className="dropdown-item" onClick={(event) => {
+            <div className="dropdown-item noselect" onClick={(event) => {
               event.stopPropagation();
+              themeSwitch.toggleClick();
               }}>
               <Switch 
-                store={new SwitchStore(getTheme("getBool"), () => {
-                  getTheme("toggle");
-                })}
+                store={themeSwitch}
               /> 
               <span>Dark mode</span></div>
             <Link to="/logout" className="dropdown-item">Logout</Link>

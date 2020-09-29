@@ -34,6 +34,9 @@ body{
                         -webkit-transform: rotate(45deg);
                     }
                 }
+                details ul {
+                    cursor: pointer;
+                }
             }
             
             .logo{
@@ -576,6 +579,15 @@ body{
             }
         }
     }
+}
+
+.noselect {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none; 
+    user-select: none;
 }
 
 body.dark {

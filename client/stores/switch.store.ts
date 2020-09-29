@@ -12,9 +12,10 @@ class SwitchStore {
         this.enabled = data;
     }
     
-    toggleClick = (e): void => {
+    toggleClick = (e?: Event): void => {
+        if (e) e.stopPropagation();
         this.setEnabled(!this.enabled);
-        this.onClick(e, !this.enabled);
+        this.onClick(!this.enabled);
     }
 }
 
