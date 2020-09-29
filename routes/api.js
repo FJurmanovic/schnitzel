@@ -3,7 +3,8 @@ const   express = require("express"),
 
 const   users = require("./users"),
         posts = require("./posts"),
-        image = require("./image");
+        image = require("./image"),
+        search = require("./search");
 
 router.get('/', (_, res) => {
     res.json({"API": "Works"});
@@ -12,5 +13,6 @@ router.get('/', (_, res) => {
 router.use('/user', users);
 router.use('/posts', posts);
 router.use('/image', image);
+router.use('/search', search);
 
 module.exports = router; 
