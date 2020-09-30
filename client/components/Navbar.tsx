@@ -6,16 +6,6 @@ import { getRandomInt, getTheme } from '../common/js';
 import {Switch, SearchComponent} from './';
 import {SwitchStore, SearchStore} from '../stores';
 
-import {FormsService} from '../services';
-const fields = [
-    {
-        name: "search",
-        type: "text",
-        rules: "required|string|between:1,50"
-    }
-];
-const forms = new FormsService({fields});
-
 const searchStore = new SearchStore("Search", 0);
 
 const themeSwitch = new SwitchStore(getTheme("getBool"), () => {
@@ -63,7 +53,6 @@ const NotLoggedLink = () =>
     <>
       <div className="header-item">
         <SearchComponent 
-          form={forms}
           store={searchStore}
           name="search"
         />

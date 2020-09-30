@@ -1,4 +1,4 @@
-import {observable, action} from 'mobx';
+import {observable, computed, action} from 'mobx';
 
 import {SearchService} from '../services';
 import {AuthStore} from './';
@@ -19,15 +19,19 @@ class SearchStore {
 
     @observable searchPhrase: string = "";
 
+    @computed get isEmpty () {
+        return !(this.fieldArray.length > 0);
+    }
+
     @action toggleDropdown = (): void => {
-        if(this.fieldArray.length) this.isOpen = !this.isOpen;
+        if(!this.isEmpty && this.searchPhrase !== "") this.isOpen = !this.isOpen;
         if(this.isOpen && !this.fieldArray.length) {
             this.getSearch();
         }
     }
 
     @action openDropdown = (event): void => {
-        if(this.fieldArray.length > 0) this.isOpen = true;
+        if(!this.isEmpty && this.searchPhrase !== "") this.isOpen = true;
     }
 
     @action closeDropdown = ():void => {
@@ -45,7 +49,6 @@ class SearchStore {
     textChange = (value: string, key: number): void => {
         this.textFieldName = value;
         this.keyFieldName = key;
-        this.phraseChange("");
         this.toggleDropdown();
     }
 

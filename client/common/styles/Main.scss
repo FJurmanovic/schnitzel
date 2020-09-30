@@ -773,6 +773,7 @@ body.dark {
     position: absolute;
     text-align: center;
     text-transform: capitalize;
+    z-index: 8000;
     width: 300px;
     div.search-custom-top {
         position: relative;
@@ -826,7 +827,7 @@ body.dark {
         border-top: 1px solid #e8e8e8;
         ul.search-custom-list {
             padding: 1px 0;
-            max-height: 100px;
+            max-height: 173px;
             overflow-y: scroll;
             &::-webkit-scrollbar{
                 display: none;
@@ -837,7 +838,7 @@ body.dark {
                 position: relative;
                 margin: 2px;
                 padding: 1px 0;
-                width: 100%;
+                width: calc(100% - 2 * 2px);
                 list-style-type: none;
                 color: #0e0d0d;
                 -webkit-touch-callout: none; 
