@@ -54,7 +54,6 @@ const NotLoggedLink = () =>
       <div className="header-item">
         <SearchComponent 
           store={searchStore}
-          name="search"
         />
       </div>
       <div className="header-item mr-5 explore-btn">

@@ -14,3 +14,4 @@ export {default as FollowersStore} from './followers.store';
 export {default as SwitchStore} from './switch.store';
 export {default as NewCommentStore} from './newComment.store';
 export {default as SearchStore} from './search.store';
+export {default as ToastStore} from './toast.store';

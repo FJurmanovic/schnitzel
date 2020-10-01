@@ -1,5 +1,5 @@
 import {observable, action} from 'mobx';
-import {AuthStore, DropdownStore} from './';
+import {AuthStore, DropdownStore, ToastStore} from './';
 import { PostsService, ImageService } from '../services';
 const path = require('path');
 

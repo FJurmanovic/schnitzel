@@ -5,10 +5,9 @@ import {observer} from 'mobx-react';
 type SearchType = {
     className?: string,
     store?: any,
-    name?: string
 }
 
-export const SearchComponent = observer(({className, store, form, name}: SearchType) =>
+export const SearchComponent = observer(({className, store}: SearchType) =>
     {
         useEffect(() => {
             document.addEventListener("click", (event: any) => {

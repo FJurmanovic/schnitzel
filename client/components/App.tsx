@@ -2,7 +2,10 @@ import React, {Component} from 'react';
 import {BrowserRouter as Router, Switch, Route, Redirect, withRouter} from 'react-router-dom';
 
 import {Landing, Login, Register, EditProfile, Feed, Explore, ExploreCategory, Profile, EditPost, FullPost} from '../pages';
-import {Navbar} from './';
+import {Navbar, Toast} from './';
+
+import {ToastStore} from '../stores';
+
 import { observer, inject } from 'mobx-react';
 
 interface DemoProps {
@@ -137,11 +140,12 @@ class App extends Component<AppProps> {
 
     render() {
         return (
-            <div>
+            <>
                 {this.props.AuthStore.passedData &&
                     <AppRouter store={this.props.AuthStore} auth={this.props.AuthStore.isAuth} />
                 }
-            </div>
+                <Toast store={ToastStore} />
+            </>
         );
     }
 }
