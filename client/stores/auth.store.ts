@@ -1,6 +1,7 @@
 import {observable, runInAction, computed, action} from 'mobx';
-import { Token } from 'typescript';
 import {AuthService, ImageService} from '../services';
+
+import {ToastStore} from './';
 
 type UserType = {
     username: string,
@@ -62,7 +63,6 @@ class AuthStore {
 
     @action toggleMenu = (e): void => {
         let menu: any = document.getElementById("profile");
-        console.log()
         this.menuShow = !menu.open;
     }
 
@@ -81,10 +81,12 @@ class AuthStore {
                 this.authorize();
                 if (history) history.push("/");
                 if(typeof callback == "function") callback();
+                ToastStore.push("Logged in", "success");
             }
             return data;
         } catch (error) {
             this.status = "error";
+            ToastStore.push("Login failed", "danger");
         }
     }
 
@@ -96,11 +98,13 @@ class AuthStore {
                 localStorage.setItem("token", data.token);
                 this.authorize();
                 history.push("/");
+                ToastStore.push("User Registered", "success");
             }
             return data;
         } catch (error) {
             console.log(error);
             this.status = "error";
+            ToastStore.push("Register failed", "danger");
         }
     }
 
@@ -113,11 +117,13 @@ class AuthStore {
                 this.authorize();
                 if(file) this.authAvatar(file, history);
                 else history.push('/');
+                ToastStore.push("Profile Edited", "success");
             }
             return data;
         } catch (error) {
             console.log(error);
             this.status = "error";
+            ToastStore.push("Edit failed", "danger");
         }
     }
 
@@ -130,6 +136,7 @@ class AuthStore {
         } catch (error) {
             console.log(error);
                 this.status = "error";
+                ToastStore.push("Image upload failed", "danger");
         }
     }
 
@@ -144,6 +151,7 @@ class AuthStore {
         } catch (error) {
             console.log(error);
             this.status = "error";
+            ToastStore.push("Could not get user data", "danger");
         }
     }
 
@@ -151,6 +159,7 @@ class AuthStore {
         this.userData = {};
         this.token = null;
         localStorage.removeItem("token");
+        ToastStore.push("Logged out", "alert");
 
         return true;
     }
@@ -162,6 +171,7 @@ class AuthStore {
         } catch (error) {
             console.log(error);
             this.status = "error";
+            ToastStore.push("Could not get followers", "danger");
         }
     }
 
@@ -172,17 +182,20 @@ class AuthStore {
         } catch (error) {
             console.log(error);
             this.status = "error";
+            ToastStore.push("Could not get followers", "danger");
         }
     }
 
     @action putFollow = async(id: string): Promise<any> => {
         try {
             const data: any = await this.authService.putFollow(id, this.token);
+            if(data) ToastStore.push("Follow successful", "success");
             return data;
         } catch (error) {
             console.log(error);
             runInAction(() => {
                 this.status = "error";
+                ToastStore.push("Could not follow user", "danger");
             });
         }
     }
@@ -190,11 +203,13 @@ class AuthStore {
     @action deleteFollow = async(id: string): Promise<any> => {
         try {
             const data: any = await this.authService.deleteFollow(id, this.token);
+            if(data) ToastStore.push("Unfollow successful", "success");
             return data;
         } catch (error) {
             console.log(error);
             runInAction(() => {
                 this.status = "error";
+                ToastStore.push("Could not unfollow user", "danger");
             });
         }
     }

@@ -1,5 +1,5 @@
 import {observable, computed, action} from 'mobx';
-import {AuthStore} from './';
+import {AuthStore, ToastStore} from './';
 import {PostsService} from '../services';
 
 type CommentObject = {
@@ -107,6 +107,7 @@ class CommentsStore {
         }
         const data = await this.postsService.deleteComment(this.authStore.token, object);
         if(data) {
+            ToastStore.push("Comment deleted", "success");
             location.reload();
         }
     }
@@ -124,6 +125,7 @@ class CommentsStore {
             object.replyId = replyId;
         }
         const data = await this.postsService.putComment(this.authStore.token, object);
+        if(data) ToastStore.push("Comment edited", "success");
         return data;
     }
 
@@ -192,6 +194,7 @@ class CommentsStore {
             if(typeof(callback) === "function") callback();
         } catch (error) {
             console.log(error);
+            ToastStore.push("Could not get comments", "danger");
         }
     }
 }

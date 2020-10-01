@@ -1076,6 +1076,18 @@ body.dark {
                 color: #296cff;
             }
         }
+        &.toast-default {
+            border-color: #ffffff;
+        }
+        &.toast-success {
+            border-color: #00dd37;
+        }
+        &.toast-alert {
+            border-color: #d9dd00;
+        }
+        &.toast-danger {
+            border-color: #dd0000;
+        }
     }
     @-webkit-keyframes fadein {
         from {opacity: 0;}

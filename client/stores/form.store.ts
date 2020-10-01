@@ -137,10 +137,12 @@ class FormStore {
             const data = await this.postsService.putPost(this.authStore.token, this.postId, object);
             if (data) {
                 if(object.hasPhoto) this.postImage(image, data.id);
+                ToastStore.push("Post edited", "success");
                 goBack.call(history);
             }
         } catch (error) {
             console.log(error);
+            ToastStore.push("Edit failed", "danger");
         }
     }
 
@@ -148,11 +150,13 @@ class FormStore {
         try { 
             const data = await this.postsService.postPost(this.authStore.token, object);
             if(data) {
+                ToastStore.push("Posting successful", "success");
                 if(object.hasPhoto) this.postImage(image, data.id);
                 else location.reload();
             }
         } catch (error) {
             console.log(error);
+            ToastStore.push("Posting failed", "danger");
         }
     }
 
@@ -165,6 +169,7 @@ class FormStore {
             }
         } catch (error) {
             console.log(error);
+            ToastStore.push("Image upload failed", "danger");
         }
     }
 }

@@ -4,19 +4,18 @@ import {observable, action} from "mobx";
 class ToastStore {
     @observable toasts = [];
 
-    @action push = (toast, color = "#ffffff") => {
+    @action push = (toast, type = "default") => {
+        this.toasts.push({"text": toast, type})
         const interval = setInterval(() => {
             if(this.toasts.length) {
-                this.toasts.splice(this.toasts.length - 1, 1);
+                this.toasts.splice(0, 1);
             }
             clearInterval(interval);
         }, 3000);
 
-        this.toasts.push({"text": toast, color, "interval": interval})
     }
 
     @action remove = (key) => {
-        clearInterval(this.toasts[key].interval);
         this.toasts.splice(key, 1);
     }
 
