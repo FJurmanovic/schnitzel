@@ -47,7 +47,7 @@ const fields = [
 ]
 
 
-const forms = new FormsService({fields});
+const forms:any = new FormsService({fields});
 
 type RegisterProps = {
   RegisterStore: any;

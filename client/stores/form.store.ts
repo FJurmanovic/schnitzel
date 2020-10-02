@@ -63,8 +63,9 @@ class FormStore {
                 form.$("directions").value = data.directions;
             }
             this.showNew = true;
-            this.postId = data.postId;
+            this.postId = data.id;
         }
+        console.log(form.values())
     }
 
     getData = async (postId: string, form: any): Promise<void> => {
@@ -107,10 +108,10 @@ class FormStore {
                 postObject.hasPhoto = true;
                 postObject.photoExt = path.extname(file.name);
             }
-        } else if (values.type === "recipe") {
+        } else if (values.type === "post") {
             postObject = {
                 title: values.title,
-                type: "recipe",
+                type: "post",
                 isPrivate: privacy,
                 description: values.description,
                 categories: values.categories,

@@ -51,7 +51,7 @@ const fields = [
 ]
 
 
-const forms = new FormsService({fields});
+const forms: any = new FormsService({fields});
 
 type EditPostProps = {
     EditPostStore?: any;
@@ -102,7 +102,7 @@ class EditPost extends Component<EditPostProps> {
                                 return <CheckboxComponent name="categories" value={category} key={key} />
                             })}
                         </FormGroupComponent>
-                        <TextAreaComponent className="width-full py-3 f5" message="Description: " name="description" />
+                        <TextAreaComponent className="width-full f5" message="Description: " name="description" />
                         {forms.$("type").value == "recipe" &&
                             <FormGroupComponent>
                                 <FormGroupComponent className="ingredients">
@@ -111,7 +111,7 @@ class EditPost extends Component<EditPostProps> {
                                     )}
                                 </FormGroupComponent>
                                 <br /><button className="btn btn-default mt-n4 mb-4" onClick={(e) => this.props.EditPostStore.addIngredientClick(e, forms.$("ingredients"))}>Add new ingredient</button><br />
-                                <TextAreaComponent className="width-full py-3 f5" message="Directions: " name="directions" />
+                                <TextAreaComponent className="width-full f5" message="Directions: " name="directions" />
                             </FormGroupComponent>
                         }
                     </FormComponent>

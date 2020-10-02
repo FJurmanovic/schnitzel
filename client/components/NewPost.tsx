@@ -49,7 +49,7 @@ const fields = [
 ]
 
 
-const forms = new FormsService({fields});
+const forms: any = new FormsService({fields});
 
 interface NewPostProps {
     NewPostStore?: any,
@@ -88,7 +88,7 @@ class NewPost extends React.Component<NewPostProps> {
                                 return <CheckboxComponent name="categories" value={category} key={key} />
                             })}
                         </FormGroupComponent>
-                        <TextAreaComponent className="width-full py-3 f4" message="Description: " name="description" />
+                        <TextAreaComponent className="width-full f5" message="Description: " name="description" />
                         {forms.$("type").value == "recipe" &&
                             <FormGroupComponent>
                                 <FormGroupComponent className="ingredients">
@@ -97,7 +97,7 @@ class NewPost extends React.Component<NewPostProps> {
                                     )}
                                 </FormGroupComponent>
                                 <br /><button className="btn btn-default mt-n4 mb-4" onClick={(e) => this.props.NewPostStore.addIngredientClick(e, forms.$("ingredients"))}>Add new ingredient</button><br />
-                                <TextAreaComponent className="width-full py-3 f4" message="Directions: " name="directions" />
+                                <TextAreaComponent className="width-full f5" message="Directions: " name="directions" />
                             </FormGroupComponent>
                         }
                     </FormComponent>

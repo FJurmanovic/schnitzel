@@ -14,6 +14,6 @@ export const NewComment = observer(({store}: NewCommentType) =>
                 className="width-full"
             />
         </label>
-        <input type="submit" value="Submit" className="btn btn-blue btn-squared px-6" />
+        <input type="submit" value="Submit" className="btn btn-blue px-6" />
     </form>
 );
