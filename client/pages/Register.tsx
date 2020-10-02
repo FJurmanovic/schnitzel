@@ -69,6 +69,9 @@ class Register extends Component<RegisterProps> {
         } 
       }
     }
+    componentWillUnmount() {
+        forms.reset();
+    }
 
     render() {
         return (

@@ -73,6 +73,9 @@ class NewPost extends React.Component<NewPostProps> {
             } 
         }
     }
+    componentWillUnmount() {
+        forms.reset();
+    }
     render() {
         return <>
             { this.props.NewPostStore.showNew

@@ -30,9 +30,10 @@ class Profile extends Component<ProfileProps> {
 
     componentDidUpdate(prevProps) {
         let { profileName } = this.props.match.params;
+        if(this.props.match.path === "/profile") profileName = this.props.ProfileStore.userData.username;
         window.removeEventListener('scroll', this.props.ProfileStore.handleScroll);
         //if (this.props.match.path !== prevProps.match.path && (prevProps.match.path == "/post/:postId/1" || this.props.match.path == "/post/:postId/1") && this.props.ProfileStore.profileId) return;
-        if (this.props.ProfileStore.profileData && profileName && profileName !== prevProps.match.params.profileName && this.props.ProfileStore.profileData.username !== profileName) {
+        if (this.props.ProfileStore.profileData && profileName && profileName !== prevProps.match.params.profileName && this.props.ProfileStore.profileData.username !== profileName ) {
             this.props.ProfileStore.componentMounted(profileName, () => {
                 if (this.props.ProfileStore.myProfile && profileName) this.props.history.push("/profile");
             });

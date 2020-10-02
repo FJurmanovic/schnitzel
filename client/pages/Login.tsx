@@ -40,6 +40,9 @@ class Login extends Component<LoginProps> {
             } 
         }
     }
+    componentWillUnmount() {
+        forms.reset();
+    }
 
     render() {
         return (

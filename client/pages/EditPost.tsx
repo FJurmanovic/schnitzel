@@ -81,6 +81,9 @@ class EditPost extends Component<EditPostProps> {
         const {postId} = this.props.match.params;
         this.props.EditPostStore.getData(postId, forms);
     }
+    componentWillUnmount() {
+        forms.reset();
+    }
     
     goBack() {
         if (this.props.history.action == "PUSH") return this.props.history.goBack();

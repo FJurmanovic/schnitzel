@@ -65,7 +65,6 @@ class FormStore {
             this.showNew = true;
             this.postId = data.id;
         }
-        console.log(form.values())
     }
 
     getData = async (postId: string, form: any): Promise<void> => {
