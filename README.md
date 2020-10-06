@@ -7,7 +7,7 @@ It is built with MongoDB for database, ExpressJS as backend, ReactJS as frontend
 
 ### [Live site](https://schnitzel.yurma.wtf/)
 
-Old repositories: [Fronend](https://github.com/Yurma/schnitzel) [Backend](https://github.com/Yurma/schnitzel_backend)
+Old repositories: [Frontend](https://github.com/Yurma/schnitzel_old) [Backend](https://github.com/Yurma/schnitzel_backend)
 
 Installation
 -------
