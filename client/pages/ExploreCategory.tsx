@@ -80,6 +80,7 @@ class ExploreCategory extends Component<ExploreCategoryProps> {
                                 togglePoint={this.props.ExploreCategoryStore.togglePoint}  
                                 authUser={this.props.ExploreCategoryStore.userData.id} 
                                 removePost={this.props.ExploreCategoryStore.removePost}
+                                isAuth={this.props.ExploreCategoryStore.authStore.isAuth}
                                 from="explore-category" 
                             />
                     })

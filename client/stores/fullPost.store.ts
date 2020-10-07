@@ -22,6 +22,9 @@ class FullPostStore {
     @observable showPost: boolean = false;
     @observable postId: string = null;
 
+    @computed get isAuth (): boolean {
+        return this.authStore.isAuth;
+    }
 
     @action componentMounted = async (postId): Promise<void> => {
         this.postId = postId;

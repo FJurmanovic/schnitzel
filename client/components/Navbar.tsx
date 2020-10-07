@@ -37,6 +37,9 @@ const Logo = (props) => {
 
 const NotLoggedLink = () =>
     <>
+      <div className="header-item mr-5 explore-btn">
+          <Link to="/explore" className="btn btn-white btn-rounder explore-btn">Explore</Link>
+      </div>
       <div className="header-item">
         <Link to="/login" className="header-link py-5px">
           Login

@@ -36,7 +36,7 @@ class Comments extends Component<CommentsProps> {
                                 : <span><Popover store={new PopoverStore} username={comment.username} iter={k} /></span>
                                 }
                             </div>
-                            <div className="d-inline-block"><span>Points: {comment.points} <button className="btn-icon ml-n2" onClick={() => this.props.store.togglePoints(comment.id)}>{!comment.isPointed ? <div className="gg-chevron-up"></div> : <div className="gg-chevron-up text-blue"></div>}</button></span></div>
+                            <div className="d-inline-block"><span>Points: {comment.points} {this.props.store.authStore.isAuth && <button className="btn-icon ml-n2" onClick={() => this.props.store.togglePoints(comment.id)}>{!comment.isPointed ? <div className="gg-chevron-up"></div> : <div className="gg-chevron-up text-blue"></div>}</button>}</span></div>
                             {(comment.userId == this.props.store.authStore.userData.id && !comment.isDeleted) && <span><button onClick={() => this.props.store.editClick(k)} className="btn-link h6 mx-2">{this.props.store.isEditing === k ? "Cancel" : "Edit"}</button> | <button onClick={() => this.props.store.deleteComment(comment.id)} className="btn-link h6 mx-2">Delete</button></span>}
                         </div>
                         {this.props.store.isEditing == k

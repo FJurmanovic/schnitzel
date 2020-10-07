@@ -49,28 +49,32 @@ class Profile extends Component<ProfileProps> {
                     <div className="profile-image mx-auto text-center">{this.props.ProfileStore.profileData.hasPhoto ? <img src={this.props.ProfileStore.profileData.url} className="card-img-top" /> : <img src="https://storage.googleapis.com/schnitzel/default.jpg" className="card-img-top" />}</div>
                     <div className="mx-auto text-center">
                         <div className="profile-info h4"><span>Followers: {this.props.ProfileStore.profileData.followerNum} </span> <span>Posts: {this.props.ProfileStore.profileData.postNum} </span> <span>Points: {this.props.ProfileStore.profileData.points} </span></div>
-                    <ul className="d-inline-block m-3 text-left">
-                        <button className="btn btn-blue-transparent btn-rounder border-blue d-inline-block" onClick={this.props.ProfileStore.toggleFollowers}>Followers</button>
-                        { this.props.ProfileStore.showFollowers &&
-                            <Followers 
-                                type="followers" 
-                                store={new FollowersStore(this.props.ProfileStore.getFollowers, this.props.ProfileStore.profileData.id)}
-                                exitScreen={this.props.ProfileStore.toggleFollowers} 
-                            />
-                        }
-                    </ul>
-                    <ul className="d-inline-block m-3 text-left">
-                        <button className="btn btn-blue-transparent btn-rounder border-blue" onClick={this.props.ProfileStore.toggleFollowing}>Following</button>
-                        { this.props.ProfileStore.showFollowing &&
-                            <Followers 
-                                type="following" 
-                                store={new FollowersStore(this.props.ProfileStore.getFollowing, this.props.ProfileStore.profileData.id)}
-                                exitScreen={this.props.ProfileStore.toggleFollowing} 
-                            />
-                        }
-                    </ul>
+                    {this.props.ProfileStore.isAuth && 
+                    <>
+                        <ul className="d-inline-block m-3 text-left">
+                            <button className="btn btn-blue-transparent btn-rounder border-blue d-inline-block" onClick={this.props.ProfileStore.toggleFollowers}>Followers</button>
+                            { this.props.ProfileStore.showFollowers &&
+                                <Followers 
+                                    type="followers" 
+                                    store={new FollowersStore(this.props.ProfileStore.getFollowers, this.props.ProfileStore.profileData.id)}
+                                    exitScreen={this.props.ProfileStore.toggleFollowers} 
+                                />
+                            }
+                        </ul>
+                        <ul className="d-inline-block m-3 text-left">
+                            <button className="btn btn-blue-transparent btn-rounder border-blue" onClick={this.props.ProfileStore.toggleFollowing}>Following</button>
+                            { this.props.ProfileStore.showFollowing &&
+                                <Followers 
+                                    type="following" 
+                                    store={new FollowersStore(this.props.ProfileStore.getFollowing, this.props.ProfileStore.profileData.id)}
+                                    exitScreen={this.props.ProfileStore.toggleFollowing} 
+                                />
+                            }
+                        </ul>
+                    </>
+                    }
                     </div>
-                    { !this.props.ProfileStore.myProfile && <>{
+                    { (this.props.ProfileStore.isAuth && !this.props.ProfileStore.myProfile) && <>{
                         this.props.ProfileStore.profileData.isFollowing
                         ?   <div className="mx-auto text-center">
                                 <button className="btn btn-orange btn-rounder px-11 folbtn" onClick={this.props.ProfileStore.unfollowClick}>Unfollow</button>
@@ -108,6 +112,7 @@ class Profile extends Component<ProfileProps> {
                                 togglePoint={this.props.ProfileStore.togglePoint}
                                 authUser={this.props.ProfileStore.userData.id} 
                                 removePost={this.props.ProfileStore.removePost}
+                                isAuth={this.props.ProfileStore.isAuth}
                                 from="profile" 
                             />)}</>
                             }</>

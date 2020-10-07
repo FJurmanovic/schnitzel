@@ -60,11 +60,11 @@ class FullPost extends Component<FullPostProps> {
                         </div>
                         <div dangerouslySetInnerHTML={{__html: this.props.FullPostStore.postObject.timeAgo}}></div>
                         
-                        <div className="f5">Points: {this.props.FullPostStore.postObject.points} <button className="btn-icon ml-n2" onClick={this.props.FullPostStore.togglePoints}>{!this.props.FullPostStore.postObject.isPointed ? <div className="gg-chevron-up"></div> : <div className="gg-chevron-up text-blue"></div>}</button> <span className="mx-5">Comments: {this.props.FullPostStore.postObject.comments}</span></div>
+                        <div className="f5">Points: {this.props.FullPostStore.postObject.points} {this.props.FullPostStore.isAuth &&  <button className="btn-icon ml-n2" onClick={this.props.FullPostStore.togglePoints}>{!this.props.FullPostStore.postObject.isPointed ? <div className="gg-chevron-up"></div> : <div className="gg-chevron-up text-blue"></div>}</button> } <span className="mx-5">Comments: {this.props.FullPostStore.postObject.comments}</span></div>
                         <hr />
-                        <NewComment
+                        {this.props.FullPostStore.isAuth && <NewComment
                             store={new NewCommentStore("comment", this.props.FullPostStore.postObject.id, null, this.props.FullPostStore.submitClick)}
-                        />
+                        />}
                         <div className="comments">
                             <Comments store={this.props.FullPostStore.commentStore} id={this.props.FullPostStore.postObject.id} hasComments={this.props.FullPostStore.postObject.comments > 0} />
                         </div>

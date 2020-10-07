@@ -69,6 +69,7 @@ class Explore extends Component<ExploreProps> {
                                 togglePoint={this.props.ExploreStore.togglePoint} 
                                 authUser={this.props.ExploreStore.userData.id} 
                                 removePost={this.props.ExploreStore.removePost}
+                                isAuth={this.props.ExploreStore.authStore.isAuth}
                                 from="explore" 
                             />
                     })

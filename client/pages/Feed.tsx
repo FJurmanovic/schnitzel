@@ -54,6 +54,7 @@ class Feed extends Component<FeedProps> {
                                 togglePoint={this.props.FeedStore.togglePoint}  
                                 authUser={this.props.FeedStore.userData.id} 
                                 removePost={this.props.FeedStore.removePost}
+                                isAuth={this.props.FeedStore.authStore.isAuth}
                                 from="home" 
                             />
                     })

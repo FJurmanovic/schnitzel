@@ -29,6 +29,10 @@ class ProfileStore extends PostsStore {
         return this.profileData.id === this.authStore.userData.id;
     }
     
+    @computed get isAuth (): boolean {
+        return this.authStore.isAuth;
+    }
+    
     @computed get postUsername (): string {
         if(FullPostStore.postObject) {
             return FullPostStore.postObject.username;

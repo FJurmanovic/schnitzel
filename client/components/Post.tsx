@@ -28,10 +28,11 @@ type PostType = {
     togglePoint: any,
     authUser: any,
     from: any,
-    removePost: any
+    removePost: any,
+    isAuth: boolean
 }
 
-export const Post = observer(({post, iter, userdata, togglePoint, authUser, from, removePost}: PostType) => 
+export const Post = observer(({post, iter, userdata, togglePoint, authUser, from, removePost, isAuth}: PostType) => 
     <React.Fragment key={iter}>
         <div className="card col-9 my-6">
             {post.hasPhoto && <div className="card-image"><OpenButton from={from} id={post.id}><img src={post.url} className="card-img-top" /></OpenButton></div>}
@@ -75,7 +76,7 @@ export const Post = observer(({post, iter, userdata, togglePoint, authUser, from
                     <div className="f5 directions">{post.directions}</div>
                 </>
                 }
-                <div className="f5">Points: {post.points} <button className="btn-icon ml-n2" onClick={() => togglePoint(post.id, "post")}>{!post.isPointed ? <div className="gg-chevron-up"></div> : <div className="gg-chevron-up text-blue"></div>}</button> <OpenButton from={from} id={post.id}><span className="mx-5">Comments: {post.comments}</span></OpenButton></div>
+                <div className="f5">Points: {post.points} {isAuth && <button className="btn-icon ml-n2" onClick={() => togglePoint(post.id, "post")}>{!post.isPointed ? <div className="gg-chevron-up"></div> : <div className="gg-chevron-up text-blue"></div>}</button> } <OpenButton from={from} id={post.id}><span className="mx-5">Comments: {post.comments}</span></OpenButton></div>
             </div>
 
             <OpenButton from={from} id={post.id}><div className="card-footer">View recipe</div></OpenButton>

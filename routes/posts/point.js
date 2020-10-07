@@ -10,6 +10,7 @@ const { Query } = require("mongoose");
 router.put('/:postId', auth, async (req, res) => {
     const {user: {id}, body: {type, commentId, replyId}, params: {postId}} = req;
     try {
+        if(req.user.id === "anonymous") return res.send("Could not add point");
     	let pst = null;
         if(type === "post") {
             pst = await Post.findOneAndUpdate({"_id": postId, 'points.userId': {$ne: id}}, { $addToSet: { points: { "userId": id } }});
@@ -40,6 +41,7 @@ router.put('/:postId', auth, async (req, res) => {
 router.delete("/:postId", auth, async (req, res) => {    
     const {user: {id}, body: {type, commentId, replyId}, params: {postId}} = req;
     try {
+        if(req.user.id === "anonymous") return res.send("Could not remove point");
         if(type === "post") {
             pst = await Post.findOneAndUpdate({"_id": postId, 'points.userId': id}, { $pull: { points: { "userId": id } }});
             await User.findOneAndUpdate({"_id": pst.userId}, { $inc: {"points": -1 }});

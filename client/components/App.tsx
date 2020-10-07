@@ -47,13 +47,13 @@ const AppRouter = ({store, auth}) =>
                         { auth ? <Feed /> : <Landing /> }
                     </Route>
                     <Route path="/explore/f/:categoryId">
-                        { auth ? <ExploreCategory /> : <Redirect to="/login" /> }
+                        <ExploreCategory />
                     </Route>
                     <Route path="/explore/:any">
                         <Redirect to="/explore" />
                     </Route>
                     <Route path="/explore">
-                        { auth ? <Explore /> : <Redirect to="/login" /> }
+                        <Explore />
                     </Route>
                     <Route path="/login">
                         { auth ? <Redirect to="/" /> : <Login /> }
@@ -81,46 +81,26 @@ const AppRouter = ({store, auth}) =>
                         { auth ? <EditPost /> : <Redirect to="/" /> }
                     </Route>
                     <Route path="/post/:postId/3">
-                        { auth 
-                        ? <>
-                            <ExploreCategory />
-                            <FullPost />
-                          </> 
-                        : <Redirect to="/" /> 
-                        }
+                        <ExploreCategory />
+                        <FullPost />
                     </Route>
                     <Route path="/post/:postId/2">
-                        { auth 
-                        ? <>
-                            <Explore />
-                            <FullPost />
-                          </> 
-                        : <Redirect to="/" /> 
-                        }
+                        <Explore />
+                        <FullPost />
                     </Route>
                     <Route path="/post/:postId/1">
-                        { auth 
-                        ? <>
-                            <Profile />
-                            <FullPost />
-                          </> 
-                        : <Redirect to="/" /> 
-                        }
+                        <Profile />
+                        <FullPost />
                     </Route>
                     <Route path="/post/:postId">
-                        { auth 
-                        ? <>
-                            <Feed />
-                            <FullPost />
-                          </> 
-                        : <Redirect to="/" /> 
-                        }
+                        <Feed />
+                        <FullPost />
                     </Route>
                     <Route path="/post">
                         <Redirect to="/" />
                     </Route>
                     <Route path="/:profileName">
-                        { auth ? <Profile /> : <Redirect to="/" /> }
+                        <Profile />
                     </Route>
                 </Switch>
             </div>

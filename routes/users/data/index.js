@@ -87,13 +87,15 @@ router.get('/', auth, async (req, res) => {
 router.get('/:userId', auth, async (req, res) => {
   try {
     const {userId} = req.params;
-
-    const [user, profile] = await Promise.all([await User.findOne({ username: userId}), await User.findById(req.user.id)]);
+    //const [user, profile] = await Promise.all([await User.findOne({ username: userId }), await User.findById(req.user.id)]);
+    const user = await User.findOne({ username: userId });
+    let profile = [];
+    if (req.user.id !== "anonymous") profile = await User.findById(req.user.id);
     const posts = await Post.find({ userId: user._id });
 
     const postNum = posts.length;
 
-    const isFollowing = profile.following.filter(x => x.userId == user._id).map(x => x.userId == user._id)[0] || false;
+    const isFollowing = profile.following ? profile.following.filter(x => x.userId == user._id).map(x => x.userId == user._id)[0] : false;
 
     let userData = {};
 
@@ -108,7 +110,7 @@ router.get('/:userId', auth, async (req, res) => {
 
       const [url] = await blobStream;
       userData.url = url;
-  }
+    }
 
     userData["id"] = user._id;
     userData["hasPhoto"] = user.hasPhoto;
