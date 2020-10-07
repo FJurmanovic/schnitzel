@@ -35,6 +35,9 @@ class FullPost extends Component<FullPostProps> {
         return <>
         { this.props.FullPostStore.showPost  &&
             <div className='overlay' onClick={this.goBack.bind(this)}>
+                <button className="btn btn-icon close-post-btn">
+                    <i className="gg-close"></i>
+                </button>
                 <div className='poston screen-post' onClick={(event) => event.stopPropagation()}>
                         { this.props.FullPostStore.postObject.hasPhoto && <div className="card-image"><img src={this.props.FullPostStore.postObject.url} className="card-img-top" /></div>}
                     <div className="screen-body">    

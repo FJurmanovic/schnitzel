@@ -105,7 +105,7 @@ class NewPost extends React.Component<NewPostProps> {
                         }
                     </FormComponent>
                 </div>
-                :   <button className="btn btn-blue-transparent d-block width-full py-4 border-blue" onClick={this.props.NewPostStore.toggleShow}>New Post</button>
+                :   <button className="btn btn-blue-transparent d-block width-full py-4 border-blue new-post-btn" onClick={this.props.NewPostStore.toggleShow}>New Post</button>
                 } 
             </>
     }

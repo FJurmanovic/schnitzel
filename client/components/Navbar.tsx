@@ -37,8 +37,8 @@ const Logo = (props) => {
 
 const NotLoggedLink = () =>
     <>
-      <div className="header-item mr-5 explore-btn">
-          <Link to="/explore" className="btn btn-white btn-rounder explore-btn">Explore</Link>
+      <div className="header-item mr-5">
+          <Link to="/explore" className="btn btn-white btn-rounder">Explore</Link>
       </div>
       <div className="header-item">
         <Link to="/login" className="header-link py-5px">
@@ -108,7 +108,7 @@ class Navbar extends Component<NavbarProps> {
                 </div>
                 { this.props.AuthStore.isAuth ? <LoggedLink userData={this.props.AuthStore.userData} toggleMenu={this.props.AuthStore.toggleMenu} /> : <NotLoggedLink /> }
             </header>
-            {this.props.AuthStore.menuShow && <div className="header-small">
+            {this.props.AuthStore.isAuth && this.props.AuthStore.menuShow && <div className="header-small">
               <ul className="header-dropdown-menu dropdown-menu-dark">
                 <Link to="/explore" className="dropdown-item explore-btn-small">Explore</Link>
                 <li className="dropdown-divider explore-btn-small"></li>

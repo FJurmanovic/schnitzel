@@ -484,7 +484,7 @@ body{
             left: 0;
             right: 0;
             z-index: 1001;
-            background: rgba(0, 0, 0, 0.3);
+            background: rgba(0, 0, 0, 0.5);
             overflow-x: auto;
             overflow-y: auto;
         }
@@ -505,15 +505,24 @@ body{
         }
         
         @media only screen and (max-width: 1145px){
-            .poston {
-                left: 2%;
-                right: 2%;
-                width: 96%;
-                
-                .card-image {
-                    --div-width: calc(100vw);
-                    width: var(--div-width) - 2%;
-                    height: calc(var(--div-width) * 3 / 4);
+            .close-post-btn {
+                background-color: #ffffff6e !important;
+                &:hover {
+                    background-color: #ffffffaf !important;
+                }
+            }
+            .overlay {
+                background: rgb(16, 16, 16) !important;
+                .poston {
+                    left: 2%;
+                    right: 2%;
+                    width: 96%;
+                    .card-image {
+                        --div-width: calc(100vw);
+                        width: var(--div-width) - 2%;
+                        height: calc(var(--div-width) * 3 / 4);
+                        border-radius: 2px !important;
+                    }
                 }
             }
         }
@@ -904,6 +913,20 @@ body.dark {
     }
 }
 
+.close-post-btn {
+    position: fixed;
+    margin: 15px 15px -10px 15px !important;
+    border-radius: 50% !important;
+    padding: 15px !important;
+    background-color: #ffffff !important;
+    i {
+        transform: scale(1.25);
+    }
+    &:hover {
+        background-color: #dddddd !important;
+    }
+}
+
  .switch {
     display: flex;
     border: 2px solid transparent;
@@ -952,6 +975,14 @@ body.dark {
         .swc {
             margin-top: 9px;
         }
+    }
+}
+
+@media only screen and (max-width: 840px) {
+    .new-post-btn {
+        border-radius: 0 !important;
+        border-left: 0 !important; 
+        border-right: 0 !important;
     }
 }
 
