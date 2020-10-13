@@ -4,6 +4,7 @@ import {withRouter} from 'react-router-dom';
 
 import {Switch} from '../components';
 import {SwitchStore} from '../stores';
+import { loadPhoto } from '../common/js';
 
 type EditProfileProps = {
   EditProfileStore?: any;
@@ -24,17 +25,20 @@ class EditProfile extends Component<EditProfileProps> {
     render() {
         return (
             <div className="edit-profile">
-            <form onSubmit={(e) => this.props.EditProfileStore.submitClick(e, this.props.history)} className="col-7 mx-auto">
+            <form onSubmit={(e) => this.props.EditProfileStore.submitClick(e, this.props.history)} className="col-7 form-edit-profile mx-auto">
               <div className="change-image">
                 <label>
-                  {this.props.EditProfileStore.userData.hasPhoto ? <img src={this.props.EditProfileStore.userData.url} className="img-edit" /> : <img src="https://storage.googleapis.com/schnitzel/default.jpg" className="img-edit" />}
+                  {this.props.EditProfileStore.userData.hasPhoto ? <img src={this.props.EditProfileStore.userData.url} id="editPhoto" className="img-edit" /> : <img src="https://storage.googleapis.com/schnitzel/default.jpg" id="editPhoto" className="img-edit" />}
                   <div className={`image-overlay ${this.props.EditProfileStore.selectedFile ? "changed" : ""}`}>
                     {this.props.EditProfileStore.selectedFile
                     ? <span className="change">Image selected</span>
                     : <span className="change">Change image</span>
                     }
                   </div>
-                  <input type="file" hidden onChange={(e) => this.props.EditProfileStore.imageChange(e.target.files[0])} />
+                  <input type="file" hidden onChange={(e) => {
+                    this.props.EditProfileStore.imageChange(e.target.files[0]);
+                    loadPhoto(e);
+                    }} />
                 </label>
               </div>
               {this.props.EditProfileStore.selectedFile && 
@@ -42,19 +46,20 @@ class EditProfile extends Component<EditProfileProps> {
                   onClick={(e) => {
                     e.preventDefault();
                     this.props.EditProfileStore.selectedFile = null;
+                    loadPhoto(e, "editPhoto", this.props.EditProfileStore.userData.hasPhoto ? this.props.EditProfileStore.userData.url : "https://storage.googleapis.com/schnitzel/default.jpg");
                   }}
                   className="btn btn-red"
                 >Remove selected image</button>
               }
               
               <hr />
-              <div className="lbl"><Switch store={new SwitchStore(this.props.EditProfileStore.editUsername, this.props.EditProfileStore.toggleUsername)} /><span>Change username</span></div>
+              <label onClick={this.props.EditProfileStore.toggleUsername} className="lbl"><Switch store={new SwitchStore(this.props.EditProfileStore.editUsername, this.props.EditProfileStore.toggleUsername)} /><span>Change username</span></label>
                 <input className="width-full py-3 f4" type="text" disabled={!this.props.EditProfileStore.editUsername} value={this.props.EditProfileStore.usernameValue || ""} onChange={(e) => this.props.EditProfileStore.usernameChange(e.target.value)} />
                 <br />
-                <div className="lbl"><Switch store={new SwitchStore(this.props.EditProfileStore.editEmail, this.props.EditProfileStore.toggleEmail)} /><span>Change e-mail</span></div>
+                <label onClick={this.props.EditProfileStore.toggleEmail} className="lbl"><Switch store={new SwitchStore(this.props.EditProfileStore.editEmail, this.props.EditProfileStore.toggleEmail)} /><span>Change e-mail</span></label>
                 <input className="width-full py-3 f4" type="email" disabled={!this.props.EditProfileStore.editEmail} value={this.props.EditProfileStore.emailValue || ""} onChange={(e) => this.props.EditProfileStore.emailChange(e.target.value)} />
                 <br />
-              <div className="lbl"><Switch store={new SwitchStore(this.props.EditProfileStore.editPassword, this.props.EditProfileStore.togglePassword)} /><span>Change password</span></div>
+              <label onClick={this.props.EditProfileStore.togglePassword} className="lbl"><Switch store={new SwitchStore(this.props.EditProfileStore.editPassword, this.props.EditProfileStore.togglePassword)} /><span>Change password</span></label>
               {this.props.EditProfileStore.editPassword
               && <><label>New password:<br />
                 <input className="width-full py-3 f4" type="password" value={this.props.EditProfileStore.passwordValue || ""} onChange={(e) => this.props.EditProfileStore.passwordChange(e.target.value)} />
@@ -64,7 +69,7 @@ class EditProfile extends Component<EditProfileProps> {
                 <input className="width-full py-3 f4" type="password" value={this.props.EditProfileStore.password2Value || ""} onChange={(e) => this.props.EditProfileStore.password2Change(e.target.value)} />
                 </label></>
               }
-              <div className="lbl"><Switch store={new SwitchStore(this.props.EditProfileStore.editPrivacy, this.props.EditProfileStore.togglePrivacy)} /><span>Change privacy</span></div>
+              <label onClick={this.props.EditProfileStore.togglePrivacy} className="lbl"><Switch store={new SwitchStore(this.props.EditProfileStore.editPrivacy, this.props.EditProfileStore.togglePrivacy)} /><span>Change privacy</span></label>
               {this.props.EditProfileStore.editPrivacy && <>
                 <div className="btn-radio">
                   <input id="private" type="radio" value="private" checked={this.props.EditProfileStore.privacyValue === "private"} onChange={(e) => this.props.EditProfileStore.privacyChange(e.target.value)}/>

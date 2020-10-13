@@ -87,7 +87,8 @@ class Profile extends Component<ProfileProps> {
                         <h1 className="text-center">{this.props.ProfileStore.profileData.username}</h1>
                     </div>
                     { (this.props.ProfileStore.myProfile || !this.props.ProfileStore.isPrivate) 
-                        ?  <>{this.props.ProfileStore.loadingPost 
+                        ?  <div className="posts" onScroll={this.props.ProfileStore.handleScroll}>
+                            {this.props.ProfileStore.loadingPost 
                             ? <>
                             <div className="posts-placeholder card col-9 my-6">
                               <div className="text-placeholder my-4 mx-1"></div>
@@ -115,7 +116,7 @@ class Profile extends Component<ProfileProps> {
                                 isAuth={this.props.ProfileStore.isAuth}
                                 from="profile" 
                             />)}</>
-                            }</>
+                            }</div>
                         :   <div className="mx-auto text-center my-5 h2">This profile is private.</div>
                     } { !this.props.ProfileStore.isPrivate && <>{ this.props.ProfileStore.last 
                     ?   <div className="text-center f2 mb-8">There are no more posts to load. <br /> 

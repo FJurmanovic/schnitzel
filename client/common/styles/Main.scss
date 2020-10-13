@@ -68,6 +68,11 @@ body{
         }
 
         .edit-profile {
+            form.form-edit-profile {
+                @media only screen and (max-width: 475px){
+                    width: 100% !important;
+                }
+            }
             .change-image {
                 margin: 0 auto;
                 width: fit-content;
