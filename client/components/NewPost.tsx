@@ -1,6 +1,6 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import {categories} from '../common/js';
+import {categories, loadPhoto} from '../common/js';
 
 import {Ingredient, FormComponent, InputComponent, FileComponent, CheckboxComponent, FormGroupComponent, DropdownComponent, TextAreaComponent} from './';
 
@@ -24,7 +24,7 @@ const fields = [
     {
         name: "image",
         type: "file",
-        value: null,
+        value: null
     },
     {
         name: "categories",
@@ -84,7 +84,8 @@ class NewPost extends React.Component<NewPostProps> {
                         <InputComponent className="width-full py-3 f4" message="Title: " errorMessage="Title must have between 1 and 50 characters" name="title" />
                         <DropdownComponent className="width-full f5 py-2 my-2" message="Type: " store={this.props.NewPostStore.typeStore} name="type" />
                         <DropdownComponent className="width-full f5 py-2 my-2" message="Privacy: " store={this.props.NewPostStore.privacyStore} name="privacy" />
-                        <FileComponent message="Image: " name="image" />
+                        <img id="newPhoto" className="width-full" />
+                        <FileComponent message="Image: " name="image" onChange={(e) => loadPhoto(e, "newPhoto")} />
                         <FormGroupComponent>
                             <div>Categories: </div>
                             {categories.map((category, key) => {

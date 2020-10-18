@@ -67,6 +67,14 @@ body{
             }
         }
 
+        .new-post {
+            form {
+                @media only screen and (max-width: 475px){
+                    width: 100% !important;
+                }
+            }
+        }
+
         .edit-profile {
             form.form-edit-profile {
                 @media only screen and (max-width: 475px){

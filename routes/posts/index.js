@@ -204,6 +204,19 @@ router.get('/edit-data/:postId', auth, async (req, res) => {
         }
         
         let postMap = {};
+
+        if(post.hasPhoto) {
+            let fileName = `post/${post._id}/${post._id}${post.photoExt}`;
+            const blob = bucket.file(fileName);
+            const blobStream = blob.getSignedUrl({
+                version: 'v4',
+                action: 'read',
+                expires: Date.now() + 1000 * 60 * 60 * 24 * 6
+            });
+
+            const [url] = await blobStream;
+            postMap["url"] = url;
+        }
     
         postMap["id"] = post._id;
         postMap["title"] = post.title;

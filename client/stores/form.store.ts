@@ -44,6 +44,8 @@ class FormStore {
     @observable typeStore: DropdownStore = new DropdownStore("showoff", 0, this.typeSearch, false);
     @observable privacyStore: DropdownStore = new DropdownStore("privacy", 0, this.privacySearch, false);
 
+    @observable imgUrl: string = null;
+
 
     @observable showNew: boolean = false;
 
@@ -56,6 +58,7 @@ class FormStore {
             this.privacyStore = new DropdownStore(data.isPrivate ? "private" : "public", 0, this.privacySearch, false);
             form.$("description").value = data.description;
             form.$("categories").value = data.categories;
+            if(data.hasPhoto) this.imgUrl = data.url;
             if(data.type === "recipe") {
                 data.ingredients.map(ingredient => {
                     this.addIngredientClick(null, form.$("ingredients"), ingredient.name, ingredient.amount, ingredient.unit);

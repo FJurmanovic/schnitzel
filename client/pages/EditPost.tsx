@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 
-import {categories} from '../common/js';
+import {categories, loadPhoto} from '../common/js';
 
 import {Ingredient, FormComponent, InputComponent, FileComponent, CheckboxComponent, FormGroupComponent, DropdownComponent, TextAreaComponent} from '../components';
 
@@ -98,7 +98,8 @@ class EditPost extends Component<EditPostProps> {
                         <InputComponent className="width-full py-3 f4" message="Title: " errorMessage="Title must have between 1 and 50 characters" name="title" />
                         <DropdownComponent className="width-full f5 py-2 my-2" message="Type: " store={this.props.EditPostStore.typeStore} name="type" />
                         <DropdownComponent className="width-full f5 py-2 my-2" message="Privacy: " store={this.props.EditPostStore.privacyStore} name="privacy" />
-                        <FileComponent message="Image: " name="image" />
+                        {this.props.EditPostStore.imgUrl ? <img src={this.props.EditPostStore.imgUrl} className="width-full" id="editPhoto" /> : <img src="https://storage.googleapis.com/schnitzel/default.jpg" className="width-full" id="editPhoto" />}
+                        <FileComponent message="Image: " name="image" onChange={(e) => loadPhoto(e, "editPhoto")} />
                         <FormGroupComponent>
                             <div>Categories: </div>
                             {categories.map((category, key) => {
