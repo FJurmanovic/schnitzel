@@ -11,13 +11,13 @@ import {PopoverStore} from '../stores';
 
 const OpenButton = (props) => {
     if (props.from == "home") {   
-        return <Link to={`/post/${props.id}`}>{props.children}</Link>
+        return <Link className={props.className} to={`/post/${props.id}`}>{props.children}</Link>
     } else if (props.from == "profile") {
-        return <Link to={`/post/${props.id}/1`}>{props.children}</Link>
+        return <Link className={props.className} to={`/post/${props.id}/1`}>{props.children}</Link>
     } else if (props.from == "explore") {
-        return <Link to={`/post/${props.id}/2`}>{props.children}</Link>
+        return <Link className={props.className} to={`/post/${props.id}/2`}>{props.children}</Link>
     } else if (props.from == "explore-category"){
-        return <Link to={`/post/${props.id}/3`}>{props.children}</Link>
+        return <Link className={props.className} to={`/post/${props.id}/3`}>{props.children}</Link>
     }
 }
 
@@ -35,7 +35,7 @@ type PostType = {
 export const Post = observer(({post, iter, userdata, togglePoint, authUser, from, removePost, isAuth}: PostType) => 
     <React.Fragment key={iter}>
         <div className="card col-9 my-6">
-            {post.hasPhoto && <div className="card-image"><OpenButton from={from} id={post.id}><img src={post.url} className="card-img-top" /></OpenButton></div>}
+            {post.hasPhoto && <div className="card-image"><OpenButton className="link--no-decor" from={from} id={post.id}><img src={post.url} className="card-img-top" /></OpenButton></div>}
             
             <div className="f5 pr-5 mb-n3 mt-3 top-card">
             {(userdata.id == post.userId || authUser == post.userId) &&<span className="float-right">{post.isPrivate && <span>Private post | </span>}<a href="./" onClick={() => removePost(post.id)}>Delete post</a> | <Link to={`/post/edit/${post.id}`}>Edit post</Link></span>}
@@ -62,10 +62,11 @@ export const Post = observer(({post, iter, userdata, togglePoint, authUser, from
                         </React.Fragment>
                     })}
                 </div>
-                <h3>{post.title}</h3>
-                <div className="f5 description">{post.description}</div>
+                <OpenButton className="link--no-decor" from={from} id={post.id}><h3>{post.title}</h3></OpenButton>
+                <OpenButton className="link--no-decor" from={from} id={post.id}><div className="f5 description">{post.description}</div></OpenButton>
                 {post.type == "recipe" &&
-                <>
+                <React.Fragment>
+                    <OpenButton className="link--no-decor" from={from} id={post.id}>
                     <div className="f5 ingredients">{post.ingredients.map((ingredient, j) => {
                         return <React.Fragment key={j}>
                             {j < 2 && <div className="ingredient"><span className="ingredient-name">{ingredient.name}</span><span className="ingredient-amount">{ingredient.amount}</span><span className="ingredient-unit">{ingredient.unit}</span></div>}
@@ -74,7 +75,8 @@ export const Post = observer(({post, iter, userdata, togglePoint, authUser, from
                         {post.ingredients.length > 3 && <div className="ingredient">...</div>}
                     </div>
                     <div className="f5 directions">{post.directions}</div>
-                </>
+                    </OpenButton>
+                </React.Fragment>
                 }
                 <div className="f5">Points: {post.points} {isAuth && <button className="btn-icon ml-n2" onClick={() => togglePoint(post.id, "post")}>{!post.isPointed ? <div className="gg-chevron-up"></div> : <div className="gg-chevron-up text-blue"></div>}</button> } <OpenButton from={from} id={post.id}><span className="mx-5">Comments: {post.comments}</span></OpenButton></div>
             </div>
