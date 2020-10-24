@@ -86,7 +86,7 @@ class NewPost extends React.Component<NewPostProps> {
                         <DropdownComponent className="width-full f5 py-2 my-2" message="Type: " store={this.props.NewPostStore.typeStore} name="type" />
                         <DropdownComponent className="width-full f5 py-2 my-2" message="Privacy: " store={this.props.NewPostStore.privacyStore} name="privacy" />
                         <PhotoPreview id="newPhoto" store={this.props.NewPostStore} />
-                        <FileComponent message="Image: " name="image" onChange={(e) => this.props.NewPostStore.loadPhoto(e)} />
+                        <FileComponent message="Image: " name="image" onChange={(e) => this.props.NewPostStore.loadPhoto(e)} selectedFile={this.props.NewPostStore.selectedFile} />
                         <FormGroupComponent>
                             <div>Categories: </div>
                             {categories.map((category, key) => {

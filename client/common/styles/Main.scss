@@ -705,6 +705,11 @@ body.dark {
             background-color: #b3b3b3;
         }
     }
+    &.selected {
+        span {
+            background-color: #86fd7b;
+        }
+    }
 }
 
 .btn-link {
