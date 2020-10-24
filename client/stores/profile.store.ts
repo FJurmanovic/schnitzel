@@ -23,7 +23,7 @@ class ProfileStore extends PostsStore {
 
     @observable followers: Array<any> = [];
     @observable following: Array<any> = [];
-
+    
 
     @computed get myProfile (): boolean {
         return this.profileData.id === this.authStore.userData.id;

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter, Link } from 'react-router-dom';
-import { Post, Followers } from '../components';
+import { Post, Followers, ScrollTop } from '../components';
 import { FollowersStore } from '../stores';
 
 type ProfileProps = {
@@ -15,36 +15,36 @@ type ProfileProps = {
 class Profile extends Component<ProfileProps> {
     componentWillMount() {
         let { profileName } = this.props.match.params;
+        window.addEventListener('scroll', this.props.ProfileStore.handleScroll);
         if (this.props.match.path === "/post/:postId/1") return;
         if (this.props.match.path === "/profile") profileName = this.props.ProfileStore.userData.username;
         this.props.ProfileStore.componentMounted(profileName, () => {
             if (this.props.ProfileStore.myProfile && profileName) this.props.history.push("/profile");
         });
-        window.addEventListener('scroll', this.props.ProfileStore.handleScroll);
     }
 
     componentWillUnmount() {
-        this.props.ProfileStore.destroy();
         window.removeEventListener('scroll', this.props.ProfileStore.handleScroll);
+        this.props.ProfileStore.destroy();
     }
 
     componentDidUpdate(prevProps) {
         let { profileName } = this.props.match.params;
         if(this.props.match.path === "/profile") profileName = this.props.ProfileStore.userData.username;
-        window.removeEventListener('scroll', this.props.ProfileStore.handleScroll);
+        //window.removeEventListener('scroll', this.props.ProfileStore.handleScroll);
         //if (this.props.match.path !== prevProps.match.path && (prevProps.match.path == "/post/:postId/1" || this.props.match.path == "/post/:postId/1") && this.props.ProfileStore.profileId) return;
         if (this.props.ProfileStore.profileData && profileName && profileName !== prevProps.match.params.profileName && this.props.ProfileStore.profileData.username !== profileName ) {
             this.props.ProfileStore.componentMounted(profileName, () => {
                 if (this.props.ProfileStore.myProfile && profileName) this.props.history.push("/profile");
             });
-            window.addEventListener('scroll', this.props.ProfileStore.handleScroll);
+            //window.addEventListener('scroll', this.props.ProfileStore.handleScroll);
         }
     }
 
     render() {
-        return <> {!this.props.ProfileStore.isLoading && <>
+        return <> <div onScroll={this.props.ProfileStore.handleScroll}>{!this.props.ProfileStore.isLoading && <>
             { this.props.ProfileStore.validProfile ? 
-            <div onScroll={this.props.ProfileStore.handleScroll}>
+            <div>
                 <div>
                     <div className="profile-image mx-auto text-center">{this.props.ProfileStore.profileData.hasPhoto ? <img src={this.props.ProfileStore.profileData.url} className="card-img-top" /> : <img src="https://storage.googleapis.com/schnitzel/default.jpg" className="card-img-top" />}</div>
                     <div className="mx-auto text-center">
@@ -87,7 +87,7 @@ class Profile extends Component<ProfileProps> {
                         <h1 className="text-center">{this.props.ProfileStore.profileData.username}</h1>
                     </div>
                     { (this.props.ProfileStore.myProfile || !this.props.ProfileStore.isPrivate) 
-                        ?  <div className="posts" onScroll={this.props.ProfileStore.handleScroll}>
+                        ?  <div className="posts">
                             {this.props.ProfileStore.loadingPost 
                             ? <>
                             <div className="posts-placeholder card col-9 my-6">
@@ -128,7 +128,12 @@ class Profile extends Component<ProfileProps> {
                 </div>
             </div>
             : <div className="mx-auto text-center my-10 h2">User could not be found.</div>
-        }</> } </>
+        }</> }
+        </div>
+            { this.props.ProfileStore.isScrolled &&
+                <ScrollTop />
+            }
+        </>
     }
 }
 

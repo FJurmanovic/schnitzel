@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { Link } from 'react-router-dom';
 
-import { Post, NewPost } from '../components';
+import { Post, NewPost, ScrollTop } from '../components';
+
 
 type FeedProps = {
     FeedStore?: any;
@@ -65,6 +66,9 @@ class Feed extends Component<FeedProps> {
                 }</>
                 }
             </div>
+            { this.props.FeedStore.isScrolled &&
+                <ScrollTop />
+            }
         </>;
     }
 }

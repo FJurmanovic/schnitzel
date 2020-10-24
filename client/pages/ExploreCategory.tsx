@@ -4,7 +4,7 @@ import { Link, withRouter } from 'react-router-dom';
 
 import { firstUpper, categories } from '../common/js';
 
-import { Post } from '../components/Post';
+import { Post, ScrollTop } from '../components';
 
 type ExploreCategoryProps = {
     ExploreCategoryStore?: any;
@@ -91,6 +91,9 @@ class ExploreCategory extends Component<ExploreCategoryProps> {
                 }</>
                 }
             </div>
+            { this.props.ExploreCategoryStore.isScrolled &&
+                <ScrollTop />
+            }
         </>;
     }
 }

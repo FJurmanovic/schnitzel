@@ -80,6 +80,17 @@ class PostsStore {
         if (windowBottom >= docHeight && this.page > 1) {
             this.postsGet();
         }
+
+        this.scrollAction();
+    }
+
+    @observable isScrolled = false;
+
+    @action scrollAction = (): void => {
+        const windowHeight = "innerHeight" in window ? window.innerHeight : document.documentElement.offsetHeight;
+        const windowBottom = windowHeight + window.pageYOffset;
+
+        this.isScrolled = (windowBottom - windowHeight) > 200;
     }
 
     @action destroy = (): void => {

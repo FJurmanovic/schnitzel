@@ -4,6 +4,7 @@ export {default as NewPost} from './NewPost';
 export {default as Comments} from './Comments';
 
 export {default as PhotoPreview} from './PhotoPreview';
+export {default as ScrollTop} from './ScrollTop';
 
 export {Post} from './Post';
 export {Popover} from './Popover';
