@@ -14,7 +14,10 @@ export const FileComponent = observer(({message, errorMessage, name, form, class
     <div>
         <label>
             {message && <div>{message}</div>}
-            <input className={className} {...form.$(name).bind()} onChange={onChange} />
+            <label className={`${className} file-input`}>
+                <span>Upload image...</span>
+                <input {...form.$(name).bind()} onChange={onChange} />
+            </label>
             {form.$(name).error && <div className="h5 text-red">{errorMessage}</div>}
         </label>
     </div>

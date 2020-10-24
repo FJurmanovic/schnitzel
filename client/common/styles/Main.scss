@@ -685,6 +685,28 @@ body.dark {
     }
 }
 
+.file-input {
+    input[type="file"] {
+        display: none;
+    }
+    span {
+        display: inline-block;
+        background-color: #dadada;
+        font-size: 14px;
+        font-weight: 600;
+        color: #000000;
+        padding: 8px 16px;
+        border-radius: .5rem;
+    }
+
+    &:hover {
+        cursor: pointer;
+        span {
+            background-color: #b3b3b3;
+        }
+    }
+}
+
 .btn-link {
     height: fit-content;
     width: fit-content;
