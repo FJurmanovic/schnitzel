@@ -1,6 +1,8 @@
 import {observable, action} from 'mobx';
 import {AuthStore, DropdownStore, ToastStore} from './';
 import { PostsService, ImageService } from '../services';
+
+import { loadPhoto } from '../common/js';
 const path = require('path');
 
 type PostObjectType = {
@@ -46,8 +48,9 @@ class FormStore {
 
     @observable imgUrl: string = null;
 
-
     @observable showNew: boolean = false;
+
+    @observable selectedFile: File = null;
 
     @action setData = (form: any, data: any): void => {
         if(data.id) {
@@ -68,6 +71,17 @@ class FormStore {
             this.showNew = true;
             this.postId = data.id;
         }
+    }
+
+    @action loadPhoto = (e: any): void => {
+        this.selectedFile = e.target.files[0];
+        loadPhoto(e, this.formType == "new" ? "newPhoto" : "editPhoto");
+    }
+
+    @action unloadPhoto = (e: any): void => {
+        e.preventDefault();
+        loadPhoto(e, this.formType == "new" ? "newPhoto" : "editPhoto", this.imgUrl ? this.imgUrl : null);
+        this.selectedFile = null;
     }
 
     getData = async (postId: string, form: any): Promise<void> => {
@@ -96,6 +110,8 @@ class FormStore {
         let data = new FormData();
         data.append('file', file);
 
+        console.log(postObject, values)
+
         if(values.type === "showoff") {
             postObject = {
                 title: values.title,
@@ -110,10 +126,10 @@ class FormStore {
                 postObject.hasPhoto = true;
                 postObject.photoExt = path.extname(file.name);
             }
-        } else if (values.type === "post") {
+        } else if (values.type === "recipe") {
             postObject = {
                 title: values.title,
-                type: "post",
+                type: "recipe",
                 isPrivate: privacy,
                 description: values.description,
                 categories: values.categories,

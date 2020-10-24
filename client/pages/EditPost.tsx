@@ -4,7 +4,7 @@ import { withRouter } from 'react-router-dom';
 
 import {categories, loadPhoto} from '../common/js';
 
-import {Ingredient, FormComponent, InputComponent, FileComponent, CheckboxComponent, FormGroupComponent, DropdownComponent, TextAreaComponent} from '../components';
+import {Ingredient, FormComponent, InputComponent, FileComponent, CheckboxComponent, FormGroupComponent, DropdownComponent, TextAreaComponent, PhotoPreview} from '../components';
 
 import {FormsService} from '../services';
 const fields = [
@@ -68,7 +68,7 @@ class EditPost extends Component<EditPostProps> {
         super(props);
         this.hooks = {
             onSuccess(form) {
-                const file = form.$("image").files && form.$("image").files[0] || null;
+                const file = props.EditPostStore.selectedFile || null;
                 props.EditPostStore.submitClick(form.values(), file, props.history);
             },
             onError(form) {
@@ -98,8 +98,8 @@ class EditPost extends Component<EditPostProps> {
                         <InputComponent className="width-full py-3 f4" message="Title: " errorMessage="Title must have between 1 and 50 characters" name="title" />
                         <DropdownComponent className="width-full f5 py-2 my-2" message="Type: " store={this.props.EditPostStore.typeStore} name="type" />
                         <DropdownComponent className="width-full f5 py-2 my-2" message="Privacy: " store={this.props.EditPostStore.privacyStore} name="privacy" />
-                        {this.props.EditPostStore.imgUrl ? <img src={this.props.EditPostStore.imgUrl} className="width-full" id="editPhoto" /> : <img src="https://storage.googleapis.com/schnitzel/default.jpg" className="width-full" id="editPhoto" />}
-                        <FileComponent message="Image: " name="image" onChange={(e) => loadPhoto(e, "editPhoto")} />
+                        <PhotoPreview id="editPhoto" store={this.props.EditPostStore} src={this.props.EditPostStore.imgUrl} />
+                        <FileComponent message="Image: " name="image" onChange={(e) => this.props.EditPostStore.loadPhoto(e)} />
                         <FormGroupComponent>
                             <div>Categories: </div>
                             {categories.map((category, key) => {

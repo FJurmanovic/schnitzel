@@ -73,6 +73,21 @@ body{
                     width: 100% !important;
                 }
             }
+            .card-image {
+                overflow: hidden;
+                max-height: 471px;
+                border-radius: .25rem;
+
+                .card-img-top {
+                    margin: auto; 
+                    min-height: 100%;
+                    min-width: 100%;
+                    left: -100%;
+                    right: -100%;
+                    top: -100%;
+                    bottom: -100%;
+                }
+            }
         }
 
         .edit-profile {

@@ -2,7 +2,7 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import {categories, loadPhoto} from '../common/js';
 
-import {Ingredient, FormComponent, InputComponent, FileComponent, CheckboxComponent, FormGroupComponent, DropdownComponent, TextAreaComponent} from './';
+import {Ingredient, FormComponent, InputComponent, FileComponent, CheckboxComponent, FormGroupComponent, DropdownComponent, TextAreaComponent, PhotoPreview} from './';
 
 import {FormsService} from '../services';
 const fields = [
@@ -65,7 +65,7 @@ class NewPost extends React.Component<NewPostProps> {
         super(props);
         this.hooks = {
             onSuccess(form) {
-                const file = form.$("image").files && form.$("image").files[0] || null;
+                const file = props.NewPostStore.selectedFile || null;
                 props.NewPostStore.submitClick(form.values(), file, props.history);
             },
             onError(form) {
@@ -77,6 +77,7 @@ class NewPost extends React.Component<NewPostProps> {
         forms.reset();
     }
     render() {
+        console.log(forms.$("image").files)
         return <>
             { this.props.NewPostStore.showNew
             ?   <div className="new-post">
@@ -84,8 +85,8 @@ class NewPost extends React.Component<NewPostProps> {
                         <InputComponent className="width-full py-3 f4" message="Title: " errorMessage="Title must have between 1 and 50 characters" name="title" />
                         <DropdownComponent className="width-full f5 py-2 my-2" message="Type: " store={this.props.NewPostStore.typeStore} name="type" />
                         <DropdownComponent className="width-full f5 py-2 my-2" message="Privacy: " store={this.props.NewPostStore.privacyStore} name="privacy" />
-                        <img id="newPhoto" className="width-full" />
-                        <FileComponent message="Image: " name="image" onChange={(e) => loadPhoto(e, "newPhoto")} />
+                        <PhotoPreview id="newPhoto" store={this.props.NewPostStore} />
+                        <FileComponent message="Image: " name="image" onChange={(e) => this.props.NewPostStore.loadPhoto(e)} />
                         <FormGroupComponent>
                             <div>Categories: </div>
                             {categories.map((category, key) => {
