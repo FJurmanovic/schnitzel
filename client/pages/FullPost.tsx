@@ -27,7 +27,8 @@ class FullPost extends Component<FullPostProps> {
 
     goBack() {
         if (this.props.history.action == "PUSH") return this.props.history.goBack();
-        if (this.props.FullPostStore.postObject.username !== "Deleted user") return this.props.history.push("/" + this.props.FullPostStore.postObject.username);
+        if (this.props.match.path === "/post/:postId/1" && this.props.FullPostStore.postObject.username !== "Deleted user") return this.props.history.push("/" + this.props.FullPostStore.postObject.username);
+        if (this.props.match.path === "/post/:postId/2" || this.props.match.path === "/post/:postId/3") return this.props.history.push("/explore")
         return this.props.history.push("/");
     }
 
