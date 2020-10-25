@@ -1102,12 +1102,17 @@ body.dark {
 @media only screen and (max-width: 590px){
     .search-custom {
         margin-left: 52px;
-        width: auto;
+        width: calc(100vw - 250px);
     }
 }
 
 
 @media only screen and (max-width: 475px){
+    .search-custom {
+        position: absolute;
+        left: calc(50% - 150px);
+        width: auto;
+    }
     .header-small {
         display: block;
     }
@@ -1136,6 +1141,15 @@ body.dark {
                 }
             }
         }
+    }
+}
+
+@media only screen and (max-width: 330px) {
+    .search-custom {
+        position: relative;
+        width: calc(100vw - 150px);
+        left: 0;
+        margin-left: 0;
     }
 }
 
