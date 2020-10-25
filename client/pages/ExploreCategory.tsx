@@ -40,10 +40,10 @@ class ExploreCategory extends Component<ExploreCategoryProps> {
         return <>
             <div className="d-flex">
                 <div className="d-inline-block mx-auto">
-                    <Link className="btn btn-lightgreen btn-rounder mx-1 my-1" to={`/explore`}>All</Link>
+                    <Link className="btn category-btn btn-rounder mx-1 my-1" to={`/explore`}>All</Link>
                     {categories.map((category, key) => {
                         return <React.Fragment key={key}>
-                            <Link className={`btn ${category === this.props.match.params.categoryId ? "btn-lightblue" : "btn-lightgreen" }  btn-rounder mx-1 my-1`} to={`/explore/f/${category}`}>{firstUpper(category)}</Link>
+                            <Link className={`btn category-btn ${category === this.props.match.params.categoryId && "-pressed" }  btn-rounder mx-1 my-1`} to={`/explore/f/${category}`}>{firstUpper(category)}</Link>
                         </React.Fragment>
                     })}
                 </div>

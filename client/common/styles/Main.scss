@@ -1227,4 +1227,19 @@ body.dark {
         from {opacity: 1;}
         to {opacity: 0;}
       }
+
+}
+
+.category-btn {
+    background-color: #dfdfdf !important;
+    color: #000000 !important;
+    &:hover {
+        background-color: #ffffff !important;
+    }
+    &.-pressed {
+        background-color: #828282 !important;
+        &:hover {
+            background-color: #aaaaaa !important;
+        }
+    }
 }

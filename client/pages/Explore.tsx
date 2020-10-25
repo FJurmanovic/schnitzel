@@ -29,10 +29,10 @@ class Explore extends Component<ExploreProps> {
         return <>
             <div className="d-flex">
                 <div className="d-inline-block mx-auto">
-                    <Link className="btn btn-lightblue btn-rounder mx-1 my-1" to={`/explore`}>All</Link>
+                    <Link className="btn category-btn -pressed btn-rounder mx-1 my-1" to={`/explore`}>All</Link>
                     {categories.map((category, key) => {
                         return <React.Fragment key={key}>
-                            <Link className="btn btn-lightgreen btn-rounder mx-1 my-1" to={`/explore/f/${category}`}>{firstUpper(category)}</Link>
+                            <Link className="btn category-btn btn-rounder mx-1 my-1" to={`/explore/f/${category}`}>{firstUpper(category)}</Link>
                         </React.Fragment>
                     })}
                 </div>
