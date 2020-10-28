@@ -94,7 +94,7 @@ class EditPost extends Component<EditPostProps> {
         return <>
             { this.props.EditPostStore.showNew
             ?   <div className="new-post">
-                    <FormComponent className="col-7 mx-auto" form={forms} onSubmit={(e) => forms.onSubmit(e, this.hooks)} onCancel={() => this.props.history.push("/")}>
+                    <FormComponent className="col-9 mx-auto" form={forms} onSubmit={(e) => forms.onSubmit(e, this.hooks)} onCancel={() => this.props.history.push("/")}>
                         <InputComponent className="width-full py-3 f4" message="Title: " errorMessage="Title must have between 1 and 50 characters" name="title" />
                         <DropdownComponent className="width-full f5 py-2 my-2" message="Type: " store={this.props.EditPostStore.typeStore} name="type" />
                         <DropdownComponent className="width-full f5 py-2 my-2" message="Privacy: " store={this.props.EditPostStore.privacyStore} name="privacy" />

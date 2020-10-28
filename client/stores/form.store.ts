@@ -43,8 +43,8 @@ class FormStore {
         })
     }
 
-    @observable typeStore: DropdownStore = new DropdownStore("showoff", 0, this.typeSearch, false);
-    @observable privacyStore: DropdownStore = new DropdownStore("privacy", 0, this.privacySearch, false);
+    @observable typeStore: DropdownStore = new DropdownStore("showoff", 0, this.typeSearch, false, false);
+    @observable privacyStore: DropdownStore = new DropdownStore("privacy", 0, this.privacySearch, false, false);
 
     @observable imgUrl: string = null;
 
@@ -56,9 +56,9 @@ class FormStore {
         if(data.id) {
             form.$("title").value = data.title;
             form.$("type").value = data.type;
-            this.typeStore = new DropdownStore(data.type, 0, this.typeSearch, false);
+            this.typeStore = new DropdownStore(data.type, 0, this.typeSearch, false, false);
             form.$("privacy").value = data.isPrivate ? "private" : "public";
-            this.privacyStore = new DropdownStore(data.isPrivate ? "private" : "public", 0, this.privacySearch, false);
+            this.privacyStore = new DropdownStore(data.isPrivate ? "private" : "public", 0, this.privacySearch, false, false);
             form.$("description").value = data.description;
             form.$("categories").value = data.categories;
             if(data.hasPhoto) this.imgUrl = data.url;

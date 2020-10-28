@@ -21,10 +21,12 @@ export const DropdownComponent = observer(({className, message, errorMessage, st
                 <input {...form.$(name).bind({value: store.textFieldName, type: "hidden"})} />
                 {store.isOpen &&
                 <div className={`dropdown-custom-open ${className || ""}`}>
-                    <input className="dropdown-custom-search" type="text" value={store.searchPhrase} onChange={(e) => store.phraseChange(e.target.value)} autoFocus />
+                    { store.showInput &&
+                        <input className="dropdown-custom-search" type="text" value={store.searchPhrase} onChange={(e) => store.phraseChange(e.target.value)} autoFocus />
+                    }
                     <ul className="dropdown-custom-list">
                         {store.fieldArray.map((field, key) => 
-                            <li key={key} className="dropdown-custom-listitem" onClick={() => {
+                            <li key={key} className={`dropdown-custom-listitem ${store.keyFieldName === key ? "--selected" : ""}`} onClick={() => {
                                 form.$(name).value = field;
                                 store.textChange(field, key);
                             }}>{field}</li>

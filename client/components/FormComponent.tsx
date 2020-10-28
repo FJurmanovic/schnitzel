@@ -11,7 +11,7 @@ type FormType = {
 
 const cloneElement: any = React.cloneElement;
 
-export const FormComponent = observer(({onSubmit, onCancel, children, form, className}: FormType) => 
+export default observer(({onSubmit, onCancel, children, form, className}: FormType) => 
     <form onSubmit={onSubmit} className={className}>
         {React.Children.map(children, child => {
             if (React.isValidElement(child) && (child.type !== "div" && child.type !== "span" && child.type !== "button" && child.type !== "br")) {

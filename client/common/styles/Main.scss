@@ -618,7 +618,7 @@ body{
 
         form {
             textarea {
-                min-height: 80px;
+                min-height: 130px;
                 border-radius: .25em;
             }
         }
@@ -764,14 +764,13 @@ body.dark {
     div.dropdown-custom-top {
         position: relative;
         background-color: #ffffff;
-        border: 1px solid transparent;
+        border: 1px solid #858585;
         color: #09090a;
         border-radius: 2px;
         cursor: pointer;
         padding: 5px 0;
         font-weight: 500;
         font-size: 16px;
-        border: 1px solid #767676;
         border-radius: 3px;
         &::after {
             content: "";  
@@ -814,7 +813,7 @@ body.dark {
         }
     }
     div.dropdown-custom-open {
-        border: 1px solid transparent;
+        border: 1px solid  #858585;
         border-top: none;
         margin-top: 0 !important;
         background-color: #fbfafa;
@@ -854,6 +853,9 @@ body.dark {
                 user-select: none;
                 cursor: pointer;
                 &:hover {
+                    background-color: #c6d8ff;
+                }
+                &.--selected {
                     background-color: #c6d8ff;
                 }
             }

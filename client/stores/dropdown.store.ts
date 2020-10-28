@@ -5,11 +5,15 @@ class DropdownStore {
     keyFieldName: number;
     fetchFunc: Function;
     initFetch: boolean;
-    constructor (textFieldName, keyFieldName, fetchFunc, initFetch) {
+    searchPhrase: string;
+    showInput: boolean;
+    constructor (textFieldName, keyFieldName, fetchFunc, initFetch, showInput) {
         this.textFieldName = textFieldName;
         this.keyFieldName = keyFieldName;
         this.fetchFunc = fetchFunc;
         this.initFetch = initFetch;
+        this.showInput = showInput;
+        this.searchPhrase = "";
         if(this.initFetch) {
             this.getSearch();
         }
@@ -17,7 +21,6 @@ class DropdownStore {
     @observable isOpen = false;
     @observable fieldArray: Array<any> = [];
 
-    searchPhrase: string = "";
 
     toggleDropdown = (): void => {
         this.isOpen = !this.isOpen;
