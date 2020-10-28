@@ -716,7 +716,7 @@ body.dark {
     position: fixed;
     bottom: 40px;
     right: 40px;
-    background-color: #000000bb;
+    background-color: #000000;
     border-radius: 50%;
     width: 60px;
     height: 60px;
@@ -725,9 +725,17 @@ body.dark {
     cursor: pointer;
     span {
         display: inline-block;
-        margin-top: 14px;
+        margin-top: 16px;
         text-transform: uppercase;
+        transform: scale(1.5);
         font-size: 11px;
+        color: #ffffff;
+    }
+
+    &:hover {
+        span {
+            color: #0059ff;
+        }
     }
 }
 

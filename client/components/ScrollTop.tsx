@@ -4,6 +4,6 @@ import { scrollToTop } from '../common/js';
 
 export default function () {
     return <div className="scroll-top" onClick={scrollToTop}>
-            <span className="noselect">Scroll to top</span>
+            <span className="noselect gg-chevron-up"></span>
         </div>
 }
