@@ -259,10 +259,7 @@ body{
                             display: block
                         }
                     }
-                }
-                
-
-                    
+                }                   
                 .others:hover .under-categories {
                     display: block;
                 }
@@ -276,72 +273,6 @@ body{
                 }
                 .author a {
                     padding-bottom: 5px;
-                }
-                .author a:hover ~ .popover-author, .popover-author:hover {
-                    display: block;
-                    position: absolute;
-                    background: #fbfbfb;
-                    border: 1px solid #b6b6b6;
-                    border-radius: .2em;
-                    margin-top: -1px;
-                    z-index: 10000;
-                    width: 200px;
-                    height: 66px;
-                }
-                .popover-author {
-                    display: none;
-                    .md-photo {
-                        top: 6px;
-                        left: 7px;
-                        position: absolute;
-                        vertical-align: middle;
-                        display: inline-block;
-                        //margin-left: 15px !important;
-                        img {
-                            width: 50px;
-                            height: 50px;
-                            border: 1px solid transparent;
-                            border-radius: .4em;
-                        }
-                    }
-
-                    .author-user {
-                        position: absolute;
-                        margin-left: 8px;
-                        font-size: 18px;
-                        font-weight: 500;
-                        width: 118px;
-                        overflow: hidden;
-                        white-space: nowrap;
-                        text-overflow: ellipsis;
-                    }
-                    .author-post {
-                        color: #7c7c7c;
-                        margin-top: 25px;
-                        margin-left: 8px;
-                        font-size: 14px;
-                        font-weight: 500;
-                        width: 118px;
-                        position: absolute;
-                        overflow: hidden;
-                        white-space: nowrap;
-                        text-overflow: ellipsis;
-                    }
-                    .author-flw {
-                        margin-top: 55px;
-                        margin-bottom: 5px;
-                        left: 0;
-                        width: 186px;
-                        
-                        position: absolute;
-                        a {
-                            width: 100%;
-                        }
-                    }
-
-                    &.flw {
-                        height: 100px !important;
-                    }
                 }
                 .comment {
                     margin-top: 25px;
@@ -587,13 +518,17 @@ body{
                     .flw-li {
                         border: 1px solid #b8b8b8;
                         border-radius: .25em; 
+                        padding: 3px 0;
 
                         &:hover{
                             border-color: #868686;
+                            text-decoration: underline;
+                            cursor: pointer;
                         }
 
                         span {
                             margin: 4px;
+                            color: #0059ff;
                             font-size: 16px;
                             
                             a{
@@ -1265,5 +1200,75 @@ body.dark {
         &:hover {
             background-color: #aaaaaa !important;
         }
+    }
+}
+
+.author a:hover ~ .popover-author, .popover-author:hover, 
+.follower a:hover ~ .popover-author, .popover-author:hover, 
+div.pop:hover ~ .popover-author, .popover-author:hover {
+    display: block;
+    position: absolute;
+    background: #fbfbfb;
+    border: 1px solid #b6b6b6;
+    border-radius: .2em;
+    margin-top: -1px;
+    margin-left: 15px;
+    z-index: 10000;
+    width: 200px;
+    height: 66px;
+}
+.popover-author {
+    display: none;
+    .md-photo {
+        top: 6px;
+        left: 7px;
+        position: absolute;
+        vertical-align: middle;
+        display: inline-block;
+        //margin-left: 15px !important;
+        img {
+            width: 50px;
+            height: 50px;
+            border: 1px solid transparent;
+            border-radius: .4em;
+        }
+    }
+
+    .author-user {
+        position: absolute;
+        margin-left: 8px;
+        font-size: 18px;
+        font-weight: 500;
+        width: 118px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+    .author-post {
+        color: #7c7c7c;
+        margin-top: 25px;
+        margin-left: 8px;
+        font-size: 14px;
+        font-weight: 500;
+        width: 118px;
+        position: absolute;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+    .author-flw {
+        margin-top: 55px;
+        margin-bottom: 5px;
+        left: 0;
+        width: 186px;
+        
+        position: absolute;
+        a {
+            width: 100%;
+        }
+    }
+
+    &.flw {
+        height: 100px !important;
     }
 }

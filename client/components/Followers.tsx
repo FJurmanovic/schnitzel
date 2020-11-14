@@ -1,15 +1,18 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
+import {Link, withRouter} from 'react-router-dom';
 import { observer } from 'mobx-react';
 import {firstUpper} from '../common/js';
+import { Popover } from './';
+import { PopoverStore } from '../stores';
 
 type FollowersType = {
     type?: string,
     store?: any,
-    exitScreen?: any
+    exitScreen?: any,
+    history?: any
 }
 
-export const Followers = observer(({type, store, exitScreen}: FollowersType) => 
+export const Followers = withRouter(observer(({type, store, exitScreen, history}: FollowersType) => 
     <div className="overlay" onClick={exitScreen}>
         <div className="followers" onClick={(e) => store.stayHere(e)}>
             <div className="flwrs">
@@ -18,7 +21,15 @@ export const Followers = observer(({type, store, exitScreen}: FollowersType) =>
                 ?   <div className="list">
                         { store.list.map((follower, key) => 
                             <React.Fragment key={key}>
-                                <span onClick={(e) => exitScreen(e)}><li className="flw-li mx-3 my-2"><span><Link to={`/${follower.username}`}>{follower.username}</Link></span></li></span>
+                                <div>
+                                    <Popover store={new PopoverStore} username={follower.username}>
+                                        <span onClick={(e) => history.push(`/${follower.username}`)}>
+                                            <li className="flw-li mx-3 my-2">
+                                                <span>{follower.username}</span>
+                                            </li>
+                                        </span>
+                                    </Popover>
+                                </div>
                             </React.Fragment>
                         )}
                     </div>
@@ -37,4 +48,4 @@ export const Followers = observer(({type, store, exitScreen}: FollowersType) =>
             </div>
         </div>
     </div>
-);
+));
