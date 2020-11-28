@@ -5,6 +5,8 @@ import {withRouter} from 'react-router-dom';
 import {FormComponent, InputComponent, RadioComponent, FormGroupComponent, DropdownComponent} from '../components';
 
 import {FormsService} from '../services';
+import { RegisterProps } from 'Types';
+
 const fields = [
     {
         name: "username",
@@ -46,13 +48,7 @@ const fields = [
     }
 ]
 
-
 const forms:any = new FormsService({fields});
-
-type RegisterProps = {
-  RegisterStore: any;
-  history: any;
-}
 
 @inject("RegisterStore")
 @observer

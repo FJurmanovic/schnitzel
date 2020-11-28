@@ -1,17 +1,9 @@
 import React, { Component } from 'react';
 import {observer, inject} from 'mobx-react';
+import { CommentsProps } from 'Types';
 
 import { NewComment, Popover } from './';
-
 import {PopoverStore, NewCommentStore} from '../stores';
-
-interface CommentsProps {
-    store: any,
-    FullPostStore?: any,
-    id: string,
-    commentId?: string,
-    hasComments: boolean
-}
 
 @inject("FullPostStore")
 @observer

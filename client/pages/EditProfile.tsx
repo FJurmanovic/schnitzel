@@ -1,15 +1,10 @@
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import {withRouter} from 'react-router-dom';
-
 import {Switch} from '../components';
 import {SwitchStore} from '../stores';
 import { loadPhoto } from '../common/js';
-
-type EditProfileProps = {
-  EditProfileStore?: any;
-  history?: any;
-}
+import { EditProfileProps } from 'Types';
 
 @inject("EditProfileStore")
 @observer

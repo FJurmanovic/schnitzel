@@ -3,12 +3,7 @@ import { inject, observer } from 'mobx-react';
 import { withRouter, Link } from 'react-router-dom';
 import { Post, Followers, ScrollTop } from '../components';
 import { FollowersStore } from '../stores';
-
-type ProfileProps = {
-    match?: any;
-    history?: any;
-    ProfileStore?: any;
-}
+import { ProfileProps } from 'Types';
 
 @inject("ProfileStore")
 @observer

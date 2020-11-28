@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
-
 import {categories, loadPhoto} from '../common/js';
-
 import {Ingredient, FormComponent, InputComponent, FileComponent, CheckboxComponent, FormGroupComponent, DropdownComponent, TextAreaComponent, PhotoPreview} from '../components';
-
 import {FormsService} from '../services';
+import { EditPostProps } from 'Types';
+
 const fields = [
     {
         name: "title",
@@ -52,12 +51,6 @@ const fields = [
 
 
 const forms: any = new FormsService({fields});
-
-type EditPostProps = {
-    EditPostStore?: any;
-    match?: any;
-    history?: any;
-}
 
 
 @inject("EditPostStore")

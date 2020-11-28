@@ -1,11 +1,6 @@
 import React from 'react';
 import {observer} from 'mobx-react';
-
-type IngredientType = {
-    form?: any,
-    i: number,
-    name: string 
-}
+import { IngredientType } from 'Types';
 
 export const Ingredient = observer(({form, i, name}: IngredientType) => 
     <div className="ingredient">

@@ -1,15 +1,6 @@
 import React from 'react';
 import {observer} from 'mobx-react';
-
-type FileType = {
-    message?: string,
-    errorMessage?: string,
-    name?: string,
-    form?: any,
-    className?: string,
-    onChange?: any,
-    selectedFile?: any
-}
+import { FileType } from 'Types';
 
 export const FileComponent = observer(({message, errorMessage, name, form, className, onChange, selectedFile}: FileType) => 
     <div>

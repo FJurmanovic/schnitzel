@@ -5,6 +5,8 @@ import {withRouter} from 'react-router-dom';
 import {FormComponent, InputComponent} from '../components';
 
 import {FormsService} from '../services';
+import { LoginProps } from 'Types';
+
 const fields = [
     {
         name: "email",
@@ -20,11 +22,6 @@ const fields = [
 
 
 const forms:any = new FormsService({fields});
-
-type LoginProps = {
-    LoginStore?: any;
-    history?: any
-}
 
 @inject("LoginStore")
 @observer

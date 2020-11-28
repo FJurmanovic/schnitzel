@@ -1,14 +1,6 @@
 import React from 'react';
 import {observer} from 'mobx-react';
-
-type InputType = {
-    message?: string,
-    errorMessage?: string,
-    name?: string,
-    form?: any,
-    className?: string,
-    autoFocus?: boolean
-}
+import { InputType } from 'Types';
 
 export const InputComponent = observer(({message, errorMessage, name, form, className, autoFocus}: InputType) => 
     <div>

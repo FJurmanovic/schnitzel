@@ -1,21 +1,11 @@
 import React, {Component} from 'react';
 import {BrowserRouter as Router, Switch, Route, Redirect, withRouter} from 'react-router-dom';
+import { observer, inject } from 'mobx-react';
+import { DemoProps, AppProps } from 'Types';
 
 import {Landing, Login, Register, EditProfile, Feed, Explore, ExploreCategory, Profile, EditPost, FullPost} from '../pages';
 import {Navbar, Toast} from './';
-
 import {ToastStore} from '../stores';
-
-import { observer, inject } from 'mobx-react';
-
-interface DemoProps {
-    store: any,
-    history: any
-}
-
-interface AppProps {
-    AuthStore: any
-}
 
 const closeDetails = function() {
     let menu = document.getElementById("profile");

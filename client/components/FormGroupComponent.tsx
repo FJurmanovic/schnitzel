@@ -1,11 +1,6 @@
 import React from 'react';
 import {observer} from 'mobx-react';
-
-type FormGroupType = {
-    children?: Array<any>,
-    form?: any,
-    className?: string
-}
+import { FormGroupType } from 'Types';
 
 const cloneElement: any = React.cloneElement;
 

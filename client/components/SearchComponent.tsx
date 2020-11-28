@@ -1,11 +1,7 @@
 import React, {useEffect} from 'react';
 import {useHistory} from 'react-router-dom'
 import {observer} from 'mobx-react';
-
-type SearchType = {
-    className?: string,
-    store?: any,
-}
+import { SearchType } from 'Types';
 
 export const SearchComponent = observer(({className, store}: SearchType) =>
     {

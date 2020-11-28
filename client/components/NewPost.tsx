@@ -1,6 +1,7 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import {categories, loadPhoto} from '../common/js';
+import { NewPostProps } from 'Types';
 
 import {Ingredient, FormComponent, InputComponent, FileComponent, CheckboxComponent, FormGroupComponent, DropdownComponent, TextAreaComponent, PhotoPreview} from './';
 
@@ -48,13 +49,7 @@ const fields = [
 
 ]
 
-
 const forms: any = new FormsService({fields});
-
-interface NewPostProps {
-    NewPostStore?: any,
-    history?: any
-}
 
 @inject("NewPostStore")
 @observer

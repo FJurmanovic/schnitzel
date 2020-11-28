@@ -5,17 +5,13 @@ import { getRandomInt, getTheme } from '../common/js';
 
 import {Switch, SearchComponent} from './';
 import {SwitchStore, SearchStore} from '../stores';
+import { NavbarProps } from 'Types';
 
 const searchStore = new SearchStore("Search", 0);
 
 const themeSwitch = new SwitchStore(getTheme("getBool"), () => {
   getTheme("toggle");
 });
-
-interface NavbarProps {
-  AuthStore: any,
-  location: any
-}
 
 const Logo = (props) => {
   const logos = ["chicken", "hamburger", "beef", "salad"];

@@ -4,12 +4,7 @@ import { withRouter, Link } from 'react-router-dom';
 
 import { Comments, NewComment, Popover } from '../components';
 import {PopoverStore, NewCommentStore} from '../stores';
-
-type FullPostProps = {
-    match?: any;
-    history?: any;
-    FullPostStore?: any;
-}
+import { FullPostProps } from 'Types';
 
 @inject("FullPostStore")
 @observer

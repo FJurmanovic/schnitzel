@@ -1,11 +1,6 @@
 import React from 'react';
 import {observer} from 'mobx-react';
-
-type CheckboxType = {
-    name: string,
-    form?: any,
-    value: string
-}
+import { CheckboxType } from 'Types';
 
 export const CheckboxComponent = observer(({name, form, value}: CheckboxType) => 
     <div className="btn-checkbox">

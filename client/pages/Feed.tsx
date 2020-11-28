@@ -1,13 +1,8 @@
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { Link } from 'react-router-dom';
-
 import { Post, NewPost, ScrollTop } from '../components';
-
-
-type FeedProps = {
-    FeedStore?: any;
-}
+import { FeedProps } from 'Types';
 
 @inject("FeedStore")
 @observer

@@ -46,7 +46,10 @@ module.exports = {
         })
     ],
     resolve: {
-        extensions: ['.js', '.jsx', '.ts', '.tsx']
+        extensions: ['.js', '.jsx', '.ts', '.tsx'],
+        root: [
+            path.resolve('./public')
+        ]
     },
     devServer: {
         historyApiFallback: true,

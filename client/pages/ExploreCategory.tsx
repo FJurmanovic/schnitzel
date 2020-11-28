@@ -1,15 +1,9 @@
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { Link, withRouter } from 'react-router-dom';
-
 import { firstUpper, categories } from '../common/js';
-
 import { Post, ScrollTop } from '../components';
-
-type ExploreCategoryProps = {
-    ExploreCategoryStore?: any;
-    match?: any;
-}
+import { ExploreCategoryProps } from 'Types';
 
 @inject("ExploreCategoryStore")
 @observer

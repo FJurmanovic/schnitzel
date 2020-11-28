@@ -1,14 +1,6 @@
 import React from 'react';
 import {observer} from 'mobx-react';
-
-type DropdownType = {
-    className?: string,
-    message?: string,
-    errorMessage?: string,
-    store?: any,
-    form?: any,
-    name?: string
-}
+import { DropdownType } from 'Types';
 
 export const DropdownComponent = observer(({className, message, errorMessage, store, form, name}: DropdownType) =>
     <div>

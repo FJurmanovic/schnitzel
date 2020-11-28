@@ -1,14 +1,6 @@
 import React from 'react';
 import {observer} from 'mobx-react';
-
-type TextAreaType = {
-    message?: string,
-    errorMessage?: string,
-    name?: string,
-    form?: any,
-    className?: string,
-    autoFocus?: boolean
-}
+import { TextAreaType } from 'Types';
 
 export const TextAreaComponent = observer(({message, errorMessage, name, form, className, autoFocus}: TextAreaType) => 
     <div>

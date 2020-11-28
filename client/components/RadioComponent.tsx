@@ -1,11 +1,6 @@
 import React from 'react';
 import {observer} from 'mobx-react';
-
-type RadioType = {
-    name?: string,
-    form?: any,
-    value?: string
-}
+import { RadioType } from 'Types';
 
 export const RadioComponent = observer(({name, form, value}: RadioType) => 
     <div className="btn-radio">

@@ -1,5 +1,15 @@
-type ThemeTypes = "get" | "set" | "getBool" | "toggle";
-type ThemeModes = "dark" | "light"
+import { ThemeTypes, ThemeModes } from 'Types';
+
+export const firstUpper = (s: string): string => {
+    if (typeof s !== 'string') return ''
+    return s.charAt(0).toUpperCase() + s.slice(1)
+};
+
+export const getRandomInt = (min: number, max: number): number => {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+};
 
 export const getTheme = (type: ThemeTypes, mode?: ThemeModes): any => {
     if(type === "get") {
@@ -34,4 +44,22 @@ export const getTheme = (type: ThemeTypes, mode?: ThemeModes): any => {
         else body.classList.remove("dark");
 
     }
-}
+};
+
+export const loadPhoto = (event: any, imgId: string = "editPhoto", imgUrl?: string) => {
+    var output = document.getElementById(imgId);
+    if(imgUrl === null) {
+      output.removeAttribute("src");
+      output.style.display = "none";
+    }else {
+      output.setAttribute("src", imgUrl ? imgUrl : URL.createObjectURL(event.target.files[0]));
+      output.style.display = "inline-block";
+    }
+    output.onload = function() {
+      URL.revokeObjectURL(output.getAttribute("src"));
+    }
+};
+
+export const scrollToTop = () => {
+    window.scrollTo(0,0);
+};

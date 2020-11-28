@@ -1,14 +1,9 @@
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { Link } from 'react-router-dom';
-
 import { Post, ScrollTop } from '../components';
-
 import { firstUpper, categories } from '../common/js';
-
-type ExploreProps = {
-    ExploreStore?: any;
-}
+import { ExploreProps } from 'Types';
 
 @inject("ExploreStore")
 @observer

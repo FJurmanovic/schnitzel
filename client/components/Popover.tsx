@@ -1,12 +1,7 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
 import { observer } from 'mobx-react';
-
-type PopoverType = {
-    store: any,
-    username: string,
-    iter: number
-}
+import { PopoverType } from 'Types';
 
 export const Popover = observer(({store, username, iter}: PopoverType) => 
     <>

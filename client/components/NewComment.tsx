@@ -1,9 +1,6 @@
 import React from 'react';
 import { observer } from 'mobx-react';
-
-type NewCommentType = {
-    store: any
-}
+import { NewCommentType } from 'Types';
 
 export const NewComment = observer(({store}: NewCommentType) => 
     <form onSubmit={(e) => store.submitClick(store.value, store.type, store.postId, store.commentId, e)} className="mb-8">

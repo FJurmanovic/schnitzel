@@ -1,12 +1,10 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
 import {observer} from 'mobx-react';
-
 import {Popover} from './';
-
 import {firstUpper} from '../common/js';
-
 import {PopoverStore} from '../stores';
+import { PostType } from 'Types';
 
 
 const OpenButton = (props) => {
@@ -19,17 +17,6 @@ const OpenButton = (props) => {
     } else if (props.from == "explore-category"){
         return <Link className={props.className} to={`/post/${props.id}/3`}>{props.children}</Link>
     }
-}
-
-type PostType = {
-    post: any,
-    iter: number,
-    userdata: any,
-    togglePoint: any,
-    authUser: any,
-    from: any,
-    removePost: any,
-    isAuth: boolean
 }
 
 export const Post = observer(({post, iter, userdata, togglePoint, authUser, from, removePost, isAuth}: PostType) => 

@@ -1,9 +1,6 @@
 import React from 'react';
 import { observer } from 'mobx-react';
-
-type SwitchType = {
-    store: any
-}
+import { SwitchType } from 'Types';
 
 export const Switch = observer(({store}: SwitchType) => 
     <div className="d-inline-block swc">

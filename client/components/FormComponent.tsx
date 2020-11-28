@@ -1,13 +1,6 @@
 import React from 'react';
 import {observer} from 'mobx-react';
-
-type FormType = {
-    onSubmit?: any,
-    onCancel?: any,
-    children?: Array<any>,
-    form?: any,
-    className?: string
-}
+import { FormType } from 'Types';
 
 const cloneElement: any = React.cloneElement;
 
