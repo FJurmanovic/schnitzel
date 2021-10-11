@@ -1,6 +1,5 @@
 node_modules
 .env
-public
 app.yaml
 .gcloudignore
 keys.json
