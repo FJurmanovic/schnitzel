@@ -21,7 +21,7 @@ class HttpClient {
             body: body,
         };
         const req: Request = new Request(
-            "https://api.jurmanovic.com/schnitzel/" + url,
+            "https://api.jurmanovic.com/schnitzel" + url,
             options
         );
 
@@ -37,7 +37,7 @@ class HttpClient {
             body: JSON.stringify(data),
         };
         const req: Request = new Request(
-            "https://api.jurmanovic.com/schnitzel/" + url,
+            "https://api.jurmanovic.com/schnitzel" + url,
             options
         );
 
@@ -53,7 +53,7 @@ class HttpClient {
             body: JSON.stringify(data),
         };
         const req: Request = new Request(
-            "https://api.jurmanovic.com/schnitzel/" + url,
+            "https://api.jurmanovic.com/schnitzel" + url,
             options
         );
 
@@ -72,7 +72,7 @@ class HttpClient {
             paramsPath = "?" + urlParams;
         }
         const req: Request = new Request(
-            "https://api.jurmanovic.com/schnitzel/" + url + paramsPath,
+            "https://api.jurmanovic.com/schnitzel" + url + paramsPath,
             options
         );
 
